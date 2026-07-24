@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <!-- Canvas Confetti for Celebration -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Google Fonts: Fredoka for a cute, rounded, kid-friendly look -->
+    <!-- Google Fonts: Fredoka -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -38,36 +38,30 @@
             }
         }
     </script>
+
     <style>
         body {
             font-family: 'Fredoka', sans-serif;
-            /* Fun, playful gradient background */
             background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
             min-height: 100vh;
-            touch-action: manipulation; /* Prevent double-tap zoom on mobile */
+            touch-action: manipulation;
             overflow-x: hidden;
         }
 
-        /* Custom Animations */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px) rotate(-5deg); }
             75% { transform: translateX(10px) rotate(5deg); }
         }
-        .animate-shake {
-            animation: shake 0.4s ease-in-out;
-        }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
 
         @keyframes popIn {
             0% { transform: scale(0.5); opacity: 0; }
             80% { transform: scale(1.1); opacity: 1; }
             100% { transform: scale(1); }
         }
-        .animate-pop {
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
+        .animate-pop { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-        /* Button Styling for tactile feel */
         .btn-3d {
             transition: all 0.1s ease;
             box-shadow: 0 6px 0 rgba(0,0,0,0.2);
@@ -85,7 +79,6 @@
         
         .hide { display: none !important; }
         
-        /* Floating background shapes */
         .bg-shape {
             position: fixed;
             z-index: -1;
@@ -100,7 +93,6 @@
 </head>
 <body class="text-gray-800 antialiased relative">
 
-    <!-- Background decorative elements -->
     <div class="bg-shape text-6xl" style="top: 10%; left: 10%; animation-delay: 0s; color: #ff9a9e;">☁️</div>
     <div class="bg-shape text-6xl" style="top: 70%; left: 80%; animation-delay: 2s; color: #a18cd1;">⭐</div>
     <div class="bg-shape text-6xl" style="top: 40%; left: 85%; animation-delay: 4s; color: #fbc2eb;">🎈</div>
@@ -108,7 +100,6 @@
 
     <div id="app" class="max-w-4xl mx-auto p-4 md:p-6 flex flex-col min-h-screen justify-center relative z-10">
         
-        <!-- Header / Navigation Area -->
         <header class="flex justify-between items-center mb-8 bg-white/50 p-4 rounded-3xl backdrop-blur-sm shadow-sm">
             <h1 class="text-2xl md:text-3xl font-bold text-kid-purple tracking-wide flex items-center gap-2 cursor-pointer" onclick="goToHome()">
                 <i class="fa-solid fa-shapes text-kid-pink"></i> 拼拼樂遊戲
@@ -118,12 +109,10 @@
             </button>
         </header>
 
-        <!-- Main Content Area Container -->
         <main id="mainContainer" class="flex-grow flex flex-col justify-center items-center w-full">
             <!-- Pages will be dynamically injected here -->
         </main>
         
-        <!-- Loading Overlay -->
         <div id="loadingOverlay" class="fixed inset-0 bg-white/80 z-50 flex flex-col items-center justify-center hide backdrop-blur-sm">
             <div class="text-6xl animate-bounce mb-4">⭐</div>
             <h2 class="text-3xl font-bold text-kid-blue">Loading...</h2>
@@ -131,65 +120,133 @@
     </div>
 
     <script>
-        // --- 1. MOCK DATABASE (Simulating Backend API) ---
         const MockDB = {
             categories: [
                 { id: 'c1', name: 'Animals', nameZh: '可愛動物', icon_emoji: '🐶' },
                 { id: 'c2', name: 'Food', nameZh: '美味食物', icon_emoji: '🍎' },
                 { id: 'c3', name: 'Vehicles', nameZh: '交通工具', icon_emoji: '🚗' },
-                { id: 'c4', name: 'Colors', nameZh: '繽紛色彩', icon_emoji: '🎨' }
+                { id: 'c4', name: 'Colors', nameZh: '繽紛色彩', icon_emoji: '🎨' },
+                { id: 'c5', name: 'Nations', nameZh: '國家', icon_emoji: '🌍' },
+                { id: 'c6', name: 'Emojis', nameZh: '表情', icon_emoji: '😀' },
+                { id: 'c7', name: 'Jobs', nameZh: '職業', icon_emoji: '👮' },
+                { id: 'c8', name: 'Objects', nameZh: '物件', icon_emoji: '🪑' },
+                { id: 'c9', name: 'Weather', nameZh: '天氣', icon_emoji: '☀️' },
+                { id: 'c10', name: 'Plants', nameZh: '植物', icon_emoji: '🌳' },
+                { id: 'c11', name: 'Crops', nameZh: '農作物', icon_emoji: '🌽' },
+                { id: 'c12', name: 'Sports', nameZh: '運動', icon_emoji: '⚽' }
             ],
             words: [
-                // Animals
-                { category_id: 'c1', word: 'DOG', emoji: '🐶' },
-                { category_id: 'c1', word: 'CAT', emoji: '🐱' },
-                { category_id: 'c1', word: 'LION', emoji: '🦁' },
-                { category_id: 'c1', word: 'PIG', emoji: '🐷' },
-                { category_id: 'c1', word: 'COW', emoji: '🐮' },
-                { category_id: 'c1', word: 'BIRD', emoji: '🐦' },
-                { category_id: 'c1', word: 'FROG', emoji: '🐸' },
-                { category_id: 'c1', word: 'BEAR', emoji: '🐻' },
-                { category_id: 'c1', word: 'FISH', emoji: '🐟' },
-                { category_id: 'c1', word: 'DUCK', emoji: '🦆' },
-                { category_id: 'c1', word: 'BEE', emoji: '🐝' },
+                // 1. Animals (15 words)
+                { category_id: 'c1', word: 'DOG', emoji: '🐶' }, { category_id: 'c1', word: 'CAT', emoji: '🐱' },
+                { category_id: 'c1', word: 'LION', emoji: '🦁' }, { category_id: 'c1', word: 'PIG', emoji: '🐷' },
+                { category_id: 'c1', word: 'COW', emoji: '🐮' }, { category_id: 'c1', word: 'BIRD', emoji: '🐦' },
+                { category_id: 'c1', word: 'FROG', emoji: '🐸' }, { category_id: 'c1', word: 'BEAR', emoji: '🐻' },
+                { category_id: 'c1', word: 'FISH', emoji: '🐟' }, { category_id: 'c1', word: 'DUCK', emoji: '🦆' },
+                { category_id: 'c1', word: 'BEE', emoji: '🐝' }, { category_id: 'c1', word: 'HORSE', emoji: '🐴' },
+                { category_id: 'c1', word: 'SHEEP', emoji: '🐑' }, { category_id: 'c1', word: 'TIGER', emoji: '🐯' },
+                { category_id: 'c1', word: 'SNAKE', emoji: '🐍' },
                 
-                // Food
-                { category_id: 'c2', word: 'APPLE', emoji: '🍎' },
-                { category_id: 'c2', word: 'CAKE', emoji: '🍰' },
-                { category_id: 'c2', word: 'MILK', emoji: '🥛' },
-                { category_id: 'c2', word: 'PIZZA', emoji: '🍕' },
-                { category_id: 'c2', word: 'BREAD', emoji: '🍞' },
-                { category_id: 'c2', word: 'MEAT', emoji: '🍖' },
-                { category_id: 'c2', word: 'EGG', emoji: '🥚' },
-                { category_id: 'c2', word: 'TACO', emoji: '🌮' },
-                { category_id: 'c2', word: 'CORN', emoji: '🌽' },
-                { category_id: 'c2', word: 'KIWI', emoji: '🥝' },
+                // 2. Food (15 words)
+                { category_id: 'c2', word: 'APPLE', emoji: '🍎' }, { category_id: 'c2', word: 'CAKE', emoji: '🍰' },
+                { category_id: 'c2', word: 'MILK', emoji: '🥛' }, { category_id: 'c2', word: 'PIZZA', emoji: '🍕' },
+                { category_id: 'c2', word: 'BREAD', emoji: '🍞' }, { category_id: 'c2', word: 'MEAT', emoji: '🍖' },
+                { category_id: 'c2', word: 'EGG', emoji: '🥚' }, { category_id: 'c2', word: 'TACO', emoji: '🌮' },
+                { category_id: 'c2', word: 'CORN', emoji: '🌽' }, { category_id: 'c2', word: 'KIWI', emoji: '🥝' },
+                { category_id: 'c2', word: 'RICE', emoji: '🍚' }, { category_id: 'c2', word: 'SOUP', emoji: '🥣' },
+                { category_id: 'c2', word: 'CHEESE', emoji: '🧀' }, { category_id: 'c2', word: 'CANDY', emoji: '🍬' },
+                { category_id: 'c2', word: 'LEMON', emoji: '🍋' },
 
-                // Vehicles
-                { category_id: 'c3', word: 'CAR', emoji: '🚗' },
-                { category_id: 'c3', word: 'BUS', emoji: '🚌' },
-                { category_id: 'c3', word: 'TRAIN', emoji: '🚂' },
-                { category_id: 'c3', word: 'BIKE', emoji: '🚲' },
-                { category_id: 'c3', word: 'SHIP', emoji: '🚢' },
-                { category_id: 'c3', word: 'BOAT', emoji: '⛵' },
-                { category_id: 'c3', word: 'JET', emoji: '✈️' },
-                { category_id: 'c3', word: 'UFO', emoji: '🛸' },
-                { category_id: 'c3', word: 'TAXI', emoji: '🚕' },
-                { category_id: 'c3', word: 'TRUCK', emoji: '🚚' },
+                // 3. Vehicles (15 words)
+                { category_id: 'c3', word: 'CAR', emoji: '🚗' }, { category_id: 'c3', word: 'BUS', emoji: '🚌' },
+                { category_id: 'c3', word: 'TRAIN', emoji: '🚂' }, { category_id: 'c3', word: 'BIKE', emoji: '🚲' },
+                { category_id: 'c3', word: 'SHIP', emoji: '🚢' }, { category_id: 'c3', word: 'BOAT', emoji: '⛵' },
+                { category_id: 'c3', word: 'JET', emoji: '✈️' }, { category_id: 'c3', word: 'UFO', emoji: '🛸' },
+                { category_id: 'c3', word: 'TAXI', emoji: '🚕' }, { category_id: 'c3', word: 'TRUCK', emoji: '🚚' },
+                { category_id: 'c3', word: 'VAN', emoji: '🚐' }, { category_id: 'c3', word: 'TRAM', emoji: '🚋' },
+                { category_id: 'c3', word: 'HELI', emoji: '🚁' }, { category_id: 'c3', word: 'ROCKET', emoji: '🚀' },
+                { category_id: 'c3', word: 'CART', emoji: '🛒' },
 
-                // Colors
-                { category_id: 'c4', word: 'RED', emoji: '🔴' },
-                { category_id: 'c4', word: 'BLUE', emoji: '🔵' },
-                { category_id: 'c4', word: 'GREEN', emoji: '🟢' },
-                { category_id: 'c4', word: 'PINK', emoji: '🌸' },
-                { category_id: 'c4', word: 'BLACK', emoji: '⚫' },
-                { category_id: 'c4', word: 'WHITE', emoji: '⚪' },
-                { category_id: 'c4', word: 'BROWN', emoji: '🟤' },
-                { category_id: 'c4', word: 'GOLD', emoji: '🌟' }
+                // 4. Colors (13 words)
+                { category_id: 'c4', word: 'RED', emoji: '🔴' }, { category_id: 'c4', word: 'BLUE', emoji: '🔵' },
+                { category_id: 'c4', word: 'GREEN', emoji: '🟢' }, { category_id: 'c4', word: 'PINK', emoji: '🌸' },
+                { category_id: 'c4', word: 'BLACK', emoji: '⚫' }, { category_id: 'c4', word: 'WHITE', emoji: '⚪' },
+                { category_id: 'c4', word: 'BROWN', emoji: '🟤' }, { category_id: 'c4', word: 'GOLD', emoji: '🌟' },
+                { category_id: 'c4', word: 'YELLOW', emoji: '🟡' }, { category_id: 'c4', word: 'PURPLE', emoji: '🟣' },
+                { category_id: 'c4', word: 'ORANGE', emoji: '🟠' }, { category_id: 'c4', word: 'GREY', emoji: '⚪' },
+                { category_id: 'c4', word: 'SILVER', emoji: '🪙' },
+
+                // 5. Nations (12 words)
+                { category_id: 'c5', word: 'USA', emoji: '🇺🇸' }, { category_id: 'c5', word: 'UK', emoji: '🇬🇧' },
+                { category_id: 'c5', word: 'JAPAN', emoji: '🇯🇵' }, { category_id: 'c5', word: 'TAIWAN', emoji: '🇹🇼' },
+                { category_id: 'c5', word: 'CHINA', emoji: '🇨🇳' }, { category_id: 'c5', word: 'KOREA', emoji: '🇰🇷' },
+                { category_id: 'c5', word: 'FRANCE', emoji: '🇫🇷' }, { category_id: 'c5', word: 'ITALY', emoji: '🇮🇹' },
+                { category_id: 'c5', word: 'SPAIN', emoji: '🇪🇸' }, { category_id: 'c5', word: 'INDIA', emoji: '🇮🇳' },
+                { category_id: 'c5', word: 'BRAZIL', emoji: '🇧🇷' }, { category_id: 'c5', word: 'CANADA', emoji: '🇨🇦' },
+
+                // 6. Emojis (13 words)
+                { category_id: 'c6', word: 'SMILE', emoji: '😀' }, { category_id: 'c6', word: 'CRY', emoji: '😢' },
+                { category_id: 'c6', word: 'ANGRY', emoji: '😡' }, { category_id: 'c6', word: 'LAUGH', emoji: '😂' },
+                { category_id: 'c6', word: 'SAD', emoji: '🙁' }, { category_id: 'c6', word: 'WINK', emoji: '😉' },
+                { category_id: 'c6', word: 'COOL', emoji: '😎' }, { category_id: 'c6', word: 'LOVE', emoji: '😍' },
+                { category_id: 'c6', word: 'SLEEP', emoji: '😴' }, { category_id: 'c6', word: 'SHOCK', emoji: '😱' },
+                { category_id: 'c6', word: 'SWEAT', emoji: '😅' }, { category_id: 'c6', word: 'DEVIL', emoji: '😈' },
+                { category_id: 'c6', word: 'KISS', emoji: '😘' },
+
+                // 7. Jobs (13 words)
+                { category_id: 'c7', word: 'COP', emoji: '👮' }, { category_id: 'c7', word: 'VET', emoji: '👩‍⚕️' },
+                { category_id: 'c7', word: 'CHEF', emoji: '👨‍🍳' }, { category_id: 'c7', word: 'NURSE', emoji: '👩‍⚕️' },
+                { category_id: 'c7', word: 'PILOT', emoji: '👨‍✈️' }, { category_id: 'c7', word: 'JUDGE', emoji: '👨‍⚖️' },
+                { category_id: 'c7', word: 'BAKER', emoji: '🧑‍🍳' }, { category_id: 'c7', word: 'CLERK', emoji: '👨‍💼' },
+                { category_id: 'c7', word: 'COACH', emoji: '🏃' }, { category_id: 'c7', word: 'GUARD', emoji: '💂' },
+                { category_id: 'c7', word: 'ACTOR', emoji: '🎭' }, { category_id: 'c7', word: 'SINGER', emoji: '🎤' },
+                { category_id: 'c7', word: 'FARMER', emoji: '🧑‍🌾' },
+
+                // 8. Objects (15 words)
+                { category_id: 'c8', word: 'CUP', emoji: '☕' }, { category_id: 'c8', word: 'DESK', emoji: '🪑' },
+                { category_id: 'c8', word: 'LAMP', emoji: '💡' }, { category_id: 'c8', word: 'BOOK', emoji: '📖' },
+                { category_id: 'c8', word: 'PEN', emoji: '🖊️' }, { category_id: 'c8', word: 'CHAIR', emoji: '🪑' },
+                { category_id: 'c8', word: 'BED', emoji: '🛏️' }, { category_id: 'c8', word: 'DOOR', emoji: '🚪' },
+                { category_id: 'c8', word: 'BELL', emoji: '🔔' }, { category_id: 'c8', word: 'RING', emoji: '💍' },
+                { category_id: 'c8', word: 'BAG', emoji: '👜' }, { category_id: 'c8', word: 'TOY', emoji: '🧸' },
+                { category_id: 'c8', word: 'CLOCK', emoji: '🕰️' }, { category_id: 'c8', word: 'KEY', emoji: '🔑' },
+                { category_id: 'c8', word: 'BOX', emoji: '📦' },
+
+                // 9. Weather (12 words)
+                { category_id: 'c9', word: 'SUN', emoji: '☀️' }, { category_id: 'c9', word: 'RAIN', emoji: '🌧️' },
+                { category_id: 'c9', word: 'SNOW', emoji: '❄️' }, { category_id: 'c9', word: 'WIND', emoji: '💨' },
+                { category_id: 'c9', word: 'CLOUD', emoji: '☁️' }, { category_id: 'c9', word: 'STORM', emoji: '⛈️' },
+                { category_id: 'c9', word: 'FOG', emoji: '🌫️' }, { category_id: 'c9', word: 'ICE', emoji: '🧊' },
+                { category_id: 'c9', word: 'HOT', emoji: '🔥' }, { category_id: 'c9', word: 'COLD', emoji: '🥶' },
+                { category_id: 'c9', word: 'WARM', emoji: '🌡️' }, { category_id: 'c9', word: 'FLASH', emoji: '⚡' },
+
+                // 10. Plants (13 words)
+                { category_id: 'c10', word: 'TREE', emoji: '🌳' }, { category_id: 'c10', word: 'GRASS', emoji: '🌿' },
+                { category_id: 'c10', word: 'LEAF', emoji: '🍂' }, { category_id: 'c10', word: 'WEED', emoji: '🌱' },
+                { category_id: 'c10', word: 'MOSS', emoji: '🟩' }, { category_id: 'c10', word: 'BUSH', emoji: '🪴' },
+                { category_id: 'c10', word: 'VINE', emoji: '〰️' }, { category_id: 'c10', word: 'ROOT', emoji: '🪵' },
+                { category_id: 'c10', word: 'SEED', emoji: '🌰' }, { category_id: 'c10', word: 'WOOD', emoji: '🪵' },
+                { category_id: 'c10', word: 'STEM', emoji: '🎋' }, { category_id: 'c10', word: 'ROSE', emoji: '🌹' },
+                { category_id: 'c10', word: 'FERN', emoji: '🌿' },
+
+                // 11. Crops (12 words)
+                { category_id: 'c11', word: 'RICE', emoji: '🍚' }, { category_id: 'c11', word: 'CORN', emoji: '🌽' },
+                { category_id: 'c11', word: 'WHEAT', emoji: '🌾' }, { category_id: 'c11', word: 'OAT', emoji: '🥣' },
+                { category_id: 'c11', word: 'BEAN', emoji: '🫘' }, { category_id: 'c11', word: 'PEA', emoji: '🫛' },
+                { category_id: 'c11', word: 'YAM', emoji: '🍠' }, { category_id: 'c11', word: 'SOY', emoji: '🫘' },
+                { category_id: 'c11', word: 'NUT', emoji: '🥜' }, { category_id: 'c11', word: 'SPUD', emoji: '🥔' },
+                { category_id: 'c11', word: 'PLUM', emoji: '🍑' }, { category_id: 'c11', word: 'PEAR', emoji: '🍐' },
+
+                // 12. Sports (13 words)
+                { category_id: 'c12', word: 'RUN', emoji: '🏃' }, { category_id: 'c12', word: 'SWIM', emoji: '🏊' },
+                { category_id: 'c12', word: 'GOLF', emoji: '🏌️' }, { category_id: 'c12', word: 'SKI', emoji: '⛷️' },
+                { category_id: 'c12', word: 'SURF', emoji: '🏄' }, { category_id: 'c12', word: 'YOGA', emoji: '🧘' },
+                { category_id: 'c12', word: 'JUDO', emoji: '🥋' }, { category_id: 'c12', word: 'BOX', emoji: '🥊' },
+                { category_id: 'c12', word: 'DIVE', emoji: '🤿' }, { category_id: 'c12', word: 'JUMP', emoji: '🦘' },
+                { category_id: 'c12', word: 'RIDE', emoji: '🚴' }, { category_id: 'c12', word: 'BALL', emoji: '⚽' },
+                { category_id: 'c12', word: 'TENNIS', emoji: '🎾' }
             ]
         };
 
-        // --- 2. APPLICATION STATE ---
         const State = {
             soundEnabled: true,
             currentCategory: null,
@@ -199,9 +256,6 @@
             score: 0
         };
 
-        // --- 3. UTILITY FUNCTIONS (Sound, Speech, Random) ---
-        
-        // Tone.js Synthesizers
         let correctSynth, wrongSynth, winSynth;
         function initAudio() {
             if(!correctSynth) {
@@ -209,9 +263,7 @@
                     oscillator: { type: "sine" },
                     envelope: { attack: 0.01, decay: 0.2, sustain: 0.2, release: 0.5 }
                 }).toDestination();
-                
                 wrongSynth = new Tone.MembraneSynth().toDestination();
-                
                 winSynth = new Tone.PolySynth(Tone.Synth).toDestination();
             }
         }
@@ -219,8 +271,7 @@
         function playSound(type) {
             if (!State.soundEnabled) return;
             initAudio();
-            Tone.start(); // Ensure audio context is started
-            
+            Tone.start(); 
             const now = Tone.now();
             if (type === 'correct') {
                 correctSynth.triggerAttackRelease("C6", "8n", now);
@@ -244,27 +295,19 @@
             }
         }
 
-        // Web Speech API for TTS
         function speakWord(text, rate = 0.85) {
             if (!State.soundEnabled || !('speechSynthesis' in window)) return;
-            
-            // Cancel any ongoing speech
             window.speechSynthesis.cancel();
-            
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
-            utterance.rate = rate; // Slightly slower for kids
-            utterance.pitch = 1.2; // Slightly higher pitch for friendly tone
-            
-            // Try to find a good English voice
+            utterance.rate = rate; 
+            utterance.pitch = 1.2; 
             const voices = window.speechSynthesis.getVoices();
             const preferredVoice = voices.find(v => v.lang.startsWith('en-') && (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Google')));
             if(preferredVoice) utterance.voice = preferredVoice;
-
             window.speechSynthesis.speak(utterance);
         }
 
-        // Helper: Shuffle Array (Fisher-Yates)
         function shuffleArray(array) {
             let curId = array.length;
             while (0 !== curId) {
@@ -277,12 +320,12 @@
             return array;
         }
 
-        // Helper: Generate random distractor letters
         function getRandomLetters(count, excludeLetters) {
             const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             let result = [];
             while(result.length < count) {
                 let char = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                // 確保隨機抽取的干擾字母，不會是目前單字裡的字母，也不會重複
                 if (!excludeLetters.includes(char) && !result.includes(char)) {
                     result.push(char);
                 }
@@ -290,36 +333,31 @@
             return result;
         }
 
-        // UI Helper: Show Loading
         function showLoading(show) {
             const overlay = document.getElementById('loadingOverlay');
-            if(show) {
-                overlay.classList.remove('hide');
-            } else {
-                overlay.classList.add('hide');
-            }
+            if(show) overlay.classList.remove('hide');
+            else overlay.classList.add('hide');
         }
 
-        // --- 4. PAGE RENDERERS ---
         const mainContainer = document.getElementById('mainContainer');
 
         function renderHome() {
             let html = `
-                <div class="text-center animate-pop w-full max-w-2xl">
+                <div class="text-center animate-pop w-full max-w-4xl">
                     <h2 class="text-4xl md:text-5xl font-bold text-kid-blue mb-2 drop-shadow-md">Choose a Category!</h2>
-                    <p class="text-xl text-gray-600 mb-10">選擇你想學習的單字類別</p>
+                    <p class="text-xl text-gray-600 mb-8">選擇你想學習的單字類別</p>
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
             `;
 
             MockDB.categories.forEach(cat => {
                 html += `
                     <button onclick="selectCategory('${cat.id}')" 
-                            class="btn-3d bg-white rounded-3xl p-6 border-4 border-kid-blue/20 flex items-center space-x-6 hover:bg-blue-50 group">
-                        <div class="text-6xl group-hover:scale-110 transition-transform">${cat.icon_emoji}</div>
-                        <div class="text-left">
-                            <div class="text-2xl font-bold text-gray-800">${cat.name}</div>
-                            <div class="text-gray-500 font-semibold">${cat.nameZh}</div>
+                            class="btn-3d bg-white rounded-3xl p-4 border-4 border-kid-blue/20 flex flex-col items-center justify-center space-y-2 hover:bg-blue-50 group">
+                        <div class="text-5xl group-hover:scale-110 transition-transform">${cat.icon_emoji}</div>
+                        <div class="text-center">
+                            <div class="text-xl font-bold text-gray-800">${cat.name}</div>
+                            <div class="text-gray-500 text-sm font-semibold">${cat.nameZh}</div>
                         </div>
                     </button>
                 `;
@@ -332,32 +370,26 @@
             mainContainer.innerHTML = html;
         }
 
-        // API Mock: Fetch words for category
         async function fetchWordsForCategory(categoryId) {
             showLoading(true);
-            // Simulate network delay
-            await new Promise(resolve => setTimeout(resolve, 800));
+            await new Promise(resolve => setTimeout(resolve, 800)); // 模擬載入時間
             
             const allCatWords = MockDB.words.filter(w => w.category_id === categoryId);
-            // Shuffle and pick up to 10
             const shuffled = shuffleArray([...allCatWords]);
-            State.gameWords = shuffled.slice(0, 10);
+            State.gameWords = shuffled.slice(0, 10); // 隨機抽 10 題
             
             showLoading(false);
             renderPreview();
         }
 
         function selectCategory(categoryId) {
-            // Wake up audio context on first user interaction
             initAudio();
             Tone.start(); 
-            // Wake up speech synthesis
             if('speechSynthesis' in window) {
                 let u = new SpeechSynthesisUtterance('');
                 u.volume = 0;
                 window.speechSynthesis.speak(u);
             }
-            
             State.currentCategory = MockDB.categories.find(c => c.id === categoryId);
             fetchWordsForCategory(categoryId);
         }
@@ -366,7 +398,7 @@
             let cardsHtml = '';
             State.gameWords.forEach((item, index) => {
                 cardsHtml += `
-                    <div class="bg-white rounded-2xl p-4 shadow-lg border-2 border-kid-yellow/30 flex flex-col items-center justify-center btn-3d cursor-pointer"
+                    <div class="bg-white rounded-2xl p-4 shadow-lg border-2 border-kid-yellow/30 flex flex-col items-center justify-center btn-3d cursor-pointer hover:border-kid-pink"
                          onclick="speakWord('${item.word}')">
                         <div class="text-5xl mb-2">${item.emoji}</div>
                         <div class="text-xl font-bold text-gray-700 tracking-wider">${item.word}</div>
@@ -382,8 +414,8 @@
                     <h2 class="text-3xl md:text-4xl font-bold text-kid-purple mb-2 text-center">Let's Learn! 📖</h2>
                     <p class="text-lg text-gray-600 mb-6 text-center">點擊卡片聽發音，準備好就出發挑戰！</p>
                     
-                    <div class="w-full bg-white/60 p-6 rounded-3xl backdrop-blur-md mb-8">
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                    <div class="w-full bg-white/60 p-4 rounded-3xl backdrop-blur-md mb-8">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                             ${cardsHtml}
                         </div>
                     </div>
@@ -405,11 +437,11 @@
         function renderGame() {
             const currentItem = State.gameWords[State.currentWordIndex];
             const targetWord = currentItem.word;
-            State.currentInput = []; // 重置輸入
+            State.currentLetterIndex = 0; // 重置目前要填的字母索引
             
             setTimeout(() => speakWord(targetWord), 300);
 
-            // 建立目標輸入框
+            // 1. 建立目標輸入方塊 (空框)
             let boxesHtml = '';
             for(let i=0; i<targetWord.length; i++) {
                 boxesHtml += `
@@ -418,27 +450,32 @@
                 `;
             }
 
-            // 建立 A-Z 虛擬字母鍵盤
-            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
-            let keyboardHtml = '<div class="flex flex-wrap justify-center gap-2 w-full max-w-xl mx-auto">';
-            alphabet.forEach(letter => {
-                keyboardHtml += `
-                    <button onclick="handleType('${letter}')" 
-                            class="btn-3d w-10 h-12 md:w-12 md:h-14 bg-kid-yellow text-gray-800 text-xl md:text-2xl font-bold rounded-lg border-b-4 border-yellow-600 hover:bg-yellow-300 flex items-center justify-center active:bg-yellow-400">
+            // 2. 建立打亂的字母堆 (正確字母 + 4個隨機干擾字母)
+            let correctLetters = targetWord.split('');
+            let distractorLetters = getRandomLetters(4, correctLetters);
+            // 將正確字母與干擾字母合併後打亂順序
+            let letterPool = shuffleArray(correctLetters.concat(distractorLetters));
+
+            // 產生畫面下方的字母按鈕
+            let poolHtml = '<div class="flex flex-wrap justify-center gap-3 w-full max-w-lg mx-auto">';
+            letterPool.forEach((letter, index) => {
+                poolHtml += `
+                    <button id="letter-btn-${index}" onclick="handleLetterClick('${letter}', 'letter-btn-${index}')" 
+                            class="btn-3d w-14 h-16 md:w-16 md:h-18 bg-kid-yellow text-gray-800 text-2xl md:text-3xl font-bold rounded-xl border-b-6 border-yellow-600 hover:bg-yellow-300 flex items-center justify-center active:bg-yellow-400 transition-all">
                         ${letter}
                     </button>
                 `;
             });
-            keyboardHtml += '</div>';
+            poolHtml += '</div>';
 
             let html = `
                 <div class="w-full max-w-3xl flex flex-col items-center animate-pop">
                     
-                    <div class="w-full flex justify-between items-center mb-6">
+                    <div class="w-full flex justify-between items-center mb-4">
                         <div class="bg-white/80 px-4 py-2 rounded-full font-bold text-gray-600 shadow-sm">
                             Question: ${State.currentWordIndex + 1} / ${State.gameWords.length}
                         </div>
-                        <div class="bg-white/80 px-4 py-2 rounded-full font-bold text-kid-yellow flex items-center shadow-sm">
+                        <div id="score-display" class="bg-white/80 px-4 py-2 rounded-full font-bold text-kid-yellow flex items-center shadow-sm">
                             <i class="fa-solid fa-star mr-1"></i> ${State.score}
                         </div>
                     </div>
@@ -447,29 +484,20 @@
                         
                         <div class="flex items-center gap-6 mb-6">
                             <div class="text-8xl md:text-9xl filter drop-shadow-lg">${currentItem.emoji}</div>
-                            <button onclick="speakWord('${targetWord}'); speakWord('Spell ${targetWord}', 1);" class="btn-3d bg-kid-blue text-white w-14 h-14 rounded-full text-xl flex items-center justify-center border-b-4 border-blue-600">
+                            <button onclick="speakWord('${targetWord}'); speakWord('Find the letters for ${targetWord}', 1);" class="btn-3d bg-kid-blue text-white w-14 h-14 rounded-full text-xl flex items-center justify-center border-b-4 border-blue-600">
                                 <i class="fa-solid fa-volume-up"></i>
                             </button>
                         </div>
 
-                        <!-- 拼字目標框區 -->
-                        <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
+                        <!-- 空白目標框區 -->
+                        <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10">
                             ${boxesHtml}
                         </div>
 
-                        <!-- 虛擬鍵盤與控制鈕 -->
-                        <div class="bg-gray-100 p-4 rounded-2xl w-full flex flex-col items-center shadow-inner">
-                            ${keyboardHtml}
-                            
-                            <!-- 刪除與送出按鈕 -->
-                            <div class="flex justify-center gap-4 mt-6 w-full">
-                                <button onclick="handleBackspace()" class="btn-3d bg-gray-300 text-gray-700 w-24 h-12 md:w-28 md:h-14 text-xl rounded-xl border-b-4 border-gray-400 hover:bg-gray-200 flex items-center justify-center">
-                                    <i class="fa-solid fa-delete-left mr-2"></i> 刪除
-                                </button>
-                                <button id="submitBtn" onclick="submitAnswer()" class="btn-3d bg-kid-green text-white w-32 h-12 md:w-40 md:h-14 text-xl md:text-2xl font-bold rounded-xl border-b-4 border-green-600 hover:bg-green-400 flex items-center justify-center btn-disabled transition-opacity">
-                                    <i class="fa-solid fa-check mr-2"></i> 送出
-                                </button>
-                            </div>
+                        <!-- 隨機字母堆區 -->
+                        <div class="bg-gray-100 p-6 rounded-2xl w-full shadow-inner border-2 border-gray-200">
+                            <p class="text-center text-gray-500 font-bold mb-4">從下方選出正確的字母吧！</p>
+                            ${poolHtml}
                         </div>
                     </div>
                 </div>
@@ -477,99 +505,77 @@
             mainContainer.innerHTML = html;
         }
 
-        // 更新畫面上的方塊顯示與送出按鈕狀態
-        function updateBoxesUI() {
+        // 處理玩家點擊隨機字母堆
+        function handleLetterClick(clickedLetter, buttonId) {
             const targetWord = State.gameWords[State.currentWordIndex].word;
-            for(let i=0; i<targetWord.length; i++) {
-                const box = document.getElementById(`target-box-${i}`);
-                if(State.currentInput[i]) {
-                    box.innerHTML = State.currentInput[i];
-                    box.classList.remove('border-dashed', 'border-gray-300');
-                    box.classList.add('border-solid', 'border-kid-blue', 'text-kid-blue');
-                    // 清除可能殘留的錯誤紅色標記
-                    box.classList.remove('border-red-500', 'text-red-500', 'bg-red-100');
-                } else {
-                    box.innerHTML = '';
-                    box.classList.remove('border-solid', 'border-kid-blue', 'border-red-500', 'text-red-500', 'bg-red-100');
-                    box.classList.add('border-dashed', 'border-gray-300', 'text-kid-blue');
-                }
-            }
-            
-            // 判斷是否填滿，填滿才能送出
-            const submitBtn = document.getElementById('submitBtn');
-            if(State.currentInput.length === targetWord.length) {
-                submitBtn.classList.remove('btn-disabled');
-            } else {
-                submitBtn.classList.add('btn-disabled');
-            }
-        }
+            const expectedLetter = targetWord[State.currentLetterIndex];
+            const btnElement = document.getElementById(buttonId);
 
-        // 點擊字母鍵盤
-        function handleType(letter) {
-            const targetWord = State.gameWords[State.currentWordIndex].word;
-            if(State.currentInput.length < targetWord.length) {
+            // 如果該按鈕已經被點擊過(隱藏了)，就不理會
+            if(btnElement.classList.contains('invisible')) return;
+
+            if(clickedLetter === expectedLetter) {
+                // 答對了！(點擊的是下一個正確字母)
                 playSound('correct'); 
-                State.currentInput.push(letter);
-                updateBoxesUI();
-            }
-        }
+                
+                // 1. 將字母填入對應的空框中
+                const box = document.getElementById(`target-box-${State.currentLetterIndex}`);
+                box.innerHTML = clickedLetter;
+                box.classList.remove('border-dashed', 'border-gray-300');
+                box.classList.add('border-solid', 'border-kid-blue', 'text-kid-blue', 'animate-pop');
 
-        // 點擊刪除退格
-        function handleBackspace() {
-            if(State.currentInput.length > 0) {
-                playSound('wrong'); 
-                State.currentInput.pop();
-                updateBoxesUI();
-            }
-        }
+                // 2. 將點擊的字母按鈕隱藏 (保留空間不破壞排版)
+                btnElement.classList.add('invisible');
 
-        // 送出驗證答案
-        function submitAnswer() {
-            const currentItem = State.gameWords[State.currentWordIndex];
-            const targetWord = currentItem.word;
-            
-            // 尚未填滿不可送出
-            if(State.currentInput.length !== targetWord.length) return;
+                // 3. 索引往前推一格
+                State.currentLetterIndex++;
 
-            const typedWord = State.currentInput.join('');
-
-            if(typedWord === targetWord) {
-                // 答對了！
-                State.score += 10;
-                for(let i=0; i<targetWord.length; i++) {
-                    const box = document.getElementById(`target-box-${i}`);
-                    box.classList.remove('border-kid-blue');
-                    box.classList.add('border-kid-green', 'bg-green-100', 'animate-pop');
+                // 4. 判斷是否整個字都拼完了
+                if(State.currentLetterIndex === targetWord.length) {
+                    // 全字拼完！加分並進入過關處理
+                    State.score += 20;
+                    document.getElementById('score-display').innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${State.score}`;
+                    
+                    // 把所有框框變成綠色慶祝
+                    for(let i=0; i<targetWord.length; i++) {
+                        let b = document.getElementById(`target-box-${i}`);
+                        b.classList.remove('border-kid-blue');
+                        b.classList.add('border-kid-green', 'bg-green-100');
+                    }
+                    
+                    // 鎖住畫面，避免小朋友亂按
+                    document.querySelector('.bg-gray-100').style.pointerEvents = 'none';
+                    
+                    setTimeout(() => {
+                        handleWordComplete(targetWord);
+                    }, 500);
                 }
-                document.querySelector('.fa-star').parentElement.innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${Math.max(0, State.score)}`;
-                handleWordComplete(targetWord);
+
             } else {
                 // 答錯了！
-                playSound('wrong');
-                speakWord("Oops! Try again!", 1.2);
-                if(State.score > 0) State.score -= 2;
+                playSound('wrong'); 
                 
-                // 讓所有框框變紅並搖晃
-                for(let i=0; i<targetWord.length; i++) {
-                    const box = document.getElementById(`target-box-${i}`);
-                    box.classList.remove('border-kid-blue');
-                    box.classList.add('border-red-500', 'text-red-500', 'bg-red-100', 'animate-shake');
-                    
-                    // 搖晃結束後移除動畫 class，但保留紅色讓小孩知道錯了，直到他們按刪除修改
-                    setTimeout(() => {
-                        box.classList.remove('animate-shake');
-                    }, 400);
-                }
-                document.querySelector('.fa-star').parentElement.innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${Math.max(0, State.score)}`;
+                // 扣分機制
+                if(State.score > 0) State.score -= 2;
+                document.getElementById('score-display').innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${Math.max(0, State.score)}`;
+
+                // 按鈕搖晃並變紅提示
+                btnElement.classList.remove('animate-shake', 'bg-red-300', 'border-red-600', 'text-white'); // 先重置
+                void btnElement.offsetWidth; // 觸發瀏覽器重繪 (Reflow) 以便重新播放動畫
+                btnElement.classList.add('animate-shake', 'bg-red-300', 'border-red-600', 'text-white');
+                
+                // 動畫結束後恢復原色
+                setTimeout(() => {
+                    btnElement.classList.remove('bg-red-300', 'border-red-600', 'text-white');
+                }, 400);
             }
         }
 
         function handleWordComplete(word) {
             playSound('win');
             speakWord(`Excellent! ${word}`);
-            State.score += 50; // Bonus for completion
             
-            // Mini confetti for single word
+            // 迷你撒花特效
             confetti({
                 particleCount: 50,
                 spread: 60,
@@ -577,7 +583,7 @@
                 colors: ['#43e97b', '#f6d365', '#4facfe']
             });
 
-            // Wait a bit, then next word or result
+            // 進入下一題或結算
             setTimeout(() => {
                 State.currentWordIndex++;
                 if (State.currentWordIndex >= State.gameWords.length) {
@@ -592,31 +598,22 @@
             playSound('win');
             speakWord("You are a superstar! Great job!");
             
-            // Big Confetti
+            // 大型撒花特效
             var duration = 3 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
 
-            function randomInRange(min, max) {
-              return Math.random() * (max - min) + min;
-            }
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
 
             var interval = setInterval(function() {
               var timeLeft = animationEnd - Date.now();
-              if (timeLeft <= 0) {
-                return clearInterval(interval);
-              }
+              if (timeLeft <= 0) return clearInterval(interval);
               var particleCount = 50 * (timeLeft / duration);
-              confetti(Object.assign({}, defaults, { particleCount,
-                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
-              }));
-              confetti(Object.assign({}, defaults, { particleCount,
-                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
-              }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
             }, 250);
 
-            let maxPossibleScore = State.gameWords.length * 150; // Approximated
-            let stars = State.score > 800 ? 3 : (State.score > 400 ? 2 : 1);
+            let stars = State.score > 150 ? 3 : (State.score > 80 ? 2 : 1);
             let starHtml = '';
             for(let i=0; i<3; i++) {
                 if(i < stars) {
@@ -627,7 +624,7 @@
             }
 
             let html = `
-                <div class="text-center animate-pop bg-white p-10 rounded-[3rem] shadow-2xl border-8 border-kid-yellow max-w-2xl w-full">
+                <div class="text-center animate-pop bg-white p-10 rounded-[3rem] shadow-2xl border-8 border-kid-yellow max-w-2xl w-full mx-auto">
                     <h1 class="text-5xl font-bold text-kid-pink mb-6">Congratulations! 🎉</h1>
                     
                     <div class="flex justify-center gap-4 mb-8">
@@ -651,12 +648,9 @@
             renderHome();
         }
 
-        // Initialize App on Load
         window.onload = function() {
-            // Load voices ahead of time
             if('speechSynthesis' in window) {
                 window.speechSynthesis.onvoiceschanged = () => {
-                    // pre-warm voices
                     window.speechSynthesis.getVoices();
                 };
             }
