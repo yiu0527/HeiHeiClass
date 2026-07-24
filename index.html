@@ -15,6 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PapaParse for CSV Data -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -115,135 +117,32 @@
         
         <div id="loadingOverlay" class="fixed inset-0 bg-white/80 z-50 flex flex-col items-center justify-center hide backdrop-blur-sm">
             <div class="text-6xl animate-bounce mb-4">⭐</div>
-            <h2 class="text-3xl font-bold text-kid-blue">Loading...</h2>
+            <h2 id="loadingText" class="text-3xl font-bold text-kid-blue">Loading...</h2>
         </div>
     </div>
 
     <script>
-        const MockDB = {
+        // ==========================================
+        // 【自行管理資料庫設定】
+        // 在此填入你的 Google Sheets 發布為 CSV 的網址
+        // 例如: "https://docs.google.com/spreadsheets/d/e/2PACX-xxxx/pub?output=csv"
+        // ==========================================
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1xUgjvN5JctaE_5r4c_UXl3Yir7eA3bMr_h-ypVsCyoA/edit?usp=sharing"; 
+
+        // 動態資料庫物件
+        let MockDB = {
+            categories: [],
+            words: []
+        };
+
+        // 預設示範字庫 (當尚未設定 Google Sheet 網址，或是載入失敗時作為備用)
+        const DefaultDB = {
             categories: [
-                { id: 'c1', name: 'Animals', nameZh: '可愛動物', icon_emoji: '🐶' },
-                { id: 'c2', name: 'Food', nameZh: '美味食物', icon_emoji: '🍎' },
-                { id: 'c3', name: 'Vehicles', nameZh: '交通工具', icon_emoji: '🚗' },
-                { id: 'c4', name: 'Colors', nameZh: '繽紛色彩', icon_emoji: '🎨' },
-                { id: 'c5', name: 'Nations', nameZh: '國家', icon_emoji: '🌍' },
-                { id: 'c6', name: 'Emojis', nameZh: '表情', icon_emoji: '😀' },
-                { id: 'c7', name: 'Jobs', nameZh: '職業', icon_emoji: '👮' },
-                { id: 'c8', name: 'Objects', nameZh: '物件', icon_emoji: '🪑' },
-                { id: 'c9', name: 'Weather', nameZh: '天氣', icon_emoji: '☀️' },
-                { id: 'c10', name: 'Plants', nameZh: '植物', icon_emoji: '🌳' },
-                { id: 'c11', name: 'Crops', nameZh: '農作物', icon_emoji: '🌽' },
-                { id: 'c12', name: 'Sports', nameZh: '運動', icon_emoji: '⚽' }
+                { id: 'c1', name: 'Demo', nameZh: '請綁定資料庫', icon_emoji: '⚠️' }
             ],
             words: [
-                // 1. Animals (15 words)
-                { category_id: 'c1', word: 'DOG', emoji: '🐶' }, { category_id: 'c1', word: 'CAT', emoji: '🐱' },
-                { category_id: 'c1', word: 'LION', emoji: '🦁' }, { category_id: 'c1', word: 'PIG', emoji: '🐷' },
-                { category_id: 'c1', word: 'COW', emoji: '🐮' }, { category_id: 'c1', word: 'BIRD', emoji: '🐦' },
-                { category_id: 'c1', word: 'FROG', emoji: '🐸' }, { category_id: 'c1', word: 'BEAR', emoji: '🐻' },
-                { category_id: 'c1', word: 'FISH', emoji: '🐟' }, { category_id: 'c1', word: 'DUCK', emoji: '🦆' },
-                { category_id: 'c1', word: 'BEE', emoji: '🐝' }, { category_id: 'c1', word: 'HORSE', emoji: '🐴' },
-                { category_id: 'c1', word: 'SHEEP', emoji: '🐑' }, { category_id: 'c1', word: 'TIGER', emoji: '🐯' },
-                { category_id: 'c1', word: 'SNAKE', emoji: '🐍' },
-                
-                // 2. Food (15 words)
-                { category_id: 'c2', word: 'APPLE', emoji: '🍎' }, { category_id: 'c2', word: 'CAKE', emoji: '🍰' },
-                { category_id: 'c2', word: 'MILK', emoji: '🥛' }, { category_id: 'c2', word: 'PIZZA', emoji: '🍕' },
-                { category_id: 'c2', word: 'BREAD', emoji: '🍞' }, { category_id: 'c2', word: 'MEAT', emoji: '🍖' },
-                { category_id: 'c2', word: 'EGG', emoji: '🥚' }, { category_id: 'c2', word: 'TACO', emoji: '🌮' },
-                { category_id: 'c2', word: 'CORN', emoji: '🌽' }, { category_id: 'c2', word: 'KIWI', emoji: '🥝' },
-                { category_id: 'c2', word: 'RICE', emoji: '🍚' }, { category_id: 'c2', word: 'SOUP', emoji: '🥣' },
-                { category_id: 'c2', word: 'CHEESE', emoji: '🧀' }, { category_id: 'c2', word: 'CANDY', emoji: '🍬' },
-                { category_id: 'c2', word: 'LEMON', emoji: '🍋' },
-
-                // 3. Vehicles (15 words)
-                { category_id: 'c3', word: 'CAR', emoji: '🚗' }, { category_id: 'c3', word: 'BUS', emoji: '🚌' },
-                { category_id: 'c3', word: 'TRAIN', emoji: '🚂' }, { category_id: 'c3', word: 'BIKE', emoji: '🚲' },
-                { category_id: 'c3', word: 'SHIP', emoji: '🚢' }, { category_id: 'c3', word: 'BOAT', emoji: '⛵' },
-                { category_id: 'c3', word: 'JET', emoji: '✈️' }, { category_id: 'c3', word: 'UFO', emoji: '🛸' },
-                { category_id: 'c3', word: 'TAXI', emoji: '🚕' }, { category_id: 'c3', word: 'TRUCK', emoji: '🚚' },
-                { category_id: 'c3', word: 'VAN', emoji: '🚐' }, { category_id: 'c3', word: 'TRAM', emoji: '🚋' },
-                { category_id: 'c3', word: 'HELI', emoji: '🚁' }, { category_id: 'c3', word: 'ROCKET', emoji: '🚀' },
-                { category_id: 'c3', word: 'CART', emoji: '🛒' },
-
-                // 4. Colors (13 words)
-                { category_id: 'c4', word: 'RED', emoji: '🔴' }, { category_id: 'c4', word: 'BLUE', emoji: '🔵' },
-                { category_id: 'c4', word: 'GREEN', emoji: '🟢' }, { category_id: 'c4', word: 'PINK', emoji: '🌸' },
-                { category_id: 'c4', word: 'BLACK', emoji: '⚫' }, { category_id: 'c4', word: 'WHITE', emoji: '⚪' },
-                { category_id: 'c4', word: 'BROWN', emoji: '🟤' }, { category_id: 'c4', word: 'GOLD', emoji: '🌟' },
-                { category_id: 'c4', word: 'YELLOW', emoji: '🟡' }, { category_id: 'c4', word: 'PURPLE', emoji: '🟣' },
-                { category_id: 'c4', word: 'ORANGE', emoji: '🟠' }, { category_id: 'c4', word: 'GREY', emoji: '⚪' },
-                { category_id: 'c4', word: 'SILVER', emoji: '🪙' },
-
-                // 5. Nations (12 words)
-                { category_id: 'c5', word: 'USA', emoji: '🇺🇸' }, { category_id: 'c5', word: 'UK', emoji: '🇬🇧' },
-                { category_id: 'c5', word: 'JAPAN', emoji: '🇯🇵' }, { category_id: 'c5', word: 'TAIWAN', emoji: '🇹🇼' },
-                { category_id: 'c5', word: 'CHINA', emoji: '🇨🇳' }, { category_id: 'c5', word: 'KOREA', emoji: '🇰🇷' },
-                { category_id: 'c5', word: 'FRANCE', emoji: '🇫🇷' }, { category_id: 'c5', word: 'ITALY', emoji: '🇮🇹' },
-                { category_id: 'c5', word: 'SPAIN', emoji: '🇪🇸' }, { category_id: 'c5', word: 'INDIA', emoji: '🇮🇳' },
-                { category_id: 'c5', word: 'BRAZIL', emoji: '🇧🇷' }, { category_id: 'c5', word: 'CANADA', emoji: '🇨🇦' },
-
-                // 6. Emojis (13 words)
-                { category_id: 'c6', word: 'SMILE', emoji: '😀' }, { category_id: 'c6', word: 'CRY', emoji: '😢' },
-                { category_id: 'c6', word: 'ANGRY', emoji: '😡' }, { category_id: 'c6', word: 'LAUGH', emoji: '😂' },
-                { category_id: 'c6', word: 'SAD', emoji: '🙁' }, { category_id: 'c6', word: 'WINK', emoji: '😉' },
-                { category_id: 'c6', word: 'COOL', emoji: '😎' }, { category_id: 'c6', word: 'LOVE', emoji: '😍' },
-                { category_id: 'c6', word: 'SLEEP', emoji: '😴' }, { category_id: 'c6', word: 'SHOCK', emoji: '😱' },
-                { category_id: 'c6', word: 'SWEAT', emoji: '😅' }, { category_id: 'c6', word: 'DEVIL', emoji: '😈' },
-                { category_id: 'c6', word: 'KISS', emoji: '😘' },
-
-                // 7. Jobs (13 words)
-                { category_id: 'c7', word: 'COP', emoji: '👮' }, { category_id: 'c7', word: 'VET', emoji: '👩‍⚕️' },
-                { category_id: 'c7', word: 'CHEF', emoji: '👨‍🍳' }, { category_id: 'c7', word: 'NURSE', emoji: '👩‍⚕️' },
-                { category_id: 'c7', word: 'PILOT', emoji: '👨‍✈️' }, { category_id: 'c7', word: 'JUDGE', emoji: '👨‍⚖️' },
-                { category_id: 'c7', word: 'BAKER', emoji: '🧑‍🍳' }, { category_id: 'c7', word: 'CLERK', emoji: '👨‍💼' },
-                { category_id: 'c7', word: 'COACH', emoji: '🏃' }, { category_id: 'c7', word: 'GUARD', emoji: '💂' },
-                { category_id: 'c7', word: 'ACTOR', emoji: '🎭' }, { category_id: 'c7', word: 'SINGER', emoji: '🎤' },
-                { category_id: 'c7', word: 'FARMER', emoji: '🧑‍🌾' },
-
-                // 8. Objects (15 words)
-                { category_id: 'c8', word: 'CUP', emoji: '☕' }, { category_id: 'c8', word: 'DESK', emoji: '🪑' },
-                { category_id: 'c8', word: 'LAMP', emoji: '💡' }, { category_id: 'c8', word: 'BOOK', emoji: '📖' },
-                { category_id: 'c8', word: 'PEN', emoji: '🖊️' }, { category_id: 'c8', word: 'CHAIR', emoji: '🪑' },
-                { category_id: 'c8', word: 'BED', emoji: '🛏️' }, { category_id: 'c8', word: 'DOOR', emoji: '🚪' },
-                { category_id: 'c8', word: 'BELL', emoji: '🔔' }, { category_id: 'c8', word: 'RING', emoji: '💍' },
-                { category_id: 'c8', word: 'BAG', emoji: '👜' }, { category_id: 'c8', word: 'TOY', emoji: '🧸' },
-                { category_id: 'c8', word: 'CLOCK', emoji: '🕰️' }, { category_id: 'c8', word: 'KEY', emoji: '🔑' },
-                { category_id: 'c8', word: 'BOX', emoji: '📦' },
-
-                // 9. Weather (12 words)
-                { category_id: 'c9', word: 'SUN', emoji: '☀️' }, { category_id: 'c9', word: 'RAIN', emoji: '🌧️' },
-                { category_id: 'c9', word: 'SNOW', emoji: '❄️' }, { category_id: 'c9', word: 'WIND', emoji: '💨' },
-                { category_id: 'c9', word: 'CLOUD', emoji: '☁️' }, { category_id: 'c9', word: 'STORM', emoji: '⛈️' },
-                { category_id: 'c9', word: 'FOG', emoji: '🌫️' }, { category_id: 'c9', word: 'ICE', emoji: '🧊' },
-                { category_id: 'c9', word: 'HOT', emoji: '🔥' }, { category_id: 'c9', word: 'COLD', emoji: '🥶' },
-                { category_id: 'c9', word: 'WARM', emoji: '🌡️' }, { category_id: 'c9', word: 'FLASH', emoji: '⚡' },
-
-                // 10. Plants (13 words)
-                { category_id: 'c10', word: 'TREE', emoji: '🌳' }, { category_id: 'c10', word: 'GRASS', emoji: '🌿' },
-                { category_id: 'c10', word: 'LEAF', emoji: '🍂' }, { category_id: 'c10', word: 'WEED', emoji: '🌱' },
-                { category_id: 'c10', word: 'MOSS', emoji: '🟩' }, { category_id: 'c10', word: 'BUSH', emoji: '🪴' },
-                { category_id: 'c10', word: 'VINE', emoji: '〰️' }, { category_id: 'c10', word: 'ROOT', emoji: '🪵' },
-                { category_id: 'c10', word: 'SEED', emoji: '🌰' }, { category_id: 'c10', word: 'WOOD', emoji: '🪵' },
-                { category_id: 'c10', word: 'STEM', emoji: '🎋' }, { category_id: 'c10', word: 'ROSE', emoji: '🌹' },
-                { category_id: 'c10', word: 'FERN', emoji: '🌿' },
-
-                // 11. Crops (12 words)
-                { category_id: 'c11', word: 'RICE', emoji: '🍚' }, { category_id: 'c11', word: 'CORN', emoji: '🌽' },
-                { category_id: 'c11', word: 'WHEAT', emoji: '🌾' }, { category_id: 'c11', word: 'OAT', emoji: '🥣' },
-                { category_id: 'c11', word: 'BEAN', emoji: '🫘' }, { category_id: 'c11', word: 'PEA', emoji: '🫛' },
-                { category_id: 'c11', word: 'YAM', emoji: '🍠' }, { category_id: 'c11', word: 'SOY', emoji: '🫘' },
-                { category_id: 'c11', word: 'NUT', emoji: '🥜' }, { category_id: 'c11', word: 'SPUD', emoji: '🥔' },
-                { category_id: 'c11', word: 'PLUM', emoji: '🍑' }, { category_id: 'c11', word: 'PEAR', emoji: '🍐' },
-
-                // 12. Sports (13 words)
-                { category_id: 'c12', word: 'RUN', emoji: '🏃' }, { category_id: 'c12', word: 'SWIM', emoji: '🏊' },
-                { category_id: 'c12', word: 'GOLF', emoji: '🏌️' }, { category_id: 'c12', word: 'SKI', emoji: '⛷️' },
-                { category_id: 'c12', word: 'SURF', emoji: '🏄' }, { category_id: 'c12', word: 'YOGA', emoji: '🧘' },
-                { category_id: 'c12', word: 'JUDO', emoji: '🥋' }, { category_id: 'c12', word: 'BOX', emoji: '🥊' },
-                { category_id: 'c12', word: 'DIVE', emoji: '🤿' }, { category_id: 'c12', word: 'JUMP', emoji: '🦘' },
-                { category_id: 'c12', word: 'RIDE', emoji: '🚴' }, { category_id: 'c12', word: 'BALL', emoji: '⚽' },
-                { category_id: 'c12', word: 'TENNIS', emoji: '🎾' }
+                { category_id: 'c1', word: 'DOG', emoji: '🐶' }, 
+                { category_id: 'c1', word: 'CAT', emoji: '🐱' }
             ]
         };
 
@@ -337,6 +236,84 @@
             const overlay = document.getElementById('loadingOverlay');
             if(show) overlay.classList.remove('hide');
             else overlay.classList.add('hide');
+        }
+
+        async function initDatabase() {
+            // 若未填寫網址，則使用預設範例字庫
+            if (!GOOGLE_SHEET_CSV_URL) {
+                MockDB = DefaultDB; 
+                renderHome();
+                return;
+            }
+
+            showLoading(true);
+            document.getElementById('loadingText').innerText = "Loading Database...";
+            
+            try {
+                // 自動下載並解析 Google Sheets CSV
+                Papa.parse(GOOGLE_SHEET_CSV_URL, {
+                    download: true,
+                    header: true,
+                    complete: function(results) {
+                        const data = results.data;
+                        let categoryMap = new Map();
+                        let parsedWords = [];
+
+                        data.forEach(row => {
+                            // 支援多種直覺的欄位命名，自動抓取對應欄位
+                            const catEN = (row['Category'] || row['category'] || row['分類'] || '').trim();
+                            const wordStr = (row['Word'] || row['word'] || row['單字'] || '').trim().toUpperCase();
+                            const wordEmoji = (row['Emoji'] || row['emoji'] || row['圖示'] || '❓').trim();
+                            
+                            // 進階可選欄位 (讓你可以在 Database 中自訂中文名與分類 icon)
+                            const catZH = (row['CategoryZH'] || row['分類中文'] || catEN).trim();
+                            const catEmoji = (row['CategoryEmoji'] || row['分類圖示'] || wordEmoji).trim();
+
+                            if (catEN && wordStr) {
+                                // 自動將類別名稱轉為 ID
+                                let catId = catEN.toLowerCase().replace(/[^a-z0-9]/g, '');
+                                
+                                // 建立類別列表
+                                if (!categoryMap.has(catId)) {
+                                    categoryMap.set(catId, {
+                                        id: catId,
+                                        name: catEN,
+                                        nameZh: catZH,
+                                        icon_emoji: catEmoji
+                                    });
+                                }
+                                
+                                // 統整所有單字
+                                parsedWords.push({
+                                    category_id: catId,
+                                    word: wordStr,
+                                    emoji: wordEmoji
+                                });
+                            }
+                        });
+
+                        MockDB.categories = Array.from(categoryMap.values());
+                        MockDB.words = parsedWords;
+                        
+                        // 防呆機制：如果試算表是空的，退回使用範例
+                        if (MockDB.words.length === 0) MockDB = DefaultDB;
+
+                        showLoading(false);
+                        renderHome();
+                    },
+                    error: function(err) {
+                        console.error("資料庫讀取失敗", err);
+                        MockDB = DefaultDB;
+                        showLoading(false);
+                        renderHome();
+                    }
+                });
+            } catch (error) {
+                console.error("初始化錯誤", error);
+                MockDB = DefaultDB;
+                showLoading(false);
+                renderHome();
+            }
         }
 
         const mainContainer = document.getElementById('mainContainer');
@@ -654,7 +631,8 @@
                     window.speechSynthesis.getVoices();
                 };
             }
-            renderHome();
+            // 系統載入時，改為先去抓取遠端 Database
+            initDatabase();
         };
     </script>
 </body>
