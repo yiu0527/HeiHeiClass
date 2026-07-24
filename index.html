@@ -404,42 +404,36 @@
 
         function renderGame() {
             const currentItem = State.gameWords[State.currentWordIndex];
-            State.currentLetterIndex = 0;
             const targetWord = currentItem.word;
+            State.currentInput = []; // 重置輸入
             
-            // Speak the word when starting a new round
             setTimeout(() => speakWord(targetWord), 300);
 
-            // Prepare letter buttons (Correct letters + distractors)
-            let lettersNeeded = targetWord.split('');
-            let distractors = getRandomLetters(3, lettersNeeded); // Add 3 random extra letters
-            let allOptions = shuffleArray([...lettersNeeded, ...distractors]);
-
-            // Build target boxes
+            // 建立目標輸入框
             let boxesHtml = '';
             for(let i=0; i<targetWord.length; i++) {
                 boxesHtml += `
-                    <div id="target-box-${i}" class="w-14 h-16 md:w-20 md:h-24 bg-white border-4 border-dashed border-gray-300 rounded-xl flex items-center justify-center text-4xl md:text-5xl font-bold text-kid-blue shadow-inner">
-                        <!-- empty -->
+                    <div id="target-box-${i}" class="w-12 h-14 md:w-16 md:h-20 bg-white border-4 border-dashed border-gray-300 rounded-xl flex items-center justify-center text-3xl md:text-5xl font-bold text-kid-blue shadow-inner transition-colors duration-200">
                     </div>
                 `;
             }
 
-            // Build option buttons
-            let optionsHtml = '';
-            allOptions.forEach((letter, idx) => {
-                optionsHtml += `
-                    <button id="option-btn-${idx}" onclick="handleLetterClick('${letter}', this)" 
-                            class="btn-3d w-14 h-16 md:w-20 md:h-24 bg-kid-yellow text-gray-800 text-3xl md:text-4xl font-bold rounded-xl border-b-4 border-yellow-600 hover:bg-yellow-300 flex items-center justify-center m-2">
+            // 建立 A-Z 虛擬字母鍵盤
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+            let keyboardHtml = '<div class="flex flex-wrap justify-center gap-2 w-full max-w-xl mx-auto">';
+            alphabet.forEach(letter => {
+                keyboardHtml += `
+                    <button onclick="handleType('${letter}')" 
+                            class="btn-3d w-10 h-12 md:w-12 md:h-14 bg-kid-yellow text-gray-800 text-xl md:text-2xl font-bold rounded-lg border-b-4 border-yellow-600 hover:bg-yellow-300 flex items-center justify-center active:bg-yellow-400">
                         ${letter}
                     </button>
                 `;
             });
+            keyboardHtml += '</div>';
 
             let html = `
                 <div class="w-full max-w-3xl flex flex-col items-center animate-pop">
                     
-                    <!-- Progress and Encouragement -->
                     <div class="w-full flex justify-between items-center mb-6">
                         <div class="bg-white/80 px-4 py-2 rounded-full font-bold text-gray-600 shadow-sm">
                             Question: ${State.currentWordIndex + 1} / ${State.gameWords.length}
@@ -449,25 +443,33 @@
                         </div>
                     </div>
 
-                    <!-- Main Play Area -->
-                    <div class="bg-white p-8 rounded-3xl shadow-xl w-full flex flex-col items-center relative overflow-hidden border-4 border-white">
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-xl w-full flex flex-col items-center relative overflow-hidden border-4 border-white">
                         
-                        <!-- Emoji & Sound Button -->
-                        <div class="flex items-center gap-6 mb-8">
+                        <div class="flex items-center gap-6 mb-6">
                             <div class="text-8xl md:text-9xl filter drop-shadow-lg">${currentItem.emoji}</div>
-                            <button onclick="speakWord('${targetWord}'); speakWord('Find the letters for ${targetWord}', 1);" class="btn-3d bg-kid-blue text-white w-16 h-16 rounded-full text-2xl flex items-center justify-center border-b-4 border-blue-600">
+                            <button onclick="speakWord('${targetWord}'); speakWord('Spell ${targetWord}', 1);" class="btn-3d bg-kid-blue text-white w-14 h-14 rounded-full text-xl flex items-center justify-center border-b-4 border-blue-600">
                                 <i class="fa-solid fa-volume-up"></i>
                             </button>
                         </div>
 
-                        <!-- Target Spelling Area -->
-                        <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10">
+                        <!-- 拼字目標框區 -->
+                        <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
                             ${boxesHtml}
                         </div>
 
-                        <!-- Keyboard / Options -->
-                        <div class="bg-gray-100 p-4 rounded-2xl w-full flex flex-wrap justify-center shadow-inner">
-                            ${optionsHtml}
+                        <!-- 虛擬鍵盤與控制鈕 -->
+                        <div class="bg-gray-100 p-4 rounded-2xl w-full flex flex-col items-center shadow-inner">
+                            ${keyboardHtml}
+                            
+                            <!-- 刪除與送出按鈕 -->
+                            <div class="flex justify-center gap-4 mt-6 w-full">
+                                <button onclick="handleBackspace()" class="btn-3d bg-gray-300 text-gray-700 w-24 h-12 md:w-28 md:h-14 text-xl rounded-xl border-b-4 border-gray-400 hover:bg-gray-200 flex items-center justify-center">
+                                    <i class="fa-solid fa-delete-left mr-2"></i> 刪除
+                                </button>
+                                <button id="submitBtn" onclick="submitAnswer()" class="btn-3d bg-kid-green text-white w-32 h-12 md:w-40 md:h-14 text-xl md:text-2xl font-bold rounded-xl border-b-4 border-green-600 hover:bg-green-400 flex items-center justify-center btn-disabled transition-opacity">
+                                    <i class="fa-solid fa-check mr-2"></i> 送出
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -475,62 +477,91 @@
             mainContainer.innerHTML = html;
         }
 
-        // Logic for checking letters
-        function handleLetterClick(letter, btnElement) {
-            if (btnElement.classList.contains('btn-disabled')) return; // Already used
-
-            const currentItem = State.gameWords[State.currentWordIndex];
-            const targetWord = currentItem.word;
-            const expectedLetter = targetWord[State.currentLetterIndex];
-
-            if (letter === expectedLetter) {
-                // Correct!
-                playSound('correct');
-                
-                // Fill the box
-                const targetBox = document.getElementById(`target-box-${State.currentLetterIndex}`);
-                targetBox.innerHTML = letter;
-                targetBox.classList.remove('border-dashed', 'border-gray-300', 'bg-white');
-                targetBox.classList.add('border-solid', 'border-kid-green', 'bg-green-100', 'animate-pop');
-                
-                // Disable button
-                btnElement.classList.add('btn-disabled');
-                
-                State.currentLetterIndex++;
-                State.score += 10;
-
-                // Check if word is complete
-                if (State.currentLetterIndex === targetWord.length) {
-                    handleWordComplete(targetWord);
+        // 更新畫面上的方塊顯示與送出按鈕狀態
+        function updateBoxesUI() {
+            const targetWord = State.gameWords[State.currentWordIndex].word;
+            for(let i=0; i<targetWord.length; i++) {
+                const box = document.getElementById(`target-box-${i}`);
+                if(State.currentInput[i]) {
+                    box.innerHTML = State.currentInput[i];
+                    box.classList.remove('border-dashed', 'border-gray-300');
+                    box.classList.add('border-solid', 'border-kid-blue', 'text-kid-blue');
+                    // 清除可能殘留的錯誤紅色標記
+                    box.classList.remove('border-red-500', 'text-red-500', 'bg-red-100');
                 } else {
-                    // Small encouragement randomly
-                    if(Math.random() > 0.6) {
-                        const praises = ["Good!", "Yes!", "Nice!"];
-                        speakWord(praises[Math.floor(Math.random()*praises.length)], 1.2);
-                    }
+                    box.innerHTML = '';
+                    box.classList.remove('border-solid', 'border-kid-blue', 'border-red-500', 'text-red-500', 'bg-red-100');
+                    box.classList.add('border-dashed', 'border-gray-300', 'text-kid-blue');
                 }
-            } else {
-                // Wrong!
-                playSound('wrong');
-                btnElement.classList.remove('animate-shake'); // reset animation
-                void btnElement.offsetWidth; // trigger reflow
-                btnElement.classList.add('animate-shake', 'bg-red-400', 'border-red-600', 'text-white');
-                
-                // Revert color after shake
-                setTimeout(() => {
-                    btnElement.classList.remove('bg-red-400', 'border-red-600', 'text-white');
-                    btnElement.classList.add('bg-kid-yellow', 'border-yellow-600', 'text-gray-800');
-                }, 400);
-
-                const encouragements = ["Oops!", "Try again!", "Almost!"];
-                speakWord(encouragements[Math.floor(Math.random()*encouragements.length)], 1.2);
-                
-                // Deduct minor points if score > 0 to keep it positive
-                if(State.score > 0) State.score -= 2; 
             }
             
-            // Update score display immediately
-            document.querySelector('.fa-star').parentElement.innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${Math.max(0, State.score)}`;
+            // 判斷是否填滿，填滿才能送出
+            const submitBtn = document.getElementById('submitBtn');
+            if(State.currentInput.length === targetWord.length) {
+                submitBtn.classList.remove('btn-disabled');
+            } else {
+                submitBtn.classList.add('btn-disabled');
+            }
+        }
+
+        // 點擊字母鍵盤
+        function handleType(letter) {
+            const targetWord = State.gameWords[State.currentWordIndex].word;
+            if(State.currentInput.length < targetWord.length) {
+                playSound('correct'); 
+                State.currentInput.push(letter);
+                updateBoxesUI();
+            }
+        }
+
+        // 點擊刪除退格
+        function handleBackspace() {
+            if(State.currentInput.length > 0) {
+                playSound('wrong'); 
+                State.currentInput.pop();
+                updateBoxesUI();
+            }
+        }
+
+        // 送出驗證答案
+        function submitAnswer() {
+            const currentItem = State.gameWords[State.currentWordIndex];
+            const targetWord = currentItem.word;
+            
+            // 尚未填滿不可送出
+            if(State.currentInput.length !== targetWord.length) return;
+
+            const typedWord = State.currentInput.join('');
+
+            if(typedWord === targetWord) {
+                // 答對了！
+                State.score += 10;
+                for(let i=0; i<targetWord.length; i++) {
+                    const box = document.getElementById(`target-box-${i}`);
+                    box.classList.remove('border-kid-blue');
+                    box.classList.add('border-kid-green', 'bg-green-100', 'animate-pop');
+                }
+                document.querySelector('.fa-star').parentElement.innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${Math.max(0, State.score)}`;
+                handleWordComplete(targetWord);
+            } else {
+                // 答錯了！
+                playSound('wrong');
+                speakWord("Oops! Try again!", 1.2);
+                if(State.score > 0) State.score -= 2;
+                
+                // 讓所有框框變紅並搖晃
+                for(let i=0; i<targetWord.length; i++) {
+                    const box = document.getElementById(`target-box-${i}`);
+                    box.classList.remove('border-kid-blue');
+                    box.classList.add('border-red-500', 'text-red-500', 'bg-red-100', 'animate-shake');
+                    
+                    // 搖晃結束後移除動畫 class，但保留紅色讓小孩知道錯了，直到他們按刪除修改
+                    setTimeout(() => {
+                        box.classList.remove('animate-shake');
+                    }, 400);
+                }
+                document.querySelector('.fa-star').parentElement.innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${Math.max(0, State.score)}`;
+            }
         }
 
         function handleWordComplete(word) {
