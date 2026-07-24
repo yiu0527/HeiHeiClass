@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Emoji Spelling Game</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <!-- Tone.js for web audio sound synthesis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <!-- Canvas Confetti for victory animations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kid-blue': '#4FACFE',
+                        'kid-pink': '#FF6B8B',
+                        'kid-yellow': '#FFD166',
+                        'kid-green': '#06D6A0',
+                        'kid-purple': '#8338EC'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Fredoka', cursive, sans-serif;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            min-height: 100vh;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .btn-3d {
+            transition: all 0.1s ease;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.15);
+        }
+
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+        }
+
+        .animate-pop {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .animate-pulse-fast {
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hide {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-gray-800 antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="w-full p-4 flex justify-between items-center max-w-5xl mx-auto z-10">
+        <button onclick="goToHome()" class="btn-3d bg-white text-kid-blue font-bold px-4 py-2 rounded-2xl flex items-center gap-2 border-2 border-white/80 shadow-md hover:bg-blue-50">
+            <i class="fa-solid fa-house text-xl"></i>
+            <span class="hidden sm:inline">Home</span>
+        </button>
+
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white drop-shadow-md tracking-wide">
+            ✨ Emoji Spelling ✨
+        </h1>
+
+        <button id="soundToggleBtn" onclick="toggleSound()" class="btn-3d bg-white text-kid-purple font-bold px-4 py-2 rounded-2xl flex items-center gap-2 border-2 border-white/80 shadow-md hover:bg-purple-50">
+            <i class="fa-solid fa-volume-up text-xl"></i>
+        </button>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="mainContainer" class="flex-grow flex items-center justify-center p-4">
+        <!-- Dynamic game content renders here -->
+    </main>
+
+    <!-- Loading Overlay Screen -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex flex-col items-center justify-center text-white transition-opacity duration-300">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl flex flex-col items-center border-4 border-kid-blue text-gray-800">
+            <div class="animate-spin text-5xl text-kid-blue mb-4">
+                <i class="fa-solid fa-circle-notch"></i>
+            </div>
+            <div id="loadingText" class="text-2xl font-bold text-gray-700">Loading Database...</div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // Google Sheets Published CSV URL
+        // ==========================================
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQtWwCQB08QJ0usLK-spN3IoBHADig1xLmWKQBRe3yKe16DFPL_DkpHLmMp5s-k2a1SozMtfgj7RrMm/pub?output=csv"; 
+
+        // Dynamic Database State
+        let MockDB = {
+            categories: [],
+            words: []
+        };
+
+        // Default Fallback Database if sheet network fails
+        const DefaultDB = {
+            categories: [
+                { id: 'animals', name: 'Animals', nameZh: '動物', icon_emoji: '🐶' },
+                { id: 'fruits', name: 'Fruits', nameZh: '水果', icon_emoji: '🍎' }
+            ],
+            words: [
+                { category_id: 'animals', word: 'DOG', emoji: '🐶' }, 
+                { category_id: 'animals', word: 'CAT', emoji: '🐱' },
+                { category_id: 'animals', word: 'LION', emoji: '🦁' },
+                { category_id: 'fruits', word: 'APPLE', emoji: '🍎' },
+                { category_id: 'fruits', word: 'BANANA', emoji: '🍌' }
+            ]
+        };
+
+        const State = {
+            soundEnabled: true,
+            currentCategory: null,
+            gameWords: [],
+            currentWordIndex: 0,
+            currentLetterIndex: 0,
+            score: 0
+        };
+
+        let correctSynth, wrongSynth, winSynth;
+
+        function initAudio() {
+            if(!correctSynth && typeof Tone !== 'undefined') {
+                try {
+                    correctSynth = new Tone.Synth({
+                        oscillator: { type: "sine" },
+                        envelope: { attack: 0.01, decay: 0.2, sustain: 0.2, release: 0.5 }
+                    }).toDestination();
+                    wrongSynth = new Tone.MembraneSynth().toDestination();
+                    winSynth = new Tone.PolySynth(Tone.Synth).toDestination();
+                } catch(e) {
+                    console.warn("Audio Context init warning:", e);
+                }
+            }
+        }
+
+        function playSound(type) {
+            if (!State.soundEnabled || typeof Tone === 'undefined') return;
+            initAudio();
+            try {
+                Tone.start(); 
+                const now = Tone.now();
+                if (type === 'correct' && correctSynth) {
+                    correctSynth.triggerAttackRelease("C6", "8n", now);
+                    correctSynth.triggerAttackRelease("E6", "8n", now + 0.1);
+                } else if (type === 'wrong' && wrongSynth) {
+                    wrongSynth.triggerAttackRelease("C2", "8n", now);
+                } else if (type === 'win' && winSynth) {
+                    winSynth.triggerAttackRelease(["C4", "E4", "G4", "C5"], "4n", now);
+                    winSynth.triggerAttackRelease(["F4", "A4", "C5", "F5"], "4n", now + 0.3);
+                    winSynth.triggerAttackRelease(["G4", "B4", "D5", "G5"], "2n", now + 0.6);
+                }
+            } catch(e) {
+                console.warn("Audio playback exception:", e);
+            }
+        }
+
+        function toggleSound() {
+            State.soundEnabled = !State.soundEnabled;
+            const btn = document.getElementById('soundToggleBtn');
+            if (btn) {
+                btn.innerHTML = State.soundEnabled 
+                    ? '<i class="fa-solid fa-volume-up text-xl"></i>' 
+                    : '<i class="fa-solid fa-volume-xmark text-xl text-red-500"></i>';
+            }
+        }
+
+        function speakWord(text, rate = 0.85) {
+            if (!State.soundEnabled || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = rate; 
+            utterance.pitch = 1.2; 
+            const voices = window.speechSynthesis.getVoices();
+            const preferredVoice = voices.find(v => v.lang.startsWith('en-') && (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Google')));
+            if(preferredVoice) utterance.voice = preferredVoice;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        function getRandomLetters(count, excludeLetters) {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let result = [];
+            while(result.length < count) {
+                let char = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                if (!excludeLetters.includes(char) && !result.includes(char)) {
+                    result.push(char);
+                }
+            }
+            return result;
+        }
+
+        // Safe UI loading spinner function with null guard checks
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (!overlay) return;
+            
+            if (show) {
+                overlay.classList.remove('hide');
+            } else {
+                overlay.classList.add('hide');
+            }
+        }
+
+        function updateLoadingText(text) {
+            const loadingText = document.getElementById('loadingText');
+            if (loadingText) {
+                loadingText.innerText = text;
+            }
+        }
+
+        function getRowValue(row, possibleKeys) {
+            const keys = Object.keys(row);
+            for (const key of keys) {
+                const cleanKey = key.replace(/^\uFEFF/, '').trim().toLowerCase();
+                for (const p of possibleKeys) {
+                    if (cleanKey === p.toLowerCase()) {
+                        return (row[key] || '').toString().trim();
+                    }
+                }
+            }
+            return '';
+        }
+
+        async function fetchCSVText(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+                return await response.text();
+            } catch (err) {
+                console.warn("Direct fetch failed, trying CORS proxy fallback...", err);
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                const res = await fetch(proxyUrl);
+                if (!res.ok) throw new Error(`Proxy HTTP Error ${res.status}`);
+                return await res.text();
+            }
+        }
+
+        async function initDatabase() {
+            showLoading(true);
+            updateLoadingText("Loading Database...");
+
+            if (!GOOGLE_SHEET_CSV_URL) {
+                MockDB = DefaultDB; 
+                showLoading(false);
+                renderHome();
+                return;
+            }
+
+            try {
+                const csvText = await fetchCSVText(GOOGLE_SHEET_CSV_URL);
+
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        const data = results.data;
+                        let categoryMap = new Map();
+                        let parsedWords = [];
+
+                        data.forEach(row => {
+                            const catEN = getRowValue(row, ['category', 'categoryen', '分類', '類別', 'cat']);
+                            const wordStr = getRowValue(row, ['word', '單字', '英文單字', 'vocab']).toUpperCase();
+                            const wordEmoji = getRowValue(row, ['emoji', '圖示', '單字圖示', 'icon']) || '❓';
+                            
+                            const catZH = getRowValue(row, ['categoryzh', '分類中文', '類別中文', '中文分類']) || catEN;
+                            const catEmoji = getRowValue(row, ['categoryemoji', '分類圖示', '類別圖示', '分類emoji']) || wordEmoji || '📚';
+
+                            if (catEN && wordStr) {
+                                let catId = catEN.toLowerCase().replace(/[^a-z0-9]/g, '');
+                                if (!catId) catId = 'cat_' + Math.random().toString(36).substr(2, 5);
+
+                                if (!categoryMap.has(catId)) {
+                                    categoryMap.set(catId, {
+                                        id: catId,
+                                        name: catEN,
+                                        nameZh: catZH,
+                                        icon_emoji: catEmoji
+                                    });
+                                }
+                                
+                                parsedWords.push({
+                                    category_id: catId,
+                                    word: wordStr,
+                                    emoji: wordEmoji
+                                });
+                            }
+                        });
+
+                        if (parsedWords.length > 0) {
+                            MockDB.categories = Array.from(categoryMap.values());
+                            MockDB.words = parsedWords;
+                        } else {
+                            console.warn("No valid data parsed, using default dataset");
+                            MockDB = DefaultDB;
+                        }
+
+                        showLoading(false);
+                        renderHome();
+                    },
+                    error: function(err) {
+                        console.error("CSV parse error", err);
+                        MockDB = DefaultDB;
+                        showLoading(false);
+                        renderHome();
+                    }
+                });
+            } catch (error) {
+                console.error("Failed to load Google Sheet database", error);
+                MockDB = DefaultDB;
+                showLoading(false);
+                renderHome();
+            }
+        }
+
+        function renderHome() {
+            const mainContainer = document.getElementById('mainContainer');
+            if (!mainContainer) return;
+
+            if (!MockDB.categories || MockDB.categories.length === 0) {
+                mainContainer.innerHTML = `
+                    <div class="text-center bg-white p-8 rounded-3xl shadow-lg">
+                        <div class="text-4xl mb-4">⚠️</div>
+                        <h2 class="text-2xl font-bold mb-2">No Categories Found</h2>
+                        <p class="text-gray-600 mb-4">Please check your Google Sheets CSV publication.</p>
+                        <button onclick="initDatabase()" class="btn-3d bg-kid-blue text-white px-6 py-2 rounded-full font-bold">Retry</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="text-center animate-pop w-full max-w-4xl">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg">Choose a Category!</h2>
+                    <p class="text-xl text-white/90 mb-8 font-semibold">選擇你想學習的單字類別</p>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full">
+            `;
+
+            MockDB.categories.forEach(cat => {
+                html += `
+                    <button onclick="selectCategory('${cat.id}')" 
+                            class="btn-3d bg-white rounded-3xl p-5 border-4 border-white/80 flex flex-col items-center justify-center space-y-2 hover:bg-blue-50 group shadow-lg">
+                        <div class="text-5xl group-hover:scale-110 transition-transform">${cat.icon_emoji}</div>
+                        <div class="text-center">
+                            <div class="text-xl font-bold text-gray-800">${cat.name}</div>
+                            <div class="text-gray-500 text-sm font-semibold">${cat.nameZh}</div>
+                        </div>
+                    </button>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+            mainContainer.innerHTML = html;
+        }
+
+        async function fetchWordsForCategory(categoryId) {
+            showLoading(true);
+            updateLoadingText("Preparing Words...");
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            const allCatWords = MockDB.words.filter(w => w.category_id === categoryId);
+            const shuffled = shuffleArray([...allCatWords]);
+            State.gameWords = shuffled.slice(0, 10);
+            
+            showLoading(false);
+            renderPreview();
+        }
+
+        function selectCategory(categoryId) {
+            initAudio();
+            if (typeof Tone !== 'undefined') Tone.start(); 
+            if ('speechSynthesis' in window) {
+                let u = new SpeechSynthesisUtterance('');
+                u.volume = 0;
+                window.speechSynthesis.speak(u);
+            }
+            State.currentCategory = MockDB.categories.find(c => c.id === categoryId);
+            fetchWordsForCategory(categoryId);
+        }
+
+        function renderPreview() {
+            const mainContainer = document.getElementById('mainContainer');
+            if (!mainContainer) return;
+
+            let cardsHtml = '';
+            State.gameWords.forEach((item) => {
+                cardsHtml += `
+                    <div class="bg-white rounded-2xl p-4 shadow-md border-2 border-kid-yellow flex flex-col items-center justify-center btn-3d cursor-pointer hover:border-kid-pink"
+                         onclick="speakWord('${item.word}')">
+                        <div class="text-5xl mb-2">${item.emoji}</div>
+                        <div class="text-xl font-bold text-gray-700 tracking-wider">${item.word}</div>
+                        <button class="mt-2 text-kid-blue hover:text-kid-pink">
+                            <i class="fa-solid fa-volume-up"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            let html = `
+                <div class="w-full max-w-4xl animate-pop flex flex-col items-center">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-2 text-center drop-shadow-md">Let's Learn! 📖</h2>
+                    <p class="text-lg text-white/90 mb-6 text-center font-semibold">點擊卡片聽發音，準備好就出發挑戰！</p>
+                    
+                    <div class="w-full bg-white/70 p-4 rounded-3xl backdrop-blur-md mb-8 shadow-xl">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                            ${cardsHtml}
+                        </div>
+                    </div>
+
+                    <button onclick="startGame()" class="btn-3d bg-kid-green text-white text-3xl font-bold py-4 px-12 rounded-full border-b-8 border-green-600 hover:bg-green-400 animate-pulse-fast shadow-xl">
+                        出發去挑戰！ <i class="fa-solid fa-rocket ml-2"></i>
+                    </button>
+                </div>
+            `;
+            mainContainer.innerHTML = html;
+        }
+
+        function startGame() {
+            State.currentWordIndex = 0;
+            State.score = 0;
+            renderGame();
+        }
+
+        function renderGame() {
+            const mainContainer = document.getElementById('mainContainer');
+            if (!mainContainer) return;
+
+            const currentItem = State.gameWords[State.currentWordIndex];
+            const targetWord = currentItem.word;
+            State.currentLetterIndex = 0;
+            
+            setTimeout(() => speakWord(targetWord), 300);
+
+            // Target Letter Boxes
+            let boxesHtml = '';
+            for(let i = 0; i < targetWord.length; i++) {
+                boxesHtml += `
+                    <div id="target-box-${i}" class="w-12 h-14 md:w-16 md:h-20 bg-white border-4 border-dashed border-gray-300 rounded-2xl flex items-center justify-center text-3xl md:text-5xl font-bold text-kid-blue shadow-inner transition-colors duration-200">
+                    </div>
+                `;
+            }
+
+            // Letter Pool Buttons
+            let correctLetters = targetWord.split('');
+            let distractorLetters = getRandomLetters(4, correctLetters);
+            let letterPool = shuffleArray(correctLetters.concat(distractorLetters));
+
+            let poolHtml = '<div class="flex flex-wrap justify-center gap-3 w-full max-w-lg mx-auto">';
+            letterPool.forEach((letter, index) => {
+                poolHtml += `
+                    <button id="letter-btn-${index}" onclick="handleLetterClick('${letter}', 'letter-btn-${index}')" 
+                            class="btn-3d w-14 h-16 md:w-16 md:h-18 bg-kid-yellow text-gray-800 text-2xl md:text-3xl font-bold rounded-2xl border-b-6 border-yellow-600 hover:bg-yellow-300 flex items-center justify-center active:bg-yellow-400 transition-all shadow-md">
+                        ${letter}
+                    </button>
+                `;
+            });
+            poolHtml += '</div>';
+
+            let html = `
+                <div class="w-full max-w-3xl flex flex-col items-center animate-pop">
+                    
+                    <div class="w-full flex justify-between items-center mb-4">
+                        <div class="bg-white/90 px-4 py-2 rounded-full font-bold text-gray-700 shadow-md">
+                            Question: ${State.currentWordIndex + 1} / ${State.gameWords.length}
+                        </div>
+                        <div id="score-display" class="bg-white/90 px-4 py-2 rounded-full font-bold text-amber-500 flex items-center shadow-md">
+                            <i class="fa-solid fa-star mr-1"></i> ${State.score}
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-2xl w-full flex flex-col items-center relative border-4 border-white">
+                        
+                        <div class="flex items-center gap-6 mb-6">
+                            <div class="text-8xl md:text-9xl filter drop-shadow-md">${currentItem.emoji}</div>
+                            <button onclick="speakWord('${targetWord}'); speakWord('Find the letters for ${targetWord}', 1);" class="btn-3d bg-kid-blue text-white w-14 h-14 rounded-full text-xl flex items-center justify-center border-b-4 border-blue-600 shadow-md">
+                                <i class="fa-solid fa-volume-up"></i>
+                            </button>
+                        </div>
+
+                        <!-- Target Box Grid -->
+                        <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10">
+                            ${boxesHtml}
+                        </div>
+
+                        <!-- Letter Choice Buttons -->
+                        <div id="letterPoolContainer" class="bg-gray-100 p-6 rounded-2xl w-full shadow-inner border-2 border-gray-200">
+                            <p class="text-center text-gray-500 font-bold mb-4">選出正確的字母拼出英文單字！</p>
+                            ${poolHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContainer.innerHTML = html;
+        }
+
+        function handleLetterClick(clickedLetter, buttonId) {
+            const targetWord = State.gameWords[State.currentWordIndex].word;
+            const expectedLetter = targetWord[State.currentLetterIndex];
+            const btnElement = document.getElementById(buttonId);
+
+            if (!btnElement || btnElement.classList.contains('invisible')) return;
+
+            if (clickedLetter === expectedLetter) {
+                playSound('correct'); 
+                
+                const box = document.getElementById(`target-box-${State.currentLetterIndex}`);
+                if (box) {
+                    box.innerHTML = clickedLetter;
+                    box.classList.remove('border-dashed', 'border-gray-300');
+                    box.classList.add('border-solid', 'border-kid-blue', 'text-kid-blue', 'animate-pop');
+                }
+
+                btnElement.classList.add('invisible');
+                State.currentLetterIndex++;
+
+                if (State.currentLetterIndex === targetWord.length) {
+                    State.score += 20;
+                    const scoreDisplay = document.getElementById('score-display');
+                    if (scoreDisplay) {
+                        scoreDisplay.innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${State.score}`;
+                    }
+                    
+                    for(let i = 0; i < targetWord.length; i++) {
+                        let b = document.getElementById(`target-box-${i}`);
+                        if (b) {
+                            b.classList.remove('border-kid-blue');
+                            b.classList.add('border-kid-green', 'bg-green-100');
+                        }
+                    }
+                    
+                    const poolContainer = document.getElementById('letterPoolContainer');
+                    if (poolContainer) poolContainer.style.pointerEvents = 'none';
+                    
+                    setTimeout(() => {
+                        handleWordComplete(targetWord);
+                    }, 500);
+                }
+
+            } else {
+                playSound('wrong'); 
+                
+                if (State.score > 0) State.score -= 2;
+                const scoreDisplay = document.getElementById('score-display');
+                if (scoreDisplay) {
+                    scoreDisplay.innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${Math.max(0, State.score)}`;
+                }
+
+                btnElement.classList.remove('animate-shake', 'bg-red-300', 'border-red-600', 'text-white');
+                void btnElement.offsetWidth;
+                btnElement.classList.add('animate-shake', 'bg-red-300', 'border-red-600', 'text-white');
+                
+                setTimeout(() => {
+                    btnElement.classList.remove('bg-red-300', 'border-red-600', 'text-white');
+                }, 400);
+            }
+        }
+
+        function handleWordComplete(word) {
+            playSound('win');
+            speakWord(`Awesome! ${word}`);
+            
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.6 },
+                    colors: ['#43e97b', '#f6d365', '#4facfe']
+                });
+            }
+
+            setTimeout(() => {
+                State.currentWordIndex++;
+                if (State.currentWordIndex >= State.gameWords.length) {
+                    renderResult();
+                } else {
+                    renderGame();
+                }
+            }, 1800);
+        }
+
+        function renderResult() {
+            const mainContainer = document.getElementById('mainContainer');
+            if (!mainContainer) return;
+
+            playSound('win');
+            speakWord("You are a superstar! Great job!");
+            
+            if (typeof confetti === 'function') {
+                var duration = 3 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+                function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) return clearInterval(interval);
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+            }
+
+            let stars = State.score > 150 ? 3 : (State.score > 80 ? 2 : 1);
+            let starHtml = '';
+            for(let i = 0; i < 3; i++) {
+                if(i < stars) {
+                    starHtml += `<i class="fa-solid fa-star text-kid-yellow text-6xl md:text-8xl animate-bounce" style="animation-delay: ${i*0.2}s"></i>`;
+                } else {
+                    starHtml += `<i class="fa-regular fa-star text-gray-300 text-6xl md:text-8xl"></i>`;
+                }
+            }
+
+            let html = `
+                <div class="text-center animate-pop bg-white p-8 md:p-10 rounded-[3rem] shadow-2xl border-8 border-kid-yellow max-w-2xl w-full mx-auto">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-kid-pink mb-6">Congratulations! 🎉</h1>
+                    
+                    <div class="flex justify-center gap-4 mb-8">
+                        ${starHtml}
+                    </div>
+
+                    <div class="text-3xl font-bold text-gray-700 mb-2">
+                        Total Score: <span class="text-kid-blue">${Math.max(0, State.score)}</span>
+                    </div>
+                    <p class="text-xl text-gray-500 mb-8 font-semibold">You did an amazing job spelling!</p>
+
+                    <button onclick="goToHome()" class="btn-3d bg-kid-blue text-white text-3xl font-bold py-4 px-12 rounded-full border-b-8 border-blue-700 hover:bg-blue-400 shadow-lg">
+                        Play Again! <i class="fa-solid fa-rotate-right ml-2"></i>
+                    </button>
+                </div>
+            `;
+            mainContainer.innerHTML = html;
+        }
+
+        function goToHome() {
+            renderHome();
+        }
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            if('speechSynthesis' in window) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    window.speechSynthesis.getVoices();
+                };
+            }
+            initDatabase();
+        };
+    </script>
+</body>
+</html>
