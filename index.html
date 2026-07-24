@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>兒童英文單字拼拼樂 | Kids Emoji Spelling Game</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tone.js for Sound Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <!-- Canvas Confetti for Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts: Fredoka for a cute, rounded, kid-friendly look -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'kids': ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        'kid-blue': '#4facfe',
+                        'kid-green': '#43e97b',
+                        'kid-yellow': '#f6d365',
+                        'kid-pink': '#ff0844',
+                        'kid-purple': '#b224ef'
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            /* Fun, playful gradient background */
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            min-height: 100vh;
+            touch-action: manipulation; /* Prevent double-tap zoom on mobile */
+            overflow-x: hidden;
+        }
+
+        /* Custom Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        .animate-pop {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Button Styling for tactile feel */
+        .btn-3d {
+            transition: all 0.1s ease;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+        }
+        .btn-3d:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 rgba(0,0,0,0.2);
+        }
+        .btn-disabled {
+            opacity: 0.5;
+            box-shadow: 0 0 0 rgba(0,0,0,0.1);
+            transform: translateY(6px);
+            pointer-events: none;
+        }
+        
+        .hide { display: none !important; }
+        
+        /* Floating background shapes */
+        .bg-shape {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.4;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-50px) rotate(45deg); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased relative">
+
+    <!-- Background decorative elements -->
+    <div class="bg-shape text-6xl" style="top: 10%; left: 10%; animation-delay: 0s; color: #ff9a9e;">☁️</div>
+    <div class="bg-shape text-6xl" style="top: 70%; left: 80%; animation-delay: 2s; color: #a18cd1;">⭐</div>
+    <div class="bg-shape text-6xl" style="top: 40%; left: 85%; animation-delay: 4s; color: #fbc2eb;">🎈</div>
+    <div class="bg-shape text-5xl" style="top: 80%; left: 20%; animation-delay: 1s; color: #84fab0;">🎵</div>
+
+    <div id="app" class="max-w-4xl mx-auto p-4 md:p-6 flex flex-col min-h-screen justify-center relative z-10">
+        
+        <!-- Header / Navigation Area -->
+        <header class="flex justify-between items-center mb-8 bg-white/50 p-4 rounded-3xl backdrop-blur-sm shadow-sm">
+            <h1 class="text-2xl md:text-3xl font-bold text-kid-purple tracking-wide flex items-center gap-2 cursor-pointer" onclick="goToHome()">
+                <i class="fa-solid fa-shapes text-kid-pink"></i> 拼拼樂遊戲
+            </h1>
+            <button id="soundToggleBtn" onclick="toggleSound()" class="text-2xl text-gray-600 hover:text-kid-blue transition-colors w-12 h-12 flex items-center justify-center bg-white rounded-full shadow-md">
+                <i class="fa-solid fa-volume-up"></i>
+            </button>
+        </header>
+
+        <!-- Main Content Area Container -->
+        <main id="mainContainer" class="flex-grow flex flex-col justify-center items-center w-full">
+            <!-- Pages will be dynamically injected here -->
+        </main>
+        
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="fixed inset-0 bg-white/80 z-50 flex flex-col items-center justify-center hide backdrop-blur-sm">
+            <div class="text-6xl animate-bounce mb-4">⭐</div>
+            <h2 class="text-3xl font-bold text-kid-blue">Loading...</h2>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. MOCK DATABASE (Simulating Backend API) ---
+        const MockDB = {
+            categories: [
+                { id: 'c1', name: 'Animals', nameZh: '可愛動物', icon_emoji: '🐶' },
+                { id: 'c2', name: 'Food', nameZh: '美味食物', icon_emoji: '🍎' },
+                { id: 'c3', name: 'Vehicles', nameZh: '交通工具', icon_emoji: '🚗' },
+                { id: 'c4', name: 'Colors', nameZh: '繽紛色彩', icon_emoji: '🎨' }
+            ],
+            words: [
+                // Animals
+                { category_id: 'c1', word: 'DOG', emoji: '🐶' },
+                { category_id: 'c1', word: 'CAT', emoji: '🐱' },
+                { category_id: 'c1', word: 'LION', emoji: '🦁' },
+                { category_id: 'c1', word: 'PIG', emoji: '🐷' },
+                { category_id: 'c1', word: 'COW', emoji: '🐮' },
+                { category_id: 'c1', word: 'BIRD', emoji: '🐦' },
+                { category_id: 'c1', word: 'FROG', emoji: '🐸' },
+                { category_id: 'c1', word: 'BEAR', emoji: '🐻' },
+                { category_id: 'c1', word: 'FISH', emoji: '🐟' },
+                { category_id: 'c1', word: 'DUCK', emoji: '🦆' },
+                { category_id: 'c1', word: 'BEE', emoji: '🐝' },
+                
+                // Food
+                { category_id: 'c2', word: 'APPLE', emoji: '🍎' },
+                { category_id: 'c2', word: 'CAKE', emoji: '🍰' },
+                { category_id: 'c2', word: 'MILK', emoji: '🥛' },
+                { category_id: 'c2', word: 'PIZZA', emoji: '🍕' },
+                { category_id: 'c2', word: 'BREAD', emoji: '🍞' },
+                { category_id: 'c2', word: 'MEAT', emoji: '🍖' },
+                { category_id: 'c2', word: 'EGG', emoji: '🥚' },
+                { category_id: 'c2', word: 'TACO', emoji: '🌮' },
+                { category_id: 'c2', word: 'CORN', emoji: '🌽' },
+                { category_id: 'c2', word: 'KIWI', emoji: '🥝' },
+
+                // Vehicles
+                { category_id: 'c3', word: 'CAR', emoji: '🚗' },
+                { category_id: 'c3', word: 'BUS', emoji: '🚌' },
+                { category_id: 'c3', word: 'TRAIN', emoji: '🚂' },
+                { category_id: 'c3', word: 'BIKE', emoji: '🚲' },
+                { category_id: 'c3', word: 'SHIP', emoji: '🚢' },
+                { category_id: 'c3', word: 'BOAT', emoji: '⛵' },
+                { category_id: 'c3', word: 'JET', emoji: '✈️' },
+                { category_id: 'c3', word: 'UFO', emoji: '🛸' },
+                { category_id: 'c3', word: 'TAXI', emoji: '🚕' },
+                { category_id: 'c3', word: 'TRUCK', emoji: '🚚' },
+
+                // Colors
+                { category_id: 'c4', word: 'RED', emoji: '🔴' },
+                { category_id: 'c4', word: 'BLUE', emoji: '🔵' },
+                { category_id: 'c4', word: 'GREEN', emoji: '🟢' },
+                { category_id: 'c4', word: 'PINK', emoji: '🌸' },
+                { category_id: 'c4', word: 'BLACK', emoji: '⚫' },
+                { category_id: 'c4', word: 'WHITE', emoji: '⚪' },
+                { category_id: 'c4', word: 'BROWN', emoji: '🟤' },
+                { category_id: 'c4', word: 'GOLD', emoji: '🌟' }
+            ]
+        };
+
+        // --- 2. APPLICATION STATE ---
+        const State = {
+            soundEnabled: true,
+            currentCategory: null,
+            gameWords: [],
+            currentWordIndex: 0,
+            currentLetterIndex: 0,
+            score: 0
+        };
+
+        // --- 3. UTILITY FUNCTIONS (Sound, Speech, Random) ---
+        
+        // Tone.js Synthesizers
+        let correctSynth, wrongSynth, winSynth;
+        function initAudio() {
+            if(!correctSynth) {
+                correctSynth = new Tone.Synth({
+                    oscillator: { type: "sine" },
+                    envelope: { attack: 0.01, decay: 0.2, sustain: 0.2, release: 0.5 }
+                }).toDestination();
+                
+                wrongSynth = new Tone.MembraneSynth().toDestination();
+                
+                winSynth = new Tone.PolySynth(Tone.Synth).toDestination();
+            }
+        }
+
+        function playSound(type) {
+            if (!State.soundEnabled) return;
+            initAudio();
+            Tone.start(); // Ensure audio context is started
+            
+            const now = Tone.now();
+            if (type === 'correct') {
+                correctSynth.triggerAttackRelease("C6", "8n", now);
+                correctSynth.triggerAttackRelease("E6", "8n", now + 0.1);
+            } else if (type === 'wrong') {
+                wrongSynth.triggerAttackRelease("C2", "8n", now);
+            } else if (type === 'win') {
+                winSynth.triggerAttackRelease(["C4", "E4", "G4", "C5"], "4n", now);
+                winSynth.triggerAttackRelease(["F4", "A4", "C5", "F5"], "4n", now + 0.3);
+                winSynth.triggerAttackRelease(["G4", "B4", "D5", "G5"], "2n", now + 0.6);
+            }
+        }
+
+        function toggleSound() {
+            State.soundEnabled = !State.soundEnabled;
+            const icon = document.querySelector('#soundToggleBtn i');
+            if (State.soundEnabled) {
+                icon.className = 'fa-solid fa-volume-up';
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-red-500';
+            }
+        }
+
+        // Web Speech API for TTS
+        function speakWord(text, rate = 0.85) {
+            if (!State.soundEnabled || !('speechSynthesis' in window)) return;
+            
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = rate; // Slightly slower for kids
+            utterance.pitch = 1.2; // Slightly higher pitch for friendly tone
+            
+            // Try to find a good English voice
+            const voices = window.speechSynthesis.getVoices();
+            const preferredVoice = voices.find(v => v.lang.startsWith('en-') && (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Google')));
+            if(preferredVoice) utterance.voice = preferredVoice;
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Helper: Shuffle Array (Fisher-Yates)
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        // Helper: Generate random distractor letters
+        function getRandomLetters(count, excludeLetters) {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let result = [];
+            while(result.length < count) {
+                let char = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                if (!excludeLetters.includes(char) && !result.includes(char)) {
+                    result.push(char);
+                }
+            }
+            return result;
+        }
+
+        // UI Helper: Show Loading
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if(show) {
+                overlay.classList.remove('hide');
+            } else {
+                overlay.classList.add('hide');
+            }
+        }
+
+        // --- 4. PAGE RENDERERS ---
+        const mainContainer = document.getElementById('mainContainer');
+
+        function renderHome() {
+            let html = `
+                <div class="text-center animate-pop w-full max-w-2xl">
+                    <h2 class="text-4xl md:text-5xl font-bold text-kid-blue mb-2 drop-shadow-md">Choose a Category!</h2>
+                    <p class="text-xl text-gray-600 mb-10">選擇你想學習的單字類別</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+            `;
+
+            MockDB.categories.forEach(cat => {
+                html += `
+                    <button onclick="selectCategory('${cat.id}')" 
+                            class="btn-3d bg-white rounded-3xl p-6 border-4 border-kid-blue/20 flex items-center space-x-6 hover:bg-blue-50 group">
+                        <div class="text-6xl group-hover:scale-110 transition-transform">${cat.icon_emoji}</div>
+                        <div class="text-left">
+                            <div class="text-2xl font-bold text-gray-800">${cat.name}</div>
+                            <div class="text-gray-500 font-semibold">${cat.nameZh}</div>
+                        </div>
+                    </button>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+            mainContainer.innerHTML = html;
+        }
+
+        // API Mock: Fetch words for category
+        async function fetchWordsForCategory(categoryId) {
+            showLoading(true);
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            const allCatWords = MockDB.words.filter(w => w.category_id === categoryId);
+            // Shuffle and pick up to 10
+            const shuffled = shuffleArray([...allCatWords]);
+            State.gameWords = shuffled.slice(0, 10);
+            
+            showLoading(false);
+            renderPreview();
+        }
+
+        function selectCategory(categoryId) {
+            // Wake up audio context on first user interaction
+            initAudio();
+            Tone.start(); 
+            // Wake up speech synthesis
+            if('speechSynthesis' in window) {
+                let u = new SpeechSynthesisUtterance('');
+                u.volume = 0;
+                window.speechSynthesis.speak(u);
+            }
+            
+            State.currentCategory = MockDB.categories.find(c => c.id === categoryId);
+            fetchWordsForCategory(categoryId);
+        }
+
+        function renderPreview() {
+            let cardsHtml = '';
+            State.gameWords.forEach((item, index) => {
+                cardsHtml += `
+                    <div class="bg-white rounded-2xl p-4 shadow-lg border-2 border-kid-yellow/30 flex flex-col items-center justify-center btn-3d cursor-pointer"
+                         onclick="speakWord('${item.word}')">
+                        <div class="text-5xl mb-2">${item.emoji}</div>
+                        <div class="text-xl font-bold text-gray-700 tracking-wider">${item.word}</div>
+                        <button class="mt-2 text-kid-blue hover:text-kid-pink">
+                            <i class="fa-solid fa-volume-up"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            let html = `
+                <div class="w-full max-w-4xl animate-pop flex flex-col items-center">
+                    <h2 class="text-3xl md:text-4xl font-bold text-kid-purple mb-2 text-center">Let's Learn! 📖</h2>
+                    <p class="text-lg text-gray-600 mb-6 text-center">點擊卡片聽發音，準備好就出發挑戰！</p>
+                    
+                    <div class="w-full bg-white/60 p-6 rounded-3xl backdrop-blur-md mb-8">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                            ${cardsHtml}
+                        </div>
+                    </div>
+
+                    <button onclick="startGame()" class="btn-3d bg-kid-green text-white text-3xl font-bold py-4 px-12 rounded-full border-b-8 border-green-600 hover:bg-green-400 animate-pulse-fast">
+                        出發去挑戰！ <i class="fa-solid fa-rocket ml-2"></i>
+                    </button>
+                </div>
+            `;
+            mainContainer.innerHTML = html;
+        }
+
+        function startGame() {
+            State.currentWordIndex = 0;
+            State.score = 0;
+            renderGame();
+        }
+
+        function renderGame() {
+            const currentItem = State.gameWords[State.currentWordIndex];
+            State.currentLetterIndex = 0;
+            const targetWord = currentItem.word;
+            
+            // Speak the word when starting a new round
+            setTimeout(() => speakWord(targetWord), 300);
+
+            // Prepare letter buttons (Correct letters + distractors)
+            let lettersNeeded = targetWord.split('');
+            let distractors = getRandomLetters(3, lettersNeeded); // Add 3 random extra letters
+            let allOptions = shuffleArray([...lettersNeeded, ...distractors]);
+
+            // Build target boxes
+            let boxesHtml = '';
+            for(let i=0; i<targetWord.length; i++) {
+                boxesHtml += `
+                    <div id="target-box-${i}" class="w-14 h-16 md:w-20 md:h-24 bg-white border-4 border-dashed border-gray-300 rounded-xl flex items-center justify-center text-4xl md:text-5xl font-bold text-kid-blue shadow-inner">
+                        <!-- empty -->
+                    </div>
+                `;
+            }
+
+            // Build option buttons
+            let optionsHtml = '';
+            allOptions.forEach((letter, idx) => {
+                optionsHtml += `
+                    <button id="option-btn-${idx}" onclick="handleLetterClick('${letter}', this)" 
+                            class="btn-3d w-14 h-16 md:w-20 md:h-24 bg-kid-yellow text-gray-800 text-3xl md:text-4xl font-bold rounded-xl border-b-4 border-yellow-600 hover:bg-yellow-300 flex items-center justify-center m-2">
+                        ${letter}
+                    </button>
+                `;
+            });
+
+            let html = `
+                <div class="w-full max-w-3xl flex flex-col items-center animate-pop">
+                    
+                    <!-- Progress and Encouragement -->
+                    <div class="w-full flex justify-between items-center mb-6">
+                        <div class="bg-white/80 px-4 py-2 rounded-full font-bold text-gray-600 shadow-sm">
+                            Question: ${State.currentWordIndex + 1} / ${State.gameWords.length}
+                        </div>
+                        <div class="bg-white/80 px-4 py-2 rounded-full font-bold text-kid-yellow flex items-center shadow-sm">
+                            <i class="fa-solid fa-star mr-1"></i> ${State.score}
+                        </div>
+                    </div>
+
+                    <!-- Main Play Area -->
+                    <div class="bg-white p-8 rounded-3xl shadow-xl w-full flex flex-col items-center relative overflow-hidden border-4 border-white">
+                        
+                        <!-- Emoji & Sound Button -->
+                        <div class="flex items-center gap-6 mb-8">
+                            <div class="text-8xl md:text-9xl filter drop-shadow-lg">${currentItem.emoji}</div>
+                            <button onclick="speakWord('${targetWord}'); speakWord('Find the letters for ${targetWord}', 1);" class="btn-3d bg-kid-blue text-white w-16 h-16 rounded-full text-2xl flex items-center justify-center border-b-4 border-blue-600">
+                                <i class="fa-solid fa-volume-up"></i>
+                            </button>
+                        </div>
+
+                        <!-- Target Spelling Area -->
+                        <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10">
+                            ${boxesHtml}
+                        </div>
+
+                        <!-- Keyboard / Options -->
+                        <div class="bg-gray-100 p-4 rounded-2xl w-full flex flex-wrap justify-center shadow-inner">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContainer.innerHTML = html;
+        }
+
+        // Logic for checking letters
+        function handleLetterClick(letter, btnElement) {
+            if (btnElement.classList.contains('btn-disabled')) return; // Already used
+
+            const currentItem = State.gameWords[State.currentWordIndex];
+            const targetWord = currentItem.word;
+            const expectedLetter = targetWord[State.currentLetterIndex];
+
+            if (letter === expectedLetter) {
+                // Correct!
+                playSound('correct');
+                
+                // Fill the box
+                const targetBox = document.getElementById(`target-box-${State.currentLetterIndex}`);
+                targetBox.innerHTML = letter;
+                targetBox.classList.remove('border-dashed', 'border-gray-300', 'bg-white');
+                targetBox.classList.add('border-solid', 'border-kid-green', 'bg-green-100', 'animate-pop');
+                
+                // Disable button
+                btnElement.classList.add('btn-disabled');
+                
+                State.currentLetterIndex++;
+                State.score += 10;
+
+                // Check if word is complete
+                if (State.currentLetterIndex === targetWord.length) {
+                    handleWordComplete(targetWord);
+                } else {
+                    // Small encouragement randomly
+                    if(Math.random() > 0.6) {
+                        const praises = ["Good!", "Yes!", "Nice!"];
+                        speakWord(praises[Math.floor(Math.random()*praises.length)], 1.2);
+                    }
+                }
+            } else {
+                // Wrong!
+                playSound('wrong');
+                btnElement.classList.remove('animate-shake'); // reset animation
+                void btnElement.offsetWidth; // trigger reflow
+                btnElement.classList.add('animate-shake', 'bg-red-400', 'border-red-600', 'text-white');
+                
+                // Revert color after shake
+                setTimeout(() => {
+                    btnElement.classList.remove('bg-red-400', 'border-red-600', 'text-white');
+                    btnElement.classList.add('bg-kid-yellow', 'border-yellow-600', 'text-gray-800');
+                }, 400);
+
+                const encouragements = ["Oops!", "Try again!", "Almost!"];
+                speakWord(encouragements[Math.floor(Math.random()*encouragements.length)], 1.2);
+                
+                // Deduct minor points if score > 0 to keep it positive
+                if(State.score > 0) State.score -= 2; 
+            }
+            
+            // Update score display immediately
+            document.querySelector('.fa-star').parentElement.innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${Math.max(0, State.score)}`;
+        }
+
+        function handleWordComplete(word) {
+            playSound('win');
+            speakWord(`Excellent! ${word}`);
+            State.score += 50; // Bonus for completion
+            
+            // Mini confetti for single word
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { y: 0.6 },
+                colors: ['#43e97b', '#f6d365', '#4facfe']
+            });
+
+            // Wait a bit, then next word or result
+            setTimeout(() => {
+                State.currentWordIndex++;
+                if (State.currentWordIndex >= State.gameWords.length) {
+                    renderResult();
+                } else {
+                    renderGame();
+                }
+            }, 2000);
+        }
+
+        function renderResult() {
+            playSound('win');
+            speakWord("You are a superstar! Great job!");
+            
+            // Big Confetti
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+              var particleCount = 50 * (timeLeft / duration);
+              confetti(Object.assign({}, defaults, { particleCount,
+                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+              }));
+              confetti(Object.assign({}, defaults, { particleCount,
+                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+              }));
+            }, 250);
+
+            let maxPossibleScore = State.gameWords.length * 150; // Approximated
+            let stars = State.score > 800 ? 3 : (State.score > 400 ? 2 : 1);
+            let starHtml = '';
+            for(let i=0; i<3; i++) {
+                if(i < stars) {
+                    starHtml += `<i class="fa-solid fa-star text-kid-yellow text-6xl md:text-8xl animate-bounce" style="animation-delay: ${i*0.2}s"></i>`;
+                } else {
+                    starHtml += `<i class="fa-regular fa-star text-gray-300 text-6xl md:text-8xl"></i>`;
+                }
+            }
+
+            let html = `
+                <div class="text-center animate-pop bg-white p-10 rounded-[3rem] shadow-2xl border-8 border-kid-yellow max-w-2xl w-full">
+                    <h1 class="text-5xl font-bold text-kid-pink mb-6">Congratulations! 🎉</h1>
+                    
+                    <div class="flex justify-center gap-4 mb-8">
+                        ${starHtml}
+                    </div>
+
+                    <div class="text-3xl font-bold text-gray-700 mb-2">
+                        Total Score: <span class="text-kid-blue">${Math.max(0, State.score)}</span>
+                    </div>
+                    <p class="text-xl text-gray-500 mb-10">You did an amazing job spelling!</p>
+
+                    <button onclick="goToHome()" class="btn-3d bg-kid-blue text-white text-3xl font-bold py-4 px-12 rounded-full border-b-8 border-blue-700 hover:bg-blue-400">
+                        Play Again! <i class="fa-solid fa-rotate-right ml-2"></i>
+                    </button>
+                </div>
+            `;
+            mainContainer.innerHTML = html;
+        }
+
+        function goToHome() {
+            renderHome();
+        }
+
+        // Initialize App on Load
+        window.onload = function() {
+            // Load voices ahead of time
+            if('speechSynthesis' in window) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    // pre-warm voices
+                    window.speechSynthesis.getVoices();
+                };
+            }
+            renderHome();
+        };
+    </script>
+</body>
+</html>
