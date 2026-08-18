@@ -123,11 +123,6 @@
                     <i id="refreshIcon" class="fa-solid fa-rotate text-lg"></i>
                     <span class="hidden md:inline">重新整理</span>
                 </button>
-
-                <button onclick="openConfigModal()" title="設定 Google 試算表連結" class="btn-3d bg-white text-hub-purple hover:bg-purple-50 font-bold px-3.5 py-2 rounded-2xl border-2 border-purple-200 flex items-center gap-2 text-sm sm:text-base">
-                    <i class="fa-solid fa-table text-lg"></i>
-                    <span class="hidden md:inline">試算表設定</span>
-                </button>
             </div>
         </div>
     </header>
@@ -206,52 +201,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Google 試算表設定 Modal 彈窗 -->
-    <div id="configModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 sm:p-8 animate-pop-in border-4 border-amber-300">
-            <div class="flex justify-between items-center mb-5 border-b pb-3">
-                <div class="flex items-center gap-2.5">
-                    <span class="text-3xl">⚙️</span>
-                    <h3 class="text-xl sm:text-2xl font-black text-gray-800">Google 試算表連結設定</h3>
-                </div>
-                <button onclick="closeConfigModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold p-1">
-                    ✕
-                </button>
-            </div>
-
-            <div class="space-y-4 text-sm text-gray-600">
-                <p class="leading-relaxed">
-                    本主頁支援 <b>XLSX</b>、<b>CSV</b> 或 <b>Google 試算表共用網址</b>：
-                </p>
-
-                <div>
-                    <label class="block font-bold text-gray-700 mb-1.5">發布網址 (XLSX / CSV)：</label>
-                    <input type="text" id="sheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=xlsx"
-                           class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-300 focus:border-blue-500 focus:outline-none font-mono text-xs text-gray-800 bg-gray-50">
-                </div>
-
-                <div class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200 text-xs text-amber-900 space-y-1">
-                    <div class="font-bold flex items-center gap-1.5 text-amber-800">
-                        <i class="fa-solid fa-check-circle"></i> 提示：
-                    </div>
-                    <ul class="list-disc list-inside space-y-1 text-amber-900/90 pl-1">
-                        <li>已自動設定為最新發布的 XLSX / CSV 網址。</li>
-                        <li>試算表修改後，Google 通常在 1–2 分鐘內自動更新發布內容。</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="mt-6 flex justify-end gap-3">
-                <button onclick="resetToDefaultSheet()" class="px-4 py-2 rounded-xl text-gray-500 hover:bg-gray-100 font-bold">
-                    恢復預設網址
-                </button>
-                <button onclick="saveSheetConfig()" class="btn-3d bg-hub-green text-white px-6 py-2.5 rounded-xl font-bold border-b-4 border-green-700 hover:bg-green-500">
-                    儲存並重新整理 💾
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- JavaScript 核心腳本 -->
     <script>
@@ -663,33 +612,6 @@
                     icon.classList.remove('animate-spin');
                 }, 500);
             });
-        }
-
-        function openConfigModal() {
-            playChime();
-            const input = document.getElementById('sheetUrlInput');
-            input.value = getActiveSheetUrl();
-            document.getElementById('configModal').classList.remove('hidden');
-        }
-
-        function closeConfigModal() {
-            document.getElementById('configModal').classList.add('hidden');
-        }
-
-        function saveSheetConfig() {
-            const input = document.getElementById('sheetUrlInput').value.trim();
-            if (input) {
-                localStorage.setItem(STORAGE_KEY, input);
-            } else {
-                localStorage.removeItem(STORAGE_KEY);
-            }
-            playChime(523.25, 1046.5, 0.3);
-            closeConfigModal();
-            refreshData();
-        }
-
-        function resetToDefaultSheet() {
-            document.getElementById('sheetUrlInput').value = DEFAULT_SHEET_URL;
         }
 
         document.getElementById('configModal').addEventListener('click', (e) => {
