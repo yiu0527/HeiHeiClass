@@ -11,10 +11,10 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- PapaParse for CSV parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- SheetJS (XLSX / CSV 解析引擎) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    <!-- Canvas Confetti for fun celebration -->
+    <!-- Canvas Confetti 慶祝特效 -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
@@ -26,8 +26,10 @@
                         'hub-sky': '#0EA5E9',
                         'hub-pink': '#EC4899',
                         'hub-yellow': '#F59E0B',
+                        'hub-amber': '#FCD34D',
                         'hub-green': '#10B981',
-                        'hub-purple': '#8B5CF6'
+                        'hub-purple': '#8B5CF6',
+                        'hub-orange': '#F97316'
                     },
                     boxShadow: {
                         'card-pop': '0 12px 28px -5px rgba(0,0,0,0.12), 0 8px 10px -6px rgba(0,0,0,0.08)'
@@ -96,6 +98,7 @@
     <header class="w-full bg-white/85 backdrop-blur-md sticky top-0 z-40 border-b-4 border-amber-200 shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             
+            <!-- 網站 Logo & 標題 -->
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 bg-gradient-to-tr from-hub-yellow to-hub-pink rounded-2xl flex items-center justify-center text-2xl shadow-md animate-float">
                     🎮
@@ -108,7 +111,7 @@
                         <span>✨ 小朋友專屬趣味學習天地</span>
                         <span id="sheetConnectionBadge" class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700">
                             <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                            試算表已連線
+                            試算表讀取中...
                         </span>
                     </p>
                 </div>
@@ -176,7 +179,7 @@
             <div class="animate-spin text-5xl text-hub-blue mb-4">
                 <i class="fa-solid fa-circle-notch"></i>
             </div>
-            <p class="text-xl font-bold text-gray-600">正在讀取小遊戲清單...</p>
+            <p class="text-xl font-bold text-gray-600">正在從 Google 試算表讀取遊戲清單...</p>
         </div>
 
         <div id="gamesGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -219,32 +222,32 @@
 
             <div class="space-y-4 text-sm text-gray-600">
                 <p class="leading-relaxed">
-                    本主頁支援任何 <b>Google 試算表共用連結</b>，系統會自動轉換並讀取：
+                    本主頁支援 <b>XLSX</b>、<b>CSV</b> 或 <b>Google 試算表共用網址</b>：
                 </p>
 
                 <div>
-                    <label class="block font-bold text-gray-700 mb-1.5">Google 試算表網址：</label>
-                    <input type="text" id="sheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/.../edit?usp=sharing"
+                    <label class="block font-bold text-gray-700 mb-1.5">發布網址 (XLSX / CSV)：</label>
+                    <input type="text" id="sheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=xlsx"
                            class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-300 focus:border-blue-500 focus:outline-none font-mono text-xs text-gray-800 bg-gray-50">
                 </div>
 
                 <div class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200 text-xs text-amber-900 space-y-1">
                     <div class="font-bold flex items-center gap-1.5 text-amber-800">
-                        <i class="fa-solid fa-check-circle"></i> 設定建議：
+                        <i class="fa-solid fa-check-circle"></i> 提示：
                     </div>
                     <ul class="list-disc list-inside space-y-1 text-amber-900/90 pl-1">
-                        <li>在 Google 試算表右上角點擊「<b>共用</b>」➜ 設定為「<b>知道連結的任何人</b>」皆可「<b>檢視</b>」。</li>
-                        <li>複製該共用連結直接貼於此處即可！</li>
+                        <li>已自動設定為最新發布的 XLSX / CSV 網址。</li>
+                        <li>試算表修改後，Google 通常在 1–2 分鐘內自動更新發布內容。</li>
                     </ul>
                 </div>
             </div>
 
             <div class="mt-6 flex justify-end gap-3">
                 <button onclick="resetToDefaultSheet()" class="px-4 py-2 rounded-xl text-gray-500 hover:bg-gray-100 font-bold">
-                    恢復預設
+                    恢復預設網址
                 </button>
                 <button onclick="saveSheetConfig()" class="btn-3d bg-hub-green text-white px-6 py-2.5 rounded-xl font-bold border-b-4 border-green-700 hover:bg-green-500">
-                    儲存並更新 💾
+                    儲存並重新整理 💾
                 </button>
             </div>
         </div>
@@ -252,11 +255,13 @@
 
     <!-- JavaScript 核心腳本 -->
     <script>
-        // 預設 Google 試算表共用網址
-        const DEFAULT_SHEET_RAW_URL = "https://docs.google.com/spreadsheets/d/16kSdG8in5UlTNk96c-6Pag6aa126tqhqFJFy_o0VO3g/edit?usp=sharing";
-        const STORAGE_KEY = "KIDS_GAME_HUB_SHEET_URL";
+        // =========================================================================
+        // 1. 最新發布的 Google 試算表 XLSX 網址
+        // =========================================================================
+        const DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTZQ1EdB9OIXebPkjQbWRDA0gTZiyM_smuyuSfGLR20CziLnQN7v6yiJeN4yy_ZzrXX3PcAKOeRRyh6/pub?output=xlsx";
+        const STORAGE_KEY = "KIDS_GAME_HUB_SHEET_URL_V3";
 
-        // 離線預設遊戲資料
+        // 離線備用資料
         const FALLBACK_GAMES = [
             {
                 name: "Emoji 英文拼字遊戲",
@@ -308,60 +313,86 @@
             } catch (e) {}
         }
 
-        function getRawInputUrl() {
-            return localStorage.getItem(STORAGE_KEY) || DEFAULT_SHEET_RAW_URL;
+        function getActiveSheetUrl() {
+            return localStorage.getItem(STORAGE_KEY) || DEFAULT_SHEET_URL;
         }
 
-        // 自動提取 ID 並建構 CSV 端點
-        function buildCsvExportUrls(rawUrl) {
+        // 取得候選請求網址 (包含 XLSX、CSV 與 CORS 代理)
+        function getCandidateFetchUrls(rawUrl) {
             const trimmed = rawUrl.trim();
-            const urls = [];
+            const candidates = [];
 
-            if (trimmed.includes('pub?') && trimmed.includes('output=csv')) {
-                urls.push(trimmed);
-                return urls;
+            candidates.push(trimmed);
+
+            // 若為 XLSX，加入 CSV 版本 (Google 自動支援切換)
+            if (trimmed.includes('output=xlsx')) {
+                candidates.push(trimmed.replace('output=xlsx', 'output=csv'));
+            } else if (trimmed.includes('output=csv')) {
+                candidates.push(trimmed.replace('output=csv', 'output=xlsx'));
             }
 
+            // 若為 Google Docs 共享連結 (/spreadsheets/d/ID/edit)
             const idMatch = trimmed.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-            if (idMatch && idMatch) {
+            if (idMatch && idMatch && !trimmed.includes('/pub?')) {
                 const sheetId = idMatch;
-                urls.push(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`);
-                urls.push(`https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`);
-            } else {
-                urls.push(trimmed);
+                candidates.push(`https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`);
+                candidates.push(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`);
             }
 
-            return urls;
+            return candidates;
         }
 
-        async function fetchCsvContent(urls) {
-            for (const url of urls) {
+        // 智慧抓取並解析 (支援 XLSX ArrayBuffer 與 CSV 文字)
+        async function fetchAndParseData(url) {
+            const candidates = getCandidateFetchUrls(url);
+
+            for (const targetUrl of candidates) {
+                // 1. 嘗試直連
                 try {
-                    const res = await fetch(url);
+                    const res = await fetch(targetUrl);
                     if (res.ok) {
-                        const text = await res.text();
-                        if (text && text.trim().length > 0 && !text.includes('<!DOCTYPE html>')) {
-                            return text;
+                        const buffer = await res.arrayBuffer();
+                        if (buffer && buffer.byteLength > 10) {
+                            const parsed = parseBufferWithSheetJS(buffer);
+                            if (parsed && parsed.length > 0) return parsed;
                         }
                     }
                 } catch (e) {
-                    console.warn(`Direct fetch failed for ${url}, trying proxy...`);
+                    console.warn(`直連 ${targetUrl} 失敗，嘗試代理...`);
                 }
 
+                // 2. 嘗試 CORS 代理 (解決本地 file:// 協議或跨網域限制)
                 try {
-                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-                    const resProxy = await fetch(proxyUrl);
-                    if (resProxy.ok) {
-                        const text = await resProxy.text();
-                        if (text && text.trim().length > 0 && !text.includes('<!DOCTYPE html>')) {
-                            return text;
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+                    const res = await fetch(proxyUrl);
+                    if (res.ok) {
+                        const buffer = await res.arrayBuffer();
+                        if (buffer && buffer.byteLength > 10) {
+                            const parsed = parseBufferWithSheetJS(buffer);
+                            if (parsed && parsed.length > 0) return parsed;
                         }
                     }
                 } catch (e) {
-                    console.warn(`Proxy fetch failed for ${url}`);
+                    console.warn(`代理 ${targetUrl} 失敗`);
                 }
             }
-            throw new Error("無法讀取試算表內容");
+
+            throw new Error("無法從指定網址讀取或解析試算表");
+        }
+
+        // 利用 SheetJS 解析 ArrayBuffer (同時支援 XLSX 與 CSV)
+        function parseBufferWithSheetJS(buffer) {
+            try {
+                const workbook = XLSX.read(buffer, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                // 轉為 2D 矩陣陣列
+                const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+                return parseGamesFrom2DArray(rows);
+            } catch (err) {
+                console.error("SheetJS parse error:", err);
+                return null;
+            }
         }
 
         // 智慧 2D 矩陣欄位定位解析
@@ -369,16 +400,12 @@
             if (!rows || rows.length === 0) return [];
 
             let headerRowIndex = -1;
-            const colMap = {};
-
-            // 搜尋標題欄關鍵字所在行
             for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
-                if (!Array.isArray(row)) continue;
-
-                for (let j = 0; j < row.length; j++) {
-                    const cell = (row[j] || '').toString().trim().toLowerCase();
-                    if (cell.includes('小遊戲名稱') || cell.includes('遊戲名稱') || cell === 'gamename' || cell === 'name' || cell === 'title') {
+                const r = rows[i];
+                if (!Array.isArray(r)) continue;
+                for (let j = 0; j < r.length; j++) {
+                    const cell = (r[j] || '').toString().trim().toLowerCase();
+                    if (cell.includes('名稱') || cell.includes('name') || cell.includes('title') || cell === '遊戲' || cell === '小遊戲') {
                         headerRowIndex = i;
                         break;
                     }
@@ -388,23 +415,29 @@
 
             if (headerRowIndex === -1) headerRowIndex = 0;
 
-            const headerRow = rows[headerRowIndex];
-            for (let j = 0; j < headerRow.length; j++) {
-                const cell = (headerRow[j] || '').toString().trim().toLowerCase();
-                if (cell.includes('小遊戲名稱') || cell.includes('遊戲名稱') || cell === 'gamename' || cell === 'name' || cell === 'title') {
-                    colMap['name'] = j;
-                } else if (cell.includes('html') || cell.includes('檔案') || cell.includes('file') || cell.includes('link') || cell.includes('path')) {
-                    colMap['file'] = j;
-                } else if (cell.includes('圖示') || cell.includes('emoji') || cell.includes('icon') || cell.includes('圖標')) {
-                    colMap['emoji'] = j;
-                } else if (cell.includes('分類') || cell.includes('category') || cell.includes('類別') || cell.includes('tag')) {
-                    colMap['category'] = j;
-                } else if (cell.includes('簡介') || cell.includes('說明') || cell.includes('desc') || cell.includes('description')) {
+            const header = rows[headerRowIndex];
+            const colMap = {};
+
+            for (let j = 0; j < header.length; j++) {
+                const c = (header[j] || '').toString().trim().toLowerCase();
+                if (c.includes('簡介') || c.includes('說明') || c.includes('description') || c.includes('desc') || c.includes('介紹')) {
                     colMap['desc'] = j;
-                } else if (cell.includes('狀態') || cell.includes('status') || cell.includes('啟用')) {
+                } else if (c.includes('html') || c.includes('檔案') || c.includes('file') || c.includes('link') || c.includes('path') || c.includes('url')) {
+                    colMap['file'] = j;
+                } else if (c.includes('圖示') || c.includes('emoji') || c.includes('icon') || c.includes('圖標')) {
+                    colMap['emoji'] = j;
+                } else if (c.includes('分類') || c.includes('category') || c.includes('類別') || c.includes('tag') || c.includes('類型')) {
+                    colMap['category'] = j;
+                } else if (c.includes('狀態') || c.includes('status') || c.includes('啟用') || c.includes('enable')) {
                     colMap['status'] = j;
+                } else if (c.includes('名稱') || c.includes('name') || c.includes('title') || c === '遊戲' || c === '小遊戲') {
+                    colMap['name'] = j;
                 }
             }
+
+            // 預設第 0 欄為名稱，第 1 欄為 HTML 檔名
+            if (colMap['name'] === undefined && header.length > 0) colMap['name'] = 0;
+            if (colMap['file'] === undefined && header.length > 1) colMap['file'] = 1;
 
             const games = [];
             for (let i = headerRowIndex + 1; i < rows.length; i++) {
@@ -414,7 +447,8 @@
                 const getCell = (key, fallback = '') => {
                     const idx = colMap[key];
                     if (idx !== undefined && idx < row.length) {
-                        return (row[idx] || '').toString().trim();
+                        const val = (row[idx] || '').toString().trim();
+                        return val || fallback;
                     }
                     return fallback;
                 };
@@ -422,10 +456,11 @@
                 const name = getCell('name');
                 const file = getCell('file');
                 const emoji = getCell('emoji', '🎮') || '🎮';
-                const category = getCell('category', '通用小遊戲') || '通用小遊戲';
+                const category = getCell('category', '學習遊戲') || '學習遊戲';
                 const desc = getCell('desc', '點擊開啟並開始暢玩遊戲！') || '點擊開啟並開始暢玩遊戲！';
                 const status = getCell('status', '啟用') || '啟用';
 
+                // 排除空白或停用行
                 if (name && file && !status.includes('停用') && !status.includes('關閉') && !status.includes('false')) {
                     games.push({ name, file, emoji, category, desc, status });
                 }
@@ -436,48 +471,33 @@
 
         async function loadGamesData() {
             showLoading(true);
-            const rawUrl = getRawInputUrl();
-            const exportUrls = buildCsvExportUrls(rawUrl);
+            const sheetUrl = getActiveSheetUrl();
             const badge = document.getElementById('sheetConnectionBadge');
 
             try {
-                const csvText = await fetchCsvContent(exportUrls);
+                const parsed = await fetchAndParseData(sheetUrl);
 
-                Papa.parse(csvText, {
-                    header: false,
-                    skipEmptyLines: 'greedy',
-                    complete: function(results) {
-                        const parsed = parseGamesFrom2DArray(results.data);
-
-                        if (parsed.length > 0) {
-                            allGames = parsed;
-                            if (badge) {
-                                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> 試算表已連線 (${allGames.length} 款遊戲)`;
-                                badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700';
-                            }
-                        } else {
-                            allGames = FALLBACK_GAMES;
-                            if (badge) {
-                                badge.innerHTML = `⚠️ 讀取備份資料`;
-                                badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700';
-                            }
-                        }
-
-                        renderApp();
-                        showLoading(false);
-                    },
-                    error: function(err) {
-                        console.error("PapaParse error:", err);
-                        allGames = FALLBACK_GAMES;
-                        renderApp();
-                        showLoading(false);
+                if (parsed && parsed.length > 0) {
+                    allGames = parsed;
+                    if (badge) {
+                        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> 試算表已連線 (${allGames.length} 款遊戲)`;
+                        badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700';
                     }
-                });
+                } else {
+                    allGames = FALLBACK_GAMES;
+                    if (badge) {
+                        badge.innerHTML = `⚠️ 讀取備份資料`;
+                        badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700';
+                    }
+                }
+
+                renderApp();
+                showLoading(false);
             } catch (error) {
-                console.warn("Fetch sheet failed, using fallback games list:", error);
+                console.warn("讀取試算表失敗，使用備用清單:", error);
                 allGames = FALLBACK_GAMES;
                 if (badge) {
-                    badge.innerHTML = `⚠️ 離線模式`;
+                    badge.innerHTML = `⚠️ 離線/備用模式`;
                     badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700';
                 }
                 renderApp();
@@ -648,7 +668,7 @@
         function openConfigModal() {
             playChime();
             const input = document.getElementById('sheetUrlInput');
-            input.value = getRawInputUrl();
+            input.value = getActiveSheetUrl();
             document.getElementById('configModal').classList.remove('hidden');
         }
 
@@ -669,15 +689,11 @@
         }
 
         function resetToDefaultSheet() {
-            document.getElementById('sheetUrlInput').value = DEFAULT_SHEET_RAW_URL;
+            document.getElementById('sheetUrlInput').value = DEFAULT_SHEET_URL;
         }
 
         document.getElementById('configModal').addEventListener('click', (e) => {
             if (e.target.id === 'configModal') closeConfigModal();
-        });
-
-        window.addEventListener('DOMContentLoaded', () => {
-             === 'configModal') closeConfigModal();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
