@@ -41,25 +41,25 @@
       touch-action: manipulation;
     }
 
-    /* 頂部導航 */
+    /* 頂部導航列 (1024x768 平板緊湊版) */
     header {
       background: #ffffff;
-      padding: 10px 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      padding: 8px 16px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
       display: flex;
       justify-content: space-between;
       align-items: center;
       position: sticky;
       top: 0;
       z-index: 100;
-      flex-wrap: wrap;
-      gap: 10px;
+      flex-wrap: nowrap;
+      gap: 8px;
     }
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     /* 立體 HOME 鍵樣式 */
@@ -67,16 +67,16 @@
       background: #ffffff;
       color: #2E7D32;
       border: 2px solid #C8E6C9;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: bold;
-      padding: 8px 16px;
-      border-radius: 20px;
+      padding: 6px 14px;
+      border-radius: 18px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.15s ease;
-      box-shadow: 0 4px 0 rgba(46, 125, 50, 0.2);
+      box-shadow: 0 3px 0 rgba(46, 125, 50, 0.2);
     }
 
     .home-btn:hover {
@@ -84,15 +84,15 @@
     }
 
     .home-btn:active {
-      transform: translateY(3px);
+      transform: translateY(2px);
       box-shadow: 0 1px 0 rgba(46, 125, 50, 0.2);
     }
 
     .logo-badge {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 1.35rem;
+      gap: 6px;
+      font-size: 1.25rem;
       font-weight: 800;
       color: #2E7D32;
     }
@@ -100,24 +100,24 @@
     .header-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .nav-tabs {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       background: #E8F5E9;
-      padding: 5px;
+      padding: 4px;
       border-radius: 50px;
     }
 
     .nav-btn {
       border: none;
       background: transparent;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: bold;
-      padding: 8px 20px;
-      border-radius: 40px;
+      padding: 6px 16px;
+      border-radius: 30px;
       cursor: pointer;
       color: #43A047;
       transition: all 0.25s ease;
@@ -129,22 +129,22 @@
     .nav-btn.active {
       background: #43A047;
       color: #ffffff;
-      box-shadow: 0 4px 10px rgba(67, 160, 71, 0.35);
-      transform: scale(1.04);
+      box-shadow: 0 3px 8px rgba(67, 160, 71, 0.35);
+      transform: scale(1.03);
     }
 
     .settings-btn {
       background: #F1F8E9;
-      border: 2px solid #C8E6C9;
+      border: 1.5px solid #C8E6C9;
       color: #2E7D32;
-      padding: 7px 14px;
-      border-radius: 20px;
-      font-size: 0.95rem;
+      padding: 6px 12px;
+      border-radius: 18px;
+      font-size: 0.9rem;
       font-weight: bold;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s;
     }
 
@@ -152,10 +152,10 @@
       background: #DCEDC8;
     }
 
-    /* 主內容容器 */
+    /* 主內容容器 (針對 1024x768 最佳化) */
     main {
       flex: 1;
-      padding: 14px;
+      padding: 10px 14px;
       max-width: 1260px;
       margin: 0 auto;
       width: 100%;
@@ -171,7 +171,7 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -179,50 +179,50 @@
     .story-container {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 14px;
     }
 
     .season-selector-bar {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      gap: 10px;
     }
 
     .season-card-btn {
       background: white;
       border: 3px solid transparent;
-      border-radius: 20px;
-      padding: 12px 8px;
+      border-radius: 18px;
+      padding: 10px 6px;
       text-align: center;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
       transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .season-card-btn .emoji-icon {
-      font-size: 2.2rem;
+      font-size: 2rem;
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .season-card-btn .season-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: bold;
     }
 
-    .season-card-btn.spring.active { border-color: #66BB6A; background: #E8F5E9; color: #2E7D32; transform: translateY(-4px); }
-    .season-card-btn.summer.active { border-color: #FFA726; background: #FFF3E0; color: #E65100; transform: translateY(-4px); }
-    .season-card-btn.autumn.active { border-color: #FF7043; background: #FBE9E7; color: #BF360C; transform: translateY(-4px); }
-    .season-card-btn.winter.active { border-color: #42A5F5; background: #E3F2FD; color: #0D47A1; transform: translateY(-4px); }
+    .season-card-btn.spring.active { border-color: #66BB6A; background: #E8F5E9; color: #2E7D32; transform: translateY(-3px); }
+    .season-card-btn.summer.active { border-color: #FFA726; background: #FFF3E0; color: #E65100; transform: translateY(-3px); }
+    .season-card-btn.autumn.active { border-color: #FF7043; background: #FBE9E7; color: #BF360C; transform: translateY(-3px); }
+    .season-card-btn.winter.active { border-color: #42A5F5; background: #E3F2FD; color: #0D47A1; transform: translateY(-3px); }
 
     .story-display-card {
       background: white;
-      border-radius: 24px;
-      padding: 22px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
       display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 22px;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 18px;
       align-items: center;
       position: relative;
     }
@@ -235,60 +235,60 @@
 
     .story-illustration {
       width: 100%;
-      height: 310px;
-      border-radius: 18px;
+      height: 280px;
+      border-radius: 16px;
       overflow: hidden;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.08);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.06);
     }
 
     .story-info {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
     }
 
     .story-header-tag {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      font-size: 1.05rem;
-      padding: 6px 16px;
+      gap: 6px;
+      font-size: 0.95rem;
+      padding: 5px 14px;
       border-radius: 30px;
       font-weight: bold;
       width: fit-content;
     }
 
     .story-text-p {
-      font-size: 1.2rem;
-      line-height: 1.8;
+      font-size: 1.12rem;
+      line-height: 1.75;
       color: #37474F;
       letter-spacing: 0.5px;
-      min-height: 80px;
+      min-height: 70px;
     }
 
     .story-features {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
 
     .feature-chip {
       background: #ECEFF1;
-      padding: 6px 12px;
-      border-radius: 12px;
-      font-size: 0.95rem;
+      padding: 5px 10px;
+      border-radius: 10px;
+      font-size: 0.9rem;
       color: #455A64;
       font-weight: bold;
     }
 
     .story-actions {
       display: flex;
-      gap: 10px;
-      margin-top: 6px;
+      gap: 8px;
+      margin-top: 4px;
       flex-wrap: wrap;
     }
 
@@ -297,14 +297,14 @@
       color: white;
       border: none;
       border-radius: 50px;
-      padding: 10px 20px;
-      font-size: 1.05rem;
+      padding: 8px 18px;
+      font-size: 0.95rem;
       font-weight: bold;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
       transition: all 0.2s;
     }
 
@@ -317,31 +317,37 @@
       color: white;
       border: none;
       border-radius: 50px;
-      padding: 10px 20px;
-      font-size: 1.05rem;
+      padding: 8px 18px;
+      font-size: 0.95rem;
       font-weight: bold;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(66, 133, 244, 0.3);
       transition: all 0.2s;
     }
 
-    .gemini-generate-btn:active {
+    .gemini-generate-btn:active:not(:disabled) {
       transform: scale(0.96);
     }
 
-    /* 遊戲主工作區 */
-    .game-workspace {
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 16px;
-      height: calc(100vh - 110px);
-      min-height: 600px;
+    .gemini-generate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(0.2);
     }
 
-    @media (max-width: 950px) {
+    /* 遊戲主工作區 (1024x768 空間最優化) */
+    .game-workspace {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 12px;
+      height: calc(100vh - 75px);
+      min-height: 520px;
+    }
+
+    @media (max-width: 900px) {
       .game-workspace {
         grid-template-columns: 1fr;
         height: auto;
@@ -350,79 +356,23 @@
 
     .canvas-container {
       background: white;
-      border-radius: 24px;
-      padding: 14px;
+      border-radius: 20px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
       position: relative;
+      overflow: hidden;
     }
 
-    .canvas-header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .canvas-season-tabs {
-      display: flex;
-      gap: 6px;
-    }
-
-    .canvas-tab-btn {
-      padding: 6px 12px;
-      border-radius: 16px;
-      border: 2px solid #E0E0E0;
-      background: #FAFAFA;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: all 0.2s;
-    }
-
-    .canvas-tab-btn.active {
-      border-color: #2E7D32;
-      background: #E8F5E9;
-      color: #2E7D32;
-    }
-
-    .canvas-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .action-icon-btn {
-      border: none;
-      background: #F1F8E9;
-      color: #33691E;
-      padding: 8px 14px;
-      border-radius: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .action-icon-btn:hover { background: #DCEDC8; }
-    .action-icon-btn.primary { background: #4CAF50; color: white; }
-    .action-icon-btn.primary:hover { background: #43A047; }
-    .action-icon-btn.danger { background: #FFEBEE; color: #C62828; }
-    .action-icon-btn.danger:hover { background: #FFCDD2; }
-
-    /* 主創作畫布 */
+    /* 主創作畫布 (移除上方Toolbar後，視野極大化) */
     .art-board-wrapper {
       flex: 1;
       width: 100%;
       height: 100%;
-      min-height: 420px;
-      border-radius: 18px;
+      min-height: 360px;
+      border-radius: 16px;
       position: relative;
       overflow: hidden;
       border: 3px dashed #BDBDBD;
@@ -430,6 +380,7 @@
       touch-action: none;
     }
 
+    /* 四季場景背景漸層 (純淨自然風景，無太陽無雲朵) */
     .bg-spring {
       background: linear-gradient(to bottom, #87CEEB 0%, #B4E6FB 52%, #90D26D 52%, #59B234 100%);
     }
@@ -453,42 +404,104 @@
       z-index: 1;
     }
 
-    .canvas-bottom-bar {
+    /* 畫布下方整合控制列 (Toolbar 下移設計) */
+    .canvas-bottom-control-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: #FAFAFA;
+      padding: 8px 10px;
+      border-radius: 16px;
+      border: 1px solid #EEEEEE;
+    }
+
+    .canvas-tools-row-1 {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 4px 0 4px;
-      gap: 10px;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
+    .canvas-season-tabs {
+      display: flex;
+      gap: 5px;
+    }
+
+    .canvas-tab-btn {
+      padding: 5px 11px;
+      border-radius: 14px;
+      border: 1.5px solid #E0E0E0;
+      background: #ffffff;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .canvas-tab-btn.active {
+      border-color: #2E7D32;
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .canvas-actions-group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .action-icon-btn {
+      border: none;
+      background: #F1F8E9;
+      color: #33691E;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .action-icon-btn:hover { background: #DCEDC8; }
+    .action-icon-btn.primary { background: #4CAF50; color: white; }
+    .action-icon-btn.primary:hover { background: #43A047; }
+    .action-icon-btn.danger { background: #FFEBEE; color: #C62828; }
+    .action-icon-btn.danger:hover { background: #FFCDD2; }
+
+    /* 畫布底部大按鈕：Gemini AI 說故事 */
     .ai-story-launch-btn {
-      flex: 1;
+      width: 100%;
       background: linear-gradient(135deg, #1A73E8 0%, #4285F4 40%, #EA4335 70%, #FBBC05 100%);
       color: white;
       border: none;
       border-radius: 50px;
-      padding: 13px 24px;
-      font-size: 1.15rem;
+      padding: 10px 18px;
+      font-size: 1.05rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      box-shadow: 0 4px 16px rgba(66, 133, 244, 0.4);
+      gap: 8px;
+      box-shadow: 0 3px 12px rgba(66, 133, 244, 0.35);
       transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      animation: pulseBtn 2.5s infinite;
     }
 
-    .ai-story-launch-btn:active {
-      transform: scale(0.97);
+    .ai-story-launch-btn:active:not(:disabled) {
+      transform: scale(0.98);
     }
 
-    @keyframes pulseBtn {
-      0%, 100% { box-shadow: 0 4px 16px rgba(66, 133, 244, 0.4); }
-      50% { box-shadow: 0 6px 24px rgba(66, 133, 244, 0.7); }
+    .ai-story-launch-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(0.3);
     }
 
+    /* 畫布貼紙項目 */
     .sticker-placed {
       position: absolute;
       cursor: grab;
@@ -505,31 +518,32 @@
     }
 
     .sticker-placed.selected {
-      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.95));
+      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.95));
       outline: 2.5px dashed #FF9800;
-      border-radius: 14px;
+      border-radius: 12px;
     }
 
     .sticker-placed .sticker-content {
-      font-size: 52px;
+      font-size: 48px;
       line-height: 1;
       display: block;
       pointer-events: none;
     }
 
+    /* 四季百寶箱面板 (右側直列分類設計) */
     .stickers-panel {
       background: white;
-      border-radius: 24px;
-      padding: 14px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border-radius: 20px;
+      padding: 10px 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       overflow: hidden;
     }
 
     .panel-title {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 800;
       color: #2E7D32;
       display: flex;
@@ -537,56 +551,39 @@
       justify-content: space-between;
     }
 
-    .category-scroll-bar {
-      display: flex;
-      gap: 5px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scrollbar-width: thin;
-    }
-
-    .category-btn {
-      padding: 6px 12px;
-      border-radius: 14px;
-      border: 1.5px solid #E0E0E0;
-      background: #FAFAFA;
-      font-size: 0.85rem;
-      font-weight: bold;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .category-btn.active {
-      background: #4CAF50;
-      color: white;
-      border-color: #4CAF50;
-      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    /* 百寶箱內部主體：左側貼紙網格 + 最右側直列分類欄 */
+    .stickers-panel-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 76px;
+      gap: 8px;
+      overflow: hidden;
+      height: 100%;
     }
 
     .stickers-grid {
-      flex: 1;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
       overflow-y: auto;
-      padding: 6px;
+      padding: 4px;
       background: #F9FBE7;
-      border-radius: 16px;
+      border-radius: 14px;
+      align-content: start;
     }
 
     .sticker-tray-item {
       background: white;
-      border: 2px solid #E8F5E9;
-      border-radius: 16px;
-      padding: 8px 4px;
+      border: 1.5px solid #E8F5E9;
+      border-radius: 12px;
+      padding: 6px 2px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 2px;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
       transition: all 0.2s;
       touch-action: none;
     }
@@ -598,16 +595,56 @@
     }
 
     .sticker-tray-item .emoji {
-      font-size: 2.1rem;
+      font-size: 1.9rem;
     }
 
     .sticker-tray-item .name {
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       color: #555;
       font-weight: bold;
       text-align: center;
     }
 
+    /* 最右側直列分類欄 */
+    .vertical-category-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+      padding-right: 2px;
+      scrollbar-width: none;
+    }
+
+    .vertical-category-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .v-category-btn {
+      padding: 6px 4px;
+      border-radius: 12px;
+      border: 1.5px solid #E0E0E0;
+      background: #FAFAFA;
+      font-size: 0.78rem;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      white-space: nowrap;
+    }
+
+    .v-category-btn.active {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+      box-shadow: 0 2px 6px rgba(76, 175, 80, 0.35);
+      transform: scale(1.02);
+    }
+
+    /* 貼紙懸浮控制列 */
     .sticker-toolbar {
       position: absolute;
       top: 10px;
@@ -615,11 +652,11 @@
       transform: translateX(-50%);
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(8px);
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 30px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.18);
       display: none;
-      gap: 8px;
+      gap: 6px;
       z-index: 100;
       align-items: center;
     }
@@ -632,9 +669,9 @@
       background: #F5F5F5;
       border: none;
       border-radius: 50%;
-      width: 38px;
-      height: 38px;
-      font-size: 1.1rem;
+      width: 34px;
+      height: 34px;
+      font-size: 1rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -651,7 +688,7 @@
       color: #D32F2F;
     }
 
-    /* 故事繪本彈窗 */
+    /* 故事繪本彈窗 (針對 1024x768 深度優化，避免滾動) */
     .story-modal-overlay {
       position: fixed;
       top: 0;
@@ -659,36 +696,36 @@
       width: 100vw;
       height: 100vh;
       background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(4px);
       z-index: 900;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 12px;
     }
 
     .story-modal-overlay.show {
       display: flex;
-      animation: modalFadeIn 0.3s ease-out;
+      animation: modalFadeIn 0.25s ease-out;
     }
 
     @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.92); }
+      from { opacity: 0; transform: scale(0.94); }
       to { opacity: 1; transform: scale(1); }
     }
 
     .story-modal-card {
       background: #ffffff;
-      border-radius: 28px;
+      border-radius: 24px;
       width: 100%;
-      max-width: 980px;
-      max-height: 90vh;
+      max-width: 900px;
+      max-height: 88vh;
       overflow-y: auto;
-      padding: 22px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      padding: 16px 20px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 10px;
       position: relative;
     }
 
@@ -697,11 +734,11 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 2px solid #F1F8E9;
-      padding-bottom: 10px;
+      padding-bottom: 8px;
     }
 
     .story-modal-title {
-      font-size: 1.45rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: #1A73E8;
       display: flex;
@@ -712,9 +749,9 @@
     .gemini-badge {
       background: #E8F0FE;
       color: #1967D2;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: bold;
-      padding: 3px 10px;
+      padding: 3px 8px;
       border-radius: 20px;
       border: 1px solid #D2E3FC;
     }
@@ -723,9 +760,9 @@
       background: #F5F5F5;
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 1.3rem;
+      width: 36px;
+      height: 36px;
+      font-size: 1.2rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -740,11 +777,11 @@
     .storybook-layout-grid {
       display: grid;
       grid-template-columns: 1fr 1.15fr;
-      gap: 20px;
-      align-items: start;
+      gap: 16px;
+      align-items: center;
     }
 
-    @media (max-width: 820px) {
+    @media (max-width: 768px) {
       .storybook-layout-grid {
         grid-template-columns: 1fr;
       }
@@ -753,15 +790,15 @@
     .storybook-art-column {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .storybook-art-frame {
       background: #FFFDE7;
-      border: 6px solid #FFE082;
-      border-radius: 20px;
-      padding: 8px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      border: 5px solid #FFE082;
+      border-radius: 16px;
+      padding: 6px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
       position: relative;
       overflow: hidden;
       display: flex;
@@ -772,9 +809,9 @@
     .storybook-artwork-img {
       width: 100%;
       height: auto;
-      max-height: 320px;
+      max-height: 240px;
       object-fit: contain;
-      border-radius: 12px;
+      border-radius: 10px;
       display: block;
       background: white;
     }
@@ -782,9 +819,9 @@
     .art-badge-tag {
       background: #FF9800;
       color: white;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: bold;
-      padding: 4px 12px;
+      padding: 3px 10px;
       border-radius: 20px;
       display: inline-flex;
       align-items: center;
@@ -794,20 +831,20 @@
 
     .story-modal-elements {
       background: #FFF8E1;
-      padding: 8px 12px;
-      border-radius: 14px;
-      font-size: 0.88rem;
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-size: 0.82rem;
       color: #795548;
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 4px;
       align-items: center;
     }
 
     .element-badge {
       background: #ffffff;
-      padding: 2px 8px;
-      border-radius: 20px;
+      padding: 2px 6px;
+      border-radius: 16px;
       font-weight: bold;
       border: 1px solid #FFE082;
     }
@@ -815,29 +852,31 @@
     .storybook-text-column {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       height: 100%;
     }
 
     .story-modal-body {
-      font-size: 1.25rem;
-      line-height: 1.95;
+      font-size: 1.15rem;
+      line-height: 1.85;
       color: #37474F;
       background: #F9FBE7;
-      padding: 20px;
-      border-radius: 20px;
-      border-left: 6px solid #4285F4;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border-left: 5px solid #4285F4;
       white-space: pre-line;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
-      min-height: 160px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+      min-height: 120px;
+      max-height: 220px;
+      overflow-y: auto;
     }
 
     .story-modal-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: flex-end;
       flex-wrap: wrap;
-      padding-top: 4px;
+      padding-top: 2px;
     }
 
     /* AI Loading 狀態 */
@@ -846,8 +885,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      padding: 30px;
+      gap: 12px;
+      padding: 24px;
       text-align: center;
     }
 
@@ -856,7 +895,7 @@
     }
 
     .ai-spinner {
-      font-size: 3rem;
+      font-size: 2.6rem;
       animation: spinGemini 1.8s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55);
     }
 
@@ -888,14 +927,14 @@
 
     .settings-modal-card {
       background: white;
-      border-radius: 24px;
+      border-radius: 22px;
       width: 100%;
-      max-width: 520px;
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      max-width: 480px;
+      padding: 20px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.25);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .settings-field-group {
@@ -911,25 +950,25 @@
     }
 
     .settings-input {
-      padding: 10px 14px;
-      border-radius: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
       border: 1.5px solid #CFD8DC;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-family: inherit;
     }
 
     .toast-bubble {
       position: fixed;
-      bottom: 24px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
       background: #2E7D32;
       color: white;
-      padding: 12px 28px;
+      padding: 10px 24px;
       border-radius: 30px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
       transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       z-index: 999;
       pointer-events: none;
@@ -1004,14 +1043,14 @@
           <div class="story-illustration" id="story-art"></div>
           
           <div class="story-info">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
               <div class="story-header-tag" id="story-tag">🌸 春天來了・大地甦醒</div>
               <span class="gemini-badge" id="story-gemini-badge" style="display:none;">✨ Gemini AI 創作</span>
             </div>
             
             <h2 id="story-title" style="color: #2E7D32;">小種子的春日派對</h2>
             
-            <!-- 故事文字與 Loading -->
+            <!-- 故事文字展示區 -->
             <div id="story-text-container">
               <p class="story-text-p" id="story-desc">
                 春天到了，溫暖的微風吹過大地，小草從泥土裡探出頭來。五顏六色的花朵慢慢盛開，粉紅色的櫻花隨風跳舞。小蜜蜂和蝴蝶忙著採花蜜，小鳥在枝頭唱著快樂的歌。
@@ -1026,25 +1065,25 @@
             </div>
             
             <div class="story-actions">
-              <button class="gemini-generate-btn" onclick="generateSeasonStoryWithGemini()">
+              <button class="gemini-generate-btn" id="btn-gemini-story" onclick="generateSeasonStoryWithGemini()">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <span>Gemini 隨機生成新故事</span>
+                <span id="btn-gemini-story-text">Gemini 隨機生成新故事</span>
               </button>
               <button class="audio-play-btn" onclick="readStoryVoice()">
                 <i class="fa-solid fa-volume-high"></i>
                 <span>語音朗讀故事</span>
               </button>
-              <button class="action-icon-btn primary" style="font-size:1.05rem; padding:10px 20px; border-radius:50px;" onclick="goToGameWithSeason()">
+              <button class="action-icon-btn primary" style="font-size:0.95rem; padding:8px 18px; border-radius:50px;" onclick="goToGameWithSeason()">
                 🎨 前往佈置這個季節
               </button>
             </div>
           </div>
         </div>
 
-        <div style="background: white; border-radius: 20px; padding: 16px 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div style="background: white; border-radius: 18px; padding: 14px 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
           <div>
-            <h3 style="color: #37474F; margin-bottom: 4px;">🌍 四季輪轉的小秘密 (The Four Seasons)</h3>
-            <p style="color: #607D8B; font-size: 0.95rem;">地球繞著太陽公轉，因為地軸傾斜，我們才能體驗到春夏秋冬四個美麗的季節！</p>
+            <h3 style="color: #37474F; margin-bottom: 2px; font-size:1.05rem;">🌍 四季輪轉的小秘密 (The Four Seasons)</h3>
+            <p style="color: #607D8B; font-size: 0.9rem;">地球繞著太陽公轉，因為地軸傾斜，我們才能體驗到春夏秋冬四個美麗的季節！</p>
           </div>
           <button class="action-icon-btn" onclick="showAllSeasonsOverview()">
             ✨ 查看四季大自然交響曲
@@ -1054,37 +1093,18 @@
       </div>
     </section>
 
-    <!-- 2. 創作小遊戲區 -->
+    <!-- 2. 創作小遊戲區 (Toolbar下移 + 側邊直列分類) -->
     <section id="game-section" class="section-view">
       <div class="game-workspace">
         
+        <!-- 左側主畫布容器 -->
         <div class="canvas-container">
-          <div class="canvas-header-bar">
-            <div class="canvas-season-tabs">
-              <button class="canvas-tab-btn active" onclick="setCanvasBg('spring')">🌸 春天</button>
-              <button class="canvas-tab-btn" onclick="setCanvasBg('summer')">☀️ 夏天</button>
-              <button class="canvas-tab-btn" onclick="setCanvasBg('autumn')">🍁 秋天</button>
-              <button class="canvas-tab-btn" onclick="setCanvasBg('winter')">❄️ 冬天</button>
-            </div>
-
-            <div class="canvas-actions">
-              <button class="action-icon-btn" onclick="addRandomMagicStickers()">
-                🪄 魔法點綴
-              </button>
-              <button class="action-icon-btn danger" onclick="clearCanvas()">
-                🗑️ 清空
-              </button>
-              <button class="action-icon-btn primary" onclick="exportArtwork()">
-                📸 保存圖畫
-              </button>
-            </div>
-          </div>
-
-          <!-- 主畫布 -->
+          
+          <!-- 主畫布 (上方無Toolbar，視野全開) -->
           <div class="art-board-wrapper bg-spring" id="art-board">
             <svg class="bg-scenery-overlay" id="bg-scenery" viewBox="0 0 800 500" preserveAspectRatio="none"></svg>
 
-            <!-- 貼紙操作列 -->
+            <!-- 貼紙操作浮動列 -->
             <div class="sticker-toolbar" id="sticker-toolbar">
               <button class="tool-btn" onclick="scaleSelectedSticker(1.2)" title="放大">➕</button>
               <button class="tool-btn" onclick="scaleSelectedSticker(0.8)" title="縮小">➖</button>
@@ -1093,42 +1113,89 @@
             </div>
           </div>
 
-          <!-- 畫布底部 Gemini AI 說故事專用按鈕 -->
-          <div class="canvas-bottom-bar">
-            <button class="ai-story-launch-btn" onclick="generateAndShowGeminiArtworkStory()">
+          <!-- 畫布下方整合控制列 (Toolbar 往下移) -->
+          <div class="canvas-bottom-control-bar">
+            
+            <!-- 第一排：春夏秋冬背景切換 + 魔法點綴/清空/保存 -->
+            <div class="canvas-tools-row-1">
+              <div class="canvas-season-tabs">
+                <button class="canvas-tab-btn active" onclick="setCanvasBg('spring')">🌸 春天</button>
+                <button class="canvas-tab-btn" onclick="setCanvasBg('summer')">☀️ 夏天</button>
+                <button class="canvas-tab-btn" onclick="setCanvasBg('autumn')">🍁 秋天</button>
+                <button class="canvas-tab-btn" onclick="setCanvasBg('winter')">❄️ 冬天</button>
+              </div>
+
+              <div class="canvas-actions-group">
+                <button class="action-icon-btn" onclick="addRandomMagicStickers()">
+                  🪄 魔法點綴
+                </button>
+                <button class="action-icon-btn danger" onclick="clearCanvas()">
+                  🗑️ 清空
+                </button>
+                <button class="action-icon-btn primary" onclick="exportArtwork()">
+                  📸 保存圖畫
+                </button>
+              </div>
+            </div>
+
+            <!-- 第二排：Gemini AI 說故事專用大按鈕 -->
+            <button class="ai-story-launch-btn" id="btn-gemini-artwork-story" onclick="generateAndShowGeminiArtworkStory()">
               <i class="fa-solid fa-wand-magic-sparkles"></i>
-              <span>Gemini AI 說故事 (繪本模式)</span>
-              <span style="font-size:0.9rem; font-weight:normal; opacity:0.95;">(依圖畫即時生成童話)</span>
+              <span id="btn-gemini-artwork-text">Gemini AI 說故事 (繪本模式)</span>
             </button>
+
           </div>
         </div>
 
-        <!-- 側邊四季百寶箱 -->
+        <!-- 右側四季百寶箱 (最右側為直列式分類欄) -->
         <div class="stickers-panel">
           <div class="panel-title">
             <span>🎒 四季百寶箱</span>
-            <span style="font-size:0.82rem; font-weight:normal; color:#7CB342;">點擊加入畫布</span>
+            <span style="font-size:0.8rem; font-weight:normal; color:#7CB342;">點擊或拖入</span>
           </div>
 
-          <div class="category-scroll-bar">
-            <button class="category-btn active" onclick="filterStickers('all')">🌟 全部</button>
-            <button class="category-btn" onclick="filterStickers('spring')">🌸 春天</button>
-            <button class="category-btn" onclick="filterStickers('summer')">☀️ 夏天</button>
-            <button class="category-btn" onclick="filterStickers('autumn')">🍁 秋天</button>
-            <button class="category-btn" onclick="filterStickers('winter')">❄️ 冬天</button>
-            <button class="category-btn" onclick="filterStickers('people')">🧑 人物</button>
-            <button class="category-btn" onclick="filterStickers('animal')">🐾 動物</button>
-            <button class="category-btn" onclick="filterStickers('fun')">🚀 奇幻趣味</button>
-          </div>
+          <!-- 百寶箱分欄：左邊貼紙網格 + 最右邊直列分類 -->
+          <div class="stickers-panel-body">
+            
+            <!-- 左側貼紙網格 -->
+            <div class="stickers-grid" id="stickers-grid"></div>
 
-          <div class="stickers-grid" id="stickers-grid"></div>
+            <!-- 最右側直列分類欄 -->
+            <div class="vertical-category-bar">
+              <button class="v-category-btn active" onclick="filterStickers('all')">
+                <span>🌟</span><span>全部</span>
+              </button>
+              <button class="v-category-btn" onclick="filterStickers('spring')">
+                <span>🌸</span><span>春天</span>
+              </button>
+              <button class="v-category-btn" onclick="filterStickers('summer')">
+                <span>☀️</span><span>夏天</span>
+              </button>
+              <button class="v-category-btn" onclick="filterStickers('autumn')">
+                <span>🍁</span><span>秋天</span>
+              </button>
+              <button class="v-category-btn" onclick="filterStickers('winter')">
+                <span>❄️</span><span>冬天</span>
+              </button>
+              <button class="v-category-btn" onclick="filterStickers('people')">
+                <span>🧑</span><span>人物</span>
+              </button>
+              <button class="v-category-btn" onclick="filterStickers('animal')">
+                <span>🐾</span><span>動物</span>
+              </button>
+              <button class="v-category-btn" onclick="filterStickers('fun')">
+                <span>🚀</span><span>奇幻</span>
+              </button>
+            </div>
+
+          </div>
         </div>
 
       </div>
     </section>
   </main>
 
-  <!-- Gemini AI 繪本故事展示彈窗 -->
+  <!-- Gemini AI 繪本故事展示彈窗 (1024x768 專屬高度優化) -->
   <div class="story-modal-overlay" id="story-modal">
     <div class="story-modal-card">
       <div class="story-modal-header">
@@ -1144,7 +1211,7 @@
       <div class="ai-loading-container" id="modal-loading-view">
         <div class="ai-spinner">🪄✨</div>
         <h3 style="color:#1A73E8;">Gemini AI 正在為你的畫作創作故事...</h3>
-        <p style="color:#607D8B; font-size:1rem;">小精靈正在分析你的四季背景與角色，編織一段精彩的冒險繪本！</p>
+        <p style="color:#607D8B; font-size:0.95rem;">小精靈正在分析你的四季背景與角色，編織一段精彩的冒險繪本！</p>
       </div>
 
       <!-- 繪本雙欄內容區 -->
@@ -1166,9 +1233,9 @@
               <i class="fa-solid fa-volume-high"></i>
               <span>語音朗讀故事</span>
             </button>
-            <button class="gemini-generate-btn" onclick="generateAndShowGeminiArtworkStory()">
+            <button class="gemini-generate-btn" id="btn-gemini-modal-regen" onclick="generateAndShowGeminiArtworkStory()">
               <i class="fa-solid fa-wand-magic-sparkles"></i>
-              <span>Gemini 再寫一個新故事</span>
+              <span id="btn-gemini-modal-regen-text">再寫一個新故事</span>
             </button>
             <button class="action-icon-btn primary" onclick="closeStoryModal()">
               👍 回去繼續畫
@@ -1190,17 +1257,17 @@
         <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
       </div>
       
-      <p style="color:#607D8B; font-size:0.95rem; line-height:1.6;">
-        本遊戲預設已啟用免註冊即開即用的 Gemini AI 雲端服務。若您擁有自己的 <strong>Google Gemini API Key</strong>，可在此填入以獲得最快速、高品質的回應！
+      <p style="color:#607D8B; font-size:0.92rem; line-height:1.6;">
+        本遊戲預設已啟用免註冊即開即用的 Gemini 雲端服務。若您擁有自己的 <strong>Google Gemini API Key</strong>，可在此填入以獲得最快速、高品質的回應！
       </p>
 
       <div class="settings-field-group">
         <label class="settings-label">Gemini API Key</label>
         <input type="password" class="settings-input" id="settings-api-key" placeholder="貼上您的 Gemini API Key (例如：AIzaSy...)" />
-        <span style="font-size:0.8rem; color:#78909C;">可至 Google AI Studio (aistudio.google.com) 免費取得 API Key</span>
+        <span style="font-size:0.78rem; color:#78909C;">可至 Google AI Studio (aistudio.google.com) 免費取得 API Key</span>
       </div>
 
-      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:6px;">
         <button class="action-icon-btn" onclick="closeSettingsModal()">取消</button>
         <button class="action-icon-btn primary" onclick="saveSettings()">💾 儲存設定</button>
       </div>
@@ -1233,7 +1300,6 @@
               <linearGradient id="sp-grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9CCC65"/><stop offset="100%" stop-color="#558B2F"/></linearGradient>
             </defs>
             <rect width="500" height="320" fill="url(#sp-sky)"/>
-            <circle cx="70" cy="60" r="35" fill="#FFE082"/>
             <path d="M 0 200 Q 150 160 300 210 T 500 190 L 500 320 L 0 320 Z" fill="url(#sp-grass)"/>
             <path d="M 120 250 Q 130 180 140 140 Q 160 180 180 260 Z" fill="#795548"/>
             <circle cx="130" cy="120" r="50" fill="#F8BBD0"/>
@@ -1263,8 +1329,6 @@
               <linearGradient id="sm-sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFE082"/><stop offset="100%" stop-color="#FFCA28"/></linearGradient>
             </defs>
             <rect width="500" height="320" fill="url(#sm-sky)"/>
-            <circle cx="430" cy="55" r="42" fill="#FF7043"/>
-            <circle cx="430" cy="55" r="34" fill="#FFD54F"/>
             <path d="M 0 135 Q 120 115 250 135 T 500 135 L 500 220 L 0 220 Z" fill="url(#sm-sea)"/>
             <path d="M 0 170 Q 130 150 260 170 T 500 170 L 500 225 L 0 225 Z" fill="#4DD0E1" opacity="0.6"/>
             <path d="M 0 215 Q 220 185 500 215 L 500 320 L 0 320 Z" fill="url(#sm-sand)"/>
@@ -1291,7 +1355,6 @@
               <linearGradient id="au-ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#D87D4A"/><stop offset="100%" stop-color="#8D4004"/></linearGradient>
             </defs>
             <rect width="500" height="320" fill="url(#au-sky)"/>
-            <circle cx="380" cy="70" r="35" fill="#FFB74D" opacity="0.8"/>
             <path d="M 0 190 Q 200 160 500 190 L 500 320 L 0 320 Z" fill="url(#au-ground)"/>
             <path d="M 120 250 Q 130 180 140 140 Q 160 180 180 260 Z" fill="#5D4037"/>
             <circle cx="130" cy="120" r="50" fill="#FF7043"/>
@@ -1450,6 +1513,14 @@
     let audioCtx = null;
     let lastGeneratedArtworkStory = "";
 
+    // --- #1 AI 間隔控制 (Rate Limit & Cooldown Manager) ---
+    const AI_COOLDOWN_SECONDS = 12;
+    let storyCooldownTimer = null;
+    let storyCooldownRemaining = 0;
+
+    let artworkCooldownTimer = null;
+    let artworkCooldownRemaining = 0;
+
     function initAudio() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1532,8 +1603,13 @@
       playSound('pop');
     }
 
-    // --- 1. 四季故事：透過 Gemini AI 隨機生成春夏秋冬故事 ---
+    // --- 1. 四季故事：Gemini AI 生成 (含冷卻間隔控制與預設降級) ---
     async function generateSeasonStoryWithGemini() {
+      if (storyCooldownRemaining > 0) {
+        showToast(`⏳ AI 休息中，請等待 ${storyCooldownRemaining} 秒後再試～`);
+        return;
+      }
+
       const seasonKey = currentStorySeason;
       const seasonName = SEASONS_DATA[seasonKey].name;
       
@@ -1541,11 +1617,13 @@
       const titleEl = document.getElementById('story-title');
       const badgeEl = document.getElementById('story-gemini-badge');
       
-      // 顯示生成中狀態
       badgeEl.style.display = 'inline-block';
       badgeEl.textContent = '✨ Gemini AI 正在構思新故事...';
       descEl.textContent = `🪄 Gemini AI 正在為你創作一個全新的【${seasonName}】奇妙故事，請稍候...`;
       playSound('magic');
+
+      // 啟動 12 秒冷卻計時器
+      startStoryCooldown();
 
       const systemPrompt = "你是一位專為幼兒創作童話故事的專家。請以繁體中文為3-7歲幼兒創作一段全新、生動、溫暖且充滿大自然知識的短篇四季故事。必須輸出嚴格的純JSON格式（不含markdown標記），包含：{\"title\":\"故事標題\",\"desc\":\"故事內容（約100字，字句溫馨）\",\"features\":[\"特色標籤1\",\"特色標籤2\",\"特色標籤3\",\"特色標籤4\"]}";
       const userPrompt = `請為【${seasonName}】隨機創作一個全新的幼兒童話故事。`;
@@ -1563,17 +1641,47 @@
         playSound('magic');
         showToast(`🎉 Gemini 已為你生成全新的${seasonName}故事！`);
       } catch (e) {
-        console.warn('Gemini 請求異常，套用隨機備援故事:', e);
+        console.warn('Gemini 請求異常或限流，自動套用預設故事備援:', e);
         const fallback = getFallbackSeasonStory(seasonKey);
         titleEl.textContent = fallback.title;
         descEl.textContent = fallback.desc;
-        badgeEl.textContent = '✨ 智慧生成故事';
-        showToast(`🌟 已為你帶來全新的${seasonName}故事！`);
+        badgeEl.textContent = '✨ 精選童話故事';
+        if (fallback.features) {
+          document.getElementById('story-tags').innerHTML = fallback.features.map(f => `<span class="feature-chip">${f}</span>`).join('');
+        }
+        showToast(`✨ 已為你呈現精選${seasonName}故事！`);
       }
     }
 
-    // --- 2. 創作小遊戲：透過 Gemini AI 生成畫作故事 ---
+    function startStoryCooldown() {
+      storyCooldownRemaining = AI_COOLDOWN_SECONDS;
+      const btn = document.getElementById('btn-gemini-story');
+      const textSpan = document.getElementById('btn-gemini-story-text');
+      
+      btn.disabled = true;
+      textSpan.textContent = `請稍候 (${storyCooldownRemaining}s)`;
+
+      if (storyCooldownTimer) clearInterval(storyCooldownTimer);
+      storyCooldownTimer = setInterval(() => {
+        storyCooldownRemaining--;
+        if (storyCooldownRemaining <= 0) {
+          clearInterval(storyCooldownTimer);
+          storyCooldownRemaining = 0;
+          btn.disabled = false;
+          textSpan.textContent = 'Gemini 隨機生成新故事';
+        } else {
+          textSpan.textContent = `請稍候 (${storyCooldownRemaining}s)`;
+        }
+      }, 1000);
+    }
+
+    // --- 2. 創作小遊戲：Gemini AI 畫作故事生成 (含冷卻間隔控制與預設降級) ---
     async function generateAndShowGeminiArtworkStory() {
+      if (artworkCooldownRemaining > 0) {
+        showToast(`⏳ AI 休息中，請等待 ${artworkCooldownRemaining} 秒後再試～`);
+        return;
+      }
+
       if (placedStickers.length === 0) {
         playSound('pop');
         showToast('💡 畫布上還沒有貼紙喔！先放幾個角色與物品吧～');
@@ -1604,6 +1712,9 @@
         ${elementsOnBoard.map(e => `<span class="element-badge">${e.emoji} ${e.name}</span>`).join('')}
       `;
 
+      // 啟動冷卻控制
+      startArtworkCooldown();
+
       const elementsText = elementsOnBoard.map(e => `${e.emoji}${e.name}`).join('、');
       const systemPrompt = "你是一位頂尖的兒童繪本作家。小朋友在畫布上創作了一幅四季圖畫。請根據小朋友選擇的季節以及畫作上的所有元素，為小朋友創作一段溫暖動人、情節連貫的繪本故事。請輸出純JSON格式（不含markdown）：{\"title\":\"繪本故事標題\",\"story\":\"繪本故事內容（約150字，生動呈現主角與物品互動，充滿童趣）\"}";
       const userPrompt = `【季節】：${seasonName}\n【畫面上的角色與物品】：${elementsText}\n請為這幅畫作創作專屬故事。`;
@@ -1614,16 +1725,46 @@
         document.getElementById('modal-story-text').textContent = result.story || result.desc || result.content;
         lastGeneratedArtworkStory = `${result.title}。\n\n${result.story || result.desc}`;
       } catch (err) {
-        console.warn('Gemini 畫作故事生成異常，使用備援引擎:', err);
+        console.warn('Gemini 畫作故事生成異常或限流，使用預設故事備援:', err);
         const fallback = composeChildStoryFallback(seasonName, elementsOnBoard);
         document.getElementById('modal-story-heading').textContent = `✨ 我的${seasonName}繪本冒險`;
         document.getElementById('modal-story-text').textContent = fallback.fullText;
         lastGeneratedArtworkStory = fallback.fullText;
+        showToast('✨ 已為你呈現精選繪本故事！');
       }
 
       document.getElementById('modal-loading-view').classList.remove('show');
       document.getElementById('modal-content-view').style.display = 'grid';
       playSound('magic');
+    }
+
+    function startArtworkCooldown() {
+      artworkCooldownRemaining = AI_COOLDOWN_SECONDS;
+      const btn1 = document.getElementById('btn-gemini-artwork-story');
+      const text1 = document.getElementById('btn-gemini-artwork-text');
+      const btn2 = document.getElementById('btn-gemini-modal-regen');
+      const text2 = document.getElementById('btn-gemini-modal-regen-text');
+
+      if (btn1) btn1.disabled = true;
+      if (text1) text1.textContent = `Gemini AI 休息中 (${artworkCooldownRemaining}s)`;
+      if (btn2) btn2.disabled = true;
+      if (text2) text2.textContent = `請稍候 (${artworkCooldownRemaining}s)`;
+
+      if (artworkCooldownTimer) clearInterval(artworkCooldownTimer);
+      artworkCooldownTimer = setInterval(() => {
+        artworkCooldownRemaining--;
+        if (artworkCooldownRemaining <= 0) {
+          clearInterval(artworkCooldownTimer);
+          artworkCooldownRemaining = 0;
+          if (btn1) btn1.disabled = false;
+          if (text1) text1.textContent = 'Gemini AI 說故事 (繪本模式)';
+          if (btn2) btn2.disabled = false;
+          if (text2) text2.textContent = '再寫一個新故事';
+        } else {
+          if (text1) text1.textContent = `Gemini AI 休息中 (${artworkCooldownRemaining}s)`;
+          if (text2) text2.textContent = `請稍候 (${artworkCooldownRemaining}s)`;
+        }
+      }, 1000);
     }
 
     // --- 通用 Gemini LLM API 呼叫核心 ---
@@ -1640,6 +1781,7 @@
             generationConfig: { responseMimeType: "application/json" }
           })
         });
+        if (!response.ok) throw new Error(`Gemini API 狀態碼: ${response.status}`);
         const data = await response.json();
         const rawText = data.candidates[0].content.parts[0].text;
         return parseJSONResponse(rawText);
@@ -1664,6 +1806,7 @@
       });
       clearTimeout(timeoutId);
 
+      if (!response.ok) throw new Error(`Pollinations 狀態碼: ${response.status}`);
       const rawText = await response.text();
       return parseJSONResponse(rawText);
     }
@@ -1674,7 +1817,7 @@
         cleaned = cleaned.replace(/```json/gi, '').replace(/```/g, '').trim();
       }
       try {
-        const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+        const jsonMatch = cleaned.match(/\\{[\\s\\S]*\\}/);
         if (jsonMatch) {
           return JSON.parse(jsonMatch[0]);
         }
@@ -1783,40 +1926,36 @@
       playSound('magic');
     }
 
+    // --- #3 基本背景純淨化：徹底移除類似雲朵或太陽的物件 ---
     function renderSceneryOverlay(seasonKey) {
       const svgOverlay = document.getElementById('bg-scenery');
       let content = '';
 
       if (seasonKey === 'spring') {
         content = `
-          <path d="M 0 320 Q 200 270 400 310 T 800 300 L 800 500 L 0 500 Z" fill="#7CB342" opacity="0.35"/>
-          <path d="M 0 360 Q 250 320 500 370 T 800 350 L 800 500 L 0 500 Z" fill="#689F38" opacity="0.45"/>
-          <ellipse cx="140" cy="70" rx="60" ry="24" fill="#ffffff" opacity="0.8"/>
-          <ellipse cx="620" cy="95" rx="75" ry="28" fill="#ffffff" opacity="0.8"/>
+          <!-- 春天起伏草坡山丘 (無太陽無雲) -->
+          <path d="M 0 330 Q 200 280 400 320 T 800 310 L 800 500 L 0 500 Z" fill="#7CB342" opacity="0.35"/>
+          <path d="M 0 370 Q 250 330 500 380 T 800 360 L 800 500 L 0 500 Z" fill="#689F38" opacity="0.45"/>
         `;
       } else if (seasonKey === 'summer') {
         content = `
-          <circle cx="700" cy="80" r="55" fill="#FFA000" opacity="0.3"/>
-          <circle cx="700" cy="80" r="42" fill="#FFC107" opacity="0.7"/>
-          <path d="M 220 70 Q 230 60 240 70 Q 250 60 260 70" stroke="#FFFFFF" stroke-width="3" fill="none" opacity="0.85"/>
-          <path d="M 270 90 Q 280 80 290 90 Q 300 80 310 90" stroke="#FFFFFF" stroke-width="2.5" fill="none" opacity="0.85"/>
-          <path d="M 0 240 Q 150 220 300 240 T 600 235 T 800 240" stroke="#E0F7FA" stroke-width="4" fill="none" opacity="0.7"/>
-          <path d="M 0 280 Q 200 260 400 280 T 800 275" stroke="#FFFFFF" stroke-width="5" fill="none" opacity="0.9"/>
-          <path d="M 0 340 Q 260 300 520 340 T 800 320 L 800 500 L 0 500 Z" fill="#FFCA28" opacity="0.45"/>
-          <circle cx="680" cy="420" r="14" fill="#FFE082" opacity="0.6"/>
-          <circle cx="220" cy="440" r="18" fill="#FFE082" opacity="0.6"/>
+          <!-- 夏天碧藍海浪、白色浪花海平線與金黃沙灘 (無太陽無雲無鳥) -->
+          <path d="M 0 230 Q 150 210 300 230 T 600 225 T 800 230" stroke="#E0F7FA" stroke-width="4" fill="none" opacity="0.7"/>
+          <path d="M 0 270 Q 200 250 400 270 T 800 265" stroke="#FFFFFF" stroke-width="5" fill="none" opacity="0.85"/>
+          <path d="M 0 330 Q 260 290 520 330 T 800 310 L 800 500 L 0 500 Z" fill="#FFCA28" opacity="0.45"/>
         `;
       } else if (seasonKey === 'autumn') {
         content = `
-          <path d="M 0 320 Q 220 270 440 320 T 800 300 L 800 500 L 0 500 Z" fill="#E65100" opacity="0.25"/>
-          <path d="M 0 360 Q 260 320 520 360 T 800 340 L 800 500 L 0 500 Z" fill="#BF360C" opacity="0.35"/>
-          <ellipse cx="180" cy="85" rx="70" ry="25" fill="#FFE082" opacity="0.65"/>
+          <!-- 秋天金色山丘起伏 (無太陽無雲) -->
+          <path d="M 0 330 Q 220 280 440 320 T 800 310 L 800 500 L 0 500 Z" fill="#E65100" opacity="0.25"/>
+          <path d="M 0 360 Q 260 330 520 370 T 800 350 L 800 500 L 0 500 Z" fill="#BF360C" opacity="0.35"/>
         `;
       } else if (seasonKey === 'winter') {
         content = `
-          <polygon points="150,140 280,340 20,340" fill="#B0BEC5" opacity="0.35"/>
-          <polygon points="420,110 580,350 260,350" fill="#CFD8DC" opacity="0.45"/>
-          <path d="M 0 340 Q 250 300 500 340 T 800 320 L 800 500 L 0 500 Z" fill="#FFFFFF" opacity="0.85"/>
+          <!-- 冬天雪山剪影與白雪丘陵 (無太陽無雲) -->
+          <polygon points="150,160 280,350 20,350" fill="#B0BEC5" opacity="0.35"/>
+          <polygon points="420,130 580,360 260,360" fill="#CFD8DC" opacity="0.45"/>
+          <path d="M 0 350 Q 250 310 500 350 T 800 330 L 800 500 L 0 500 Z" fill="#FFFFFF" opacity="0.85"/>
         `;
       }
       svgOverlay.innerHTML = content;
@@ -1837,8 +1976,8 @@
     }
 
     function filterStickers(category) {
-      document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-      const targetBtn = Array.from(document.querySelectorAll('.category-btn')).find(b => b.getAttribute('onclick').includes(`'${category}'`));
+      document.querySelectorAll('.v-category-btn').forEach(btn => btn.classList.remove('active'));
+      const targetBtn = Array.from(document.querySelectorAll('.v-category-btn')).find(b => b.getAttribute('onclick').includes(`'${category}'`));
       if (targetBtn) targetBtn.classList.add('active');
       renderStickersGrid(category);
       playSound('pop');
@@ -2022,6 +2161,7 @@
       showToast('🧹 畫布已清空，開始新的創作吧！');
     }
 
+    // --- 快照渲染至隱藏 Canvas 並轉為 DataURL (移除固定太陽) ---
     function renderCanvasSnapshotDataURL() {
       const canvas = document.getElementById('export-canvas');
       const ctx = canvas.getContext('2d');
@@ -2055,12 +2195,8 @@
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
+      // 夏天海灘：只繪製純粹的白色浪花波紋 (無太陽)
       if (currentCanvasSeason === 'summer') {
-        ctx.fillStyle = '#FFC107';
-        ctx.beginPath();
-        ctx.arc(width - 120, 90, 50, 0, Math.PI * 2);
-        ctx.fill();
-
         ctx.strokeStyle = '#FFFFFF';
         ctx.lineWidth = 4;
         ctx.beginPath();
@@ -2072,6 +2208,7 @@
 
       ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
       ctx.font = 'bold 30px ' + getComputedStyle(document.body).fontFamily;
+      ctx.fillText(`四季奇遇記・我的${SEASONS_0px ' + getComputedStyle(document.body).fontFamily;
       ctx.fillText(`四季奇遇記・我的${SEASONS_DATA[currentCanvasSeason].name}美麗畫作`, 30, 50);
 
       const artBoard = document.getElementById('art-board');
