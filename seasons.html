@@ -10,13 +10,13 @@
 
   <style>
     :root {
-      --spring-color: #7BC676;
+      --spring-color: #2E7D32;
       --spring-bg: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
-      --summer-color: #FF9800;
+      --summer-color: #E65100;
       --summer-bg: linear-gradient(135deg, #00c6ff 0%, #0072ff 50%, #f7971e 100%);
-      --autumn-color: #E65100;
+      --autumn-color: #BF360C;
       --autumn-bg: linear-gradient(135deg, #f85032 0%, #e73827 100%);
-      --winter-color: #29B6F6;
+      --winter-color: #0D47A1;
       --winter-bg: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
       --primary-font: "PingFang TC", "Hiragino Sans GB", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
     }
@@ -59,7 +59,7 @@
     .header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     /* 立體 HOME 鍵樣式 */
@@ -67,16 +67,16 @@
       background: #ffffff;
       color: #2E7D32;
       border: 2px solid #C8E6C9;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: bold;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.15s ease;
-      box-shadow: 0 4px 0 rgba(46, 125, 50, 0.2);
+      box-shadow: 0 3px 0 rgba(46, 125, 50, 0.2);
     }
 
     .home-btn:hover {
@@ -84,33 +84,58 @@
     }
 
     .home-btn:active {
-      transform: translateY(3px);
+      transform: translateY(2px);
       box-shadow: 0 1px 0 rgba(46, 125, 50, 0.2);
+    }
+
+    .settings-btn {
+      background: #ffffff;
+      color: #546E7A;
+      border: 2px solid #CFD8DC;
+      font-size: 0.95rem;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      box-shadow: 0 3px 0 rgba(84, 110, 122, 0.2);
+    }
+
+    .settings-btn:hover {
+      background: #ECEFF1;
+    }
+
+    .settings-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 rgba(84, 110, 122, 0.2);
     }
 
     .logo-badge {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 1.35rem;
+      gap: 6px;
+      font-size: 1.3rem;
       font-weight: 800;
       color: #2E7D32;
     }
 
     .nav-tabs {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       background: #E8F5E9;
-      padding: 5px;
+      padding: 4px;
       border-radius: 50px;
     }
 
     .nav-btn {
       border: none;
       background: transparent;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: bold;
-      padding: 8px 20px;
+      padding: 8px 18px;
       border-radius: 40px;
       cursor: pointer;
       color: #43A047;
@@ -124,13 +149,13 @@
       background: #43A047;
       color: #ffffff;
       box-shadow: 0 4px 10px rgba(67, 160, 71, 0.35);
-      transform: scale(1.04);
+      transform: scale(1.03);
     }
 
     /* 主內容容器 */
     main {
       flex: 1;
-      padding: 14px;
+      padding: 12px 14px;
       max-width: 1260px;
       margin: 0 auto;
       width: 100%;
@@ -154,20 +179,20 @@
     .story-container {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
 
     .season-selector-bar {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      gap: 10px;
     }
 
     .season-card-btn {
       background: white;
       border: 3px solid transparent;
       border-radius: 20px;
-      padding: 12px 8px;
+      padding: 10px 6px;
       text-align: center;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -175,33 +200,33 @@
     }
 
     .season-card-btn .emoji-icon {
-      font-size: 2.2rem;
+      font-size: 2rem;
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .season-card-btn .season-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: bold;
     }
 
-    .season-card-btn.spring.active { border-color: #66BB6A; background: #E8F5E9; color: #2E7D32; transform: translateY(-4px); }
-    .season-card-btn.summer.active { border-color: #FFA726; background: #FFF3E0; color: #E65100; transform: translateY(-4px); }
-    .season-card-btn.autumn.active { border-color: #FF7043; background: #FBE9E7; color: #BF360C; transform: translateY(-4px); }
-    .season-card-btn.winter.active { border-color: #42A5F5; background: #E3F2FD; color: #0D47A1; transform: translateY(-4px); }
+    .season-card-btn.spring.active { border-color: #66BB6A; background: #E8F5E9; color: #2E7D32; transform: translateY(-3px); }
+    .season-card-btn.summer.active { border-color: #FFA726; background: #FFF3E0; color: #E65100; transform: translateY(-3px); }
+    .season-card-btn.autumn.active { border-color: #FF7043; background: #FBE9E7; color: #BF360C; transform: translateY(-3px); }
+    .season-card-btn.winter.active { border-color: #42A5F5; background: #E3F2FD; color: #0D47A1; transform: translateY(-3px); }
 
     .story-display-card {
       background: white;
       border-radius: 24px;
-      padding: 22px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
       display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 22px;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 20px;
       align-items: center;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 820px) {
       .story-display-card {
         grid-template-columns: 1fr;
       }
@@ -212,169 +237,688 @@
       height: 310px;
       border-radius: 18px;
       overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
       position: relative;
+      background: #FAFAFA;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.08);
+    }
+
+    .story-illustration svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .story-info {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
+    }
+
+    .story-tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .story-header-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.05rem;
-      padding: 6px 16px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 5px 14px;
       border-radius: 30px;
+      display: inline-block;
+    }
+
+    .ai-badge {
+      background: #FFF8E1;
+      border: 1px solid #FFE082;
+      color: #F57F17;
+      font-size: 0.82rem;
       font-weight: bold;
-      width: fit-content;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .story-text-p {
-      font-size: 1.2rem;
-      line-height: 1.8;
-      color: #37474F;
-      letter-spacing: 0.5px;
+      font-size: 1.08rem;
+      line-height: 1.65;
+      color: #455A64;
     }
 
     .story-features {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
 
     .feature-chip {
-      background: #ECEFF1;
-      padding: 6px 12px;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      color: #455A64;
+      background: #F1F8E9;
+      color: #33691E;
+      font-size: 0.85rem;
+      padding: 5px 12px;
+      border-radius: 16px;
       font-weight: bold;
     }
 
     .story-actions {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       margin-top: 6px;
       flex-wrap: wrap;
     }
 
     .audio-play-btn {
-      background: #4CAF50;
-      color: white;
+      background: #E0F2F1;
+      color: #00796B;
       border: none;
+      padding: 10px 16px;
       border-radius: 50px;
-      padding: 10px 22px;
-      font-size: 1.05rem;
       font-weight: bold;
       cursor: pointer;
+      font-size: 0.95rem;
       display: flex;
       align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+      gap: 6px;
       transition: all 0.2s;
     }
 
-    .audio-play-btn:active {
-      transform: scale(0.96);
+    .audio-play-btn:hover {
+      background: #B2DFDB;
+      transform: scale(1.03);
     }
 
-    /* 遊戲主工作區 */
-    .game-workspace {
-      display: grid;
-      grid-template-columns: 1fr 360px;
+    .ai-magic-story-btn {
+      background: linear-gradient(135deg, #7B1FA2 0%, #AB47BC 100%);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.98rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(123, 31, 162, 0.3);
+      transition: all 0.2s;
+    }
+
+    .ai-magic-story-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 16px rgba(123, 31, 162, 0.4);
+    }
+
+    .ai-magic-story-btn:disabled {
+      background: #BDBDBD;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ============================================================
+       擴充：四季輪轉的小秘密 (地理教學互動探索區)
+       ============================================================ */
+    .secrets-section-card {
+      background: white;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
       gap: 16px;
-      height: calc(100vh - 110px);
-      min-height: 600px;
+      border: 2px solid #E8F5E9;
+    }
+
+    .secrets-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-bottom: 2px dashed #E0F2F1;
+      padding-bottom: 12px;
+    }
+
+    .secrets-header-titles h3 {
+      font-size: 1.3rem;
+      color: #1B5E20;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .secrets-header-titles p {
+      color: #546E7A;
+      font-size: 0.95rem;
+      margin-top: 3px;
+    }
+
+    .secrets-header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .secrets-main-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 960px) {
+      .secrets-main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 動態公轉軌道模擬區 */
+    .orbit-sim-box {
+      background: radial-gradient(circle at center, #1A237E 0%, #0D1B2A 70%, #050B14 100%);
+      border-radius: 20px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 6px 18px rgba(26, 35, 126, 0.2);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .orbit-svg-wrapper {
+      width: 100%;
+      height: 310px;
+      position: relative;
+    }
+
+    .orbit-svg-wrapper svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .orbit-live-status-bar {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 14px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      flex-wrap: wrap;
+      gap: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .status-highlight-sun {
+      color: #FFE082;
+      font-weight: bold;
+    }
+
+    .status-highlight-earth {
+      color: #80D8FF;
+      font-weight: bold;
+    }
+
+    .orbit-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,0,0,0.3);
+      padding: 8px 10px;
+      border-radius: 14px;
+    }
+
+    .station-btn-group {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .station-quick-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 5px 9px;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .station-quick-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .station-quick-btn.active {
+      background: #FFD54F;
+      color: #3E2723;
+      border-color: #FFA000;
+      box-shadow: 0 0 10px rgba(255, 213, 79, 0.6);
+      transform: scale(1.05);
+    }
+
+    .orbit-anim-btns {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .orbit-anim-play-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .orbit-anim-play-btn:hover {
+      background: #43A047;
+      transform: scale(1.03);
+    }
+
+    .orbit-anim-play-btn.paused {
+      background: #FF9800;
+    }
+
+    /* 地理故事解說面板 */
+    .secrets-story-panel {
+      background: #F9FBE7;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 2px solid #E8F5E9;
+      justify-content: space-between;
+    }
+
+    .secret-story-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .secret-badge {
+      font-size: 0.88rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .secret-story-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #1B5E20;
+    }
+
+    .secret-facts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    @media (max-width: 500px) {
+      .secret-facts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .secret-fact-card {
+      background: white;
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      border: 1px solid #DCEDC8;
+    }
+
+    .secret-fact-card strong {
+      color: #33691E;
+      display: block;
+      margin-bottom: 2px;
+      font-size: 0.8rem;
+    }
+
+    .secret-story-narrative {
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: #37474F;
+      background: white;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border-left: 4px solid #81C784;
+    }
+
+    /* 手電筒實驗直射 vs 斜射小卡片 */
+    .flashlight-exp-box {
+      background: white;
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1.5px dashed #AED581;
+    }
+
+    .flashlight-exp-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .flashlight-exp-text {
+      font-size: 0.85rem;
+      color: #455A64;
+      line-height: 1.45;
+    }
+
+    .flashlight-exp-text strong {
+      color: #E65100;
+    }
+
+    .secrets-interactive-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .quiz-reveal-box {
+      background: #FFFDE7;
+      border: 1.5px solid #FFF59D;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      color: #5D4037;
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .quiz-reveal-box.show {
+      display: block;
+    }
+
+    /* ============================================================
+       2. 創作小遊戲區 (優化：百寶箱置左、Category在頂部、可縮排)
+       ============================================================ */
+    .game-workspace {
+      display: flex;
+      gap: 14px;
+      height: calc(100vh - 90px);
+      min-height: 560px;
+      position: relative;
+      width: 100%;
     }
 
     @media (max-width: 950px) {
       .game-workspace {
-        grid-template-columns: 1fr;
+        flex-direction: column;
         height: auto;
       }
     }
 
-    .canvas-container {
+    /* 左側：四季百寶箱 (可縮排 / 展開，分類在頂部) */
+    .stickers-panel {
+      width: 320px;
+      min-width: 320px;
+      max-width: 320px;
       background: white;
       border-radius: 24px;
-      padding: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: hidden;
+      height: 100%;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    /* 縮排狀態樣式 */
+    .stickers-panel.collapsed {
+      width: 52px;
+      min-width: 52px;
+      max-width: 52px;
+      padding: 12px 6px;
+      background: #F1F8E9;
+      border: 2px dashed #81C784;
+      cursor: pointer;
+    }
+
+    .stickers-panel.collapsed .panel-header .panel-title,
+    .stickers-panel.collapsed .category-top-bar,
+    .stickers-panel.collapsed .stickers-content-wrap {
+      display: none !important;
+    }
+
+    .stickers-panel .collapsed-indicator {
+      display: none;
+    }
+
+    .stickers-panel.collapsed .collapsed-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 100%;
+      color: #2E7D32;
+      font-weight: 800;
+      font-size: 0.95rem;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 3px;
+      cursor: pointer;
+    }
+
+    .stickers-panel.collapsed .panel-header {
+      justify-content: center;
+      padding: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2px 2px;
+    }
+
+    .panel-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-title-text {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #2E7D32;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .panel-subtitle {
+      font-size: 0.76rem;
+      color: #7CB342;
+      font-weight: bold;
+    }
+
+    .panel-toggle-btn {
+      background: #E8F5E9;
+      border: 1.5px solid #C8E6C9;
+      color: #2E7D32;
+      padding: 5px 10px;
+      border-radius: 14px;
+      font-size: 0.82rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    }
+
+    .panel-toggle-btn:hover {
+      background: #C8E6C9;
+      transform: scale(1.04);
+    }
+
+    /* 百寶箱頂部分類欄 (Category on TOP) */
+    .category-top-bar {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      padding: 4px 2px 6px 2px;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+      flex-shrink: 0;
+    }
+
+    .category-top-bar::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .category-top-bar::-webkit-scrollbar-thumb {
+      background: #C8E6C9;
+      border-radius: 4px;
+    }
+
+    .category-btn {
+      padding: 6px 10px;
+      border-radius: 14px;
+      border: 1.5px solid #E0E0E0;
+      background: #FAFAFA;
+      font-size: 0.82rem;
+      font-weight: bold;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .category-btn:hover {
+      background: #E8F5E9;
+      border-color: #81C784;
+    }
+
+    .category-btn.active {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    /* 貼紙內容網格區 */
+    .stickers-content-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .stickers-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      overflow-y: auto;
+      padding: 6px;
+      background: #F9FBE7;
+      border-radius: 16px;
+      align-content: start;
+    }
+
+    .sticker-tray-item {
+      background: white;
+      border: 2px solid #E8F5E9;
+      border-radius: 14px;
+      padding: 6px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+      transition: all 0.2s;
+      touch-action: none;
+    }
+
+    .sticker-tray-item:hover, .sticker-tray-item:active {
+      transform: scale(1.08);
+      border-color: #81C784;
+      background: #E8F5E9;
+    }
+
+    .sticker-tray-item .emoji {
+      font-size: 1.85rem;
+    }
+
+    .sticker-tray-item .name {
+      font-size: 0.74rem;
+      color: #555;
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    /* 右側：主畫布容器 */
+    .canvas-container {
+      flex: 1;
+      min-width: 0;
+      background: white;
+      border-radius: 24px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08);
       position: relative;
+      height: 100%;
+      overflow: hidden;
+      transition: all 0.35s ease;
     }
-
-    .canvas-header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .canvas-season-tabs {
-      display: flex;
-      gap: 6px;
-    }
-
-    .canvas-tab-btn {
-      padding: 6px 12px;
-      border-radius: 16px;
-      border: 2px solid #E0E0E0;
-      background: #FAFAFA;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: all 0.2s;
-    }
-
-    .canvas-tab-btn.active {
-      border-color: #2E7D32;
-      background: #E8F5E9;
-      color: #2E7D32;
-    }
-
-    .canvas-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .action-icon-btn {
-      border: none;
-      background: #F1F8E9;
-      color: #33691E;
-      padding: 8px 14px;
-      border-radius: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .action-icon-btn:hover { background: #DCEDC8; }
-    .action-icon-btn.primary { background: #4CAF50; color: white; }
-    .action-icon-btn.primary:hover { background: #43A047; }
-    .action-icon-btn.danger { background: #FFEBEE; color: #C62828; }
-    .action-icon-btn.danger:hover { background: #FFCDD2; }
 
     /* 主創作畫布 */
     .art-board-wrapper {
       flex: 1;
       width: 100%;
       height: 100%;
-      min-height: 420px;
+      min-height: 380px;
       border-radius: 18px;
       position: relative;
       overflow: hidden;
@@ -406,11 +950,75 @@
       z-index: 1;
     }
 
+    /* 下移之工具列 (春夏秋冬切換 + 魔法點綴/清空/保存) */
+    .canvas-toolbar-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 2px 2px 0 2px;
+    }
+
+    .canvas-season-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .canvas-tab-btn {
+      padding: 7px 12px;
+      border-radius: 16px;
+      border: 2px solid #E0E0E0;
+      background: #FAFAFA;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .canvas-tab-btn.active {
+      border-color: #2E7D32;
+      background: #E8F5E9;
+      color: #2E7D32;
+      box-shadow: 0 2px 8px rgba(46, 125, 50, 0.15);
+    }
+
+    .canvas-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .action-icon-btn {
+      border: none;
+      background: #F1F8E9;
+      color: #33691E;
+      padding: 8px 14px;
+      border-radius: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .action-icon-btn:hover { background: #DCEDC8; }
+    .action-icon-btn.primary { background: #4CAF50; color: white; }
+    .action-icon-btn.primary:hover { background: #43A047; }
+    .action-icon-btn.danger { background: #FFEBEE; color: #C62828; }
+    .action-icon-btn.danger:hover { background: #FFCDD2; }
+
+    /* 畫布底部 AI 說故事專用按鈕 */
     .canvas-bottom-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 4px 0 4px;
+      padding: 0 2px;
       gap: 10px;
     }
 
@@ -420,161 +1028,70 @@
       color: white;
       border: none;
       border-radius: 50px;
-      padding: 12px 24px;
-      font-size: 1.15rem;
+      padding: 10px 20px;
+      font-size: 1.12rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 4px 16px rgba(255, 111, 0, 0.4);
-      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      animation: pulseBtn 2.5s infinite;
+      box-shadow: 0 6px 18px rgba(255, 111, 0, 0.35);
+      transition: all 0.25s;
     }
 
-    .ai-story-launch-btn:active {
-      transform: scale(0.97);
+    .ai-story-launch-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(255, 111, 0, 0.45);
     }
 
-    @keyframes pulseBtn {
-      0%, 100% { box-shadow: 0 4px 16px rgba(255, 111, 0, 0.4); }
-      50% { box-shadow: 0 6px 24px rgba(255, 143, 0, 0.7); }
+    .ai-story-launch-btn:disabled {
+      background: #BDBDBD;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
     }
 
+    .ai-btn-subtext {
+      font-size: 0.85rem;
+      font-weight: normal;
+      opacity: 0.9;
+    }
+
+    /* 貼紙與操作列 */
     .sticker-placed {
       position: absolute;
       cursor: grab;
       touch-action: none;
       z-index: 10;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.1s ease, filter 0.2s;
-    }
-
-    .sticker-placed:active {
-      cursor: grabbing;
+      transform-origin: center center;
     }
 
     .sticker-placed.selected {
-      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.95));
-      outline: 2.5px dashed #FF9800;
-      border-radius: 14px;
+      outline: 2px dashed #FF9800;
+      outline-offset: 4px;
+      border-radius: 8px;
     }
 
     .sticker-placed .sticker-content {
       font-size: 52px;
-      line-height: 1;
       display: block;
-      pointer-events: none;
-    }
-
-    .stickers-panel {
-      background: white;
-      border-radius: 24px;
-      padding: 14px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      overflow: hidden;
-    }
-
-    .panel-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #2E7D32;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .category-scroll-bar {
-      display: flex;
-      gap: 5px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scrollbar-width: thin;
-    }
-
-    .category-btn {
-      padding: 6px 12px;
-      border-radius: 14px;
-      border: 1.5px solid #E0E0E0;
-      background: #FAFAFA;
-      font-size: 0.85rem;
-      font-weight: bold;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .category-btn.active {
-      background: #4CAF50;
-      color: white;
-      border-color: #4CAF50;
-      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-    }
-
-    .stickers-grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      overflow-y: auto;
-      padding: 6px;
-      background: #F9FBE7;
-      border-radius: 16px;
-    }
-
-    .sticker-tray-item {
-      background: white;
-      border: 2px solid #E8F5E9;
-      border-radius: 16px;
-      padding: 8px 4px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-      transition: all 0.2s;
-      touch-action: none;
-    }
-
-    .sticker-tray-item:hover, .sticker-tray-item:active {
-      transform: scale(1.08);
-      border-color: #81C784;
-      background: #E8F5E9;
-    }
-
-    .sticker-tray-item .emoji {
-      font-size: 2.1rem;
-    }
-
-    .sticker-tray-item .name {
-      font-size: 0.78rem;
-      color: #555;
-      font-weight: bold;
-      text-align: center;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
     }
 
     .sticker-toolbar {
       position: absolute;
       top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.96);
+      left: 10px;
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(8px);
-      padding: 6px 14px;
+      padding: 4px 8px;
       border-radius: 30px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       display: none;
-      gap: 8px;
-      z-index: 100;
-      align-items: center;
+      gap: 6px;
+      z-index: 50;
+      border: 1px solid #E0E0E0;
     }
 
     .sticker-toolbar.show {
@@ -582,78 +1099,70 @@
     }
 
     .tool-btn {
-      background: #F5F5F5;
       border: none;
-      border-radius: 50%;
-      width: 38px;
-      height: 38px;
-      font-size: 1.1rem;
+      background: #F5F5F5;
+      font-size: 1rem;
+      padding: 6px 10px;
+      border-radius: 20px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
+      transition: all 0.15s;
     }
 
-    .tool-btn:active {
+    .tool-btn:hover {
       background: #E0E0E0;
+      transform: scale(1.1);
     }
 
-    .tool-btn.delete {
-      background: #FFEBEE;
-      color: #D32F2F;
+    .tool-btn.delete:hover {
+      background: #FFCDD2;
+      color: #C62828;
     }
 
+    /* 彈窗樣式 (AI 繪本 / 家長設定 / 沉浸式天文館) */
     .story-modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(0,0,0,0.6);
       backdrop-filter: blur(5px);
-      z-index: 900;
       display: none;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      z-index: 1000;
       padding: 16px;
     }
 
     .story-modal-overlay.show {
       display: flex;
-      animation: modalFadeIn 0.3s ease-out;
-    }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.92); }
-      to { opacity: 1; transform: scale(1); }
+      animation: fadeIn 0.25s ease-out;
     }
 
     .story-modal-card {
-      background: #ffffff;
+      background: white;
       border-radius: 28px;
       width: 100%;
-      max-width: 980px;
+      max-width: 900px;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 22px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
       display: flex;
       flex-direction: column;
       gap: 16px;
-      position: relative;
     }
 
     .story-modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #F1F8E9;
-      padding-bottom: 10px;
+      border-bottom: 2px dashed #E0E0E0;
+      padding-bottom: 12px;
     }
 
     .story-modal-title {
-      font-size: 1.45rem;
+      font-size: 1.4rem;
       font-weight: 800;
       color: #E65100;
       display: flex;
@@ -664,21 +1173,24 @@
     .modal-close-btn {
       background: #F5F5F5;
       border: none;
+      font-size: 1.2rem;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 1.3rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      color: #757575;
+      transition: all 0.2s;
     }
 
     .modal-close-btn:hover {
       background: #E0E0E0;
+      color: #333;
     }
 
+    /* 繪本雙欄排版 */
     .storybook-layout-grid {
       display: grid;
       grid-template-columns: 1fr 1.15fr;
@@ -686,7 +1198,7 @@
       align-items: start;
     }
 
-    @media (max-width: 820px) {
+    @media (max-width: 760px) {
       .storybook-layout-grid {
         grid-template-columns: 1fr;
       }
@@ -699,103 +1211,159 @@
     }
 
     .storybook-art-frame {
-      background: #FFFDE7;
-      border: 6px solid #FFE082;
-      border-radius: 20px;
-      padding: 8px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-      position: relative;
+      width: 100%;
+      border-radius: 18px;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      border: 4px solid #FFF8E1;
+      background: #FAFAFA;
+      position: relative;
     }
 
     .storybook-artwork-img {
       width: 100%;
       height: auto;
-      max-height: 320px;
-      object-fit: contain;
-      border-radius: 12px;
       display: block;
-      background: white;
     }
 
     .art-badge-tag {
-      background: #FF9800;
-      color: white;
       font-size: 0.85rem;
       font-weight: bold;
-      padding: 4px 12px;
-      border-radius: 20px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      width: fit-content;
+      color: #F57F17;
+      background: #FFF9C4;
+      padding: 4px 10px;
+      border-radius: 12px;
+      display: inline-block;
     }
 
     .story-modal-elements {
-      background: #FFF8E1;
-      padding: 8px 12px;
-      border-radius: 14px;
-      font-size: 0.88rem;
-      color: #795548;
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
-      align-items: center;
+      font-size: 0.85rem;
+      color: #555;
     }
 
     .element-badge {
-      background: #ffffff;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-weight: bold;
-      border: 1px solid #FFE082;
+      background: #ECEFF1;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 0.8rem;
     }
 
     .storybook-text-column {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       height: 100%;
+      justify-content: space-between;
     }
 
     .story-modal-body {
-      font-size: 1.25rem;
-      line-height: 1.95;
+      font-size: 1.12rem;
+      line-height: 1.8;
       color: #37474F;
-      background: #F9FBE7;
-      padding: 20px;
-      border-radius: 20px;
-      border-left: 6px solid #8BC34A;
+      background: #FFFDE7;
+      padding: 18px;
+      border-radius: 18px;
+      border: 2px solid #FFF59D;
       white-space: pre-line;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
 
     .story-modal-actions {
       display: flex;
       gap: 10px;
-      justify-content: flex-end;
       flex-wrap: wrap;
-      padding-top: 4px;
     }
 
+    .modal-loading-box {
+      text-align: center;
+      padding: 40px 20px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .modal-loading-box.show {
+      display: flex;
+    }
+
+    .spinner-magic {
+      font-size: 3rem;
+      animation: spinMagic 1.5s infinite linear;
+    }
+
+    @keyframes spinMagic {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.2); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    /* 設定彈窗 */
+    .settings-modal-card {
+      background: white;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .settings-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #CFD8DC;
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .settings-input:focus {
+      border-color: #4CAF50;
+    }
+
+    /* 沉浸式天文館彈窗 */
+    .planetarium-modal-card {
+      background: #0B132B;
+      color: white;
+      border-radius: 28px;
+      width: 100%;
+      max-width: 1050px;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border: 1px solid #1C2541;
+    }
+
+    /* Toast 通知 */
     .toast-bubble {
       position: fixed;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: #2E7D32;
+      background: rgba(33, 33, 33, 0.92);
       color: white;
-      padding: 12px 28px;
+      padding: 10px 22px;
       border-radius: 30px;
-      font-size: 1.1rem;
       font-weight: bold;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      font-size: 0.98rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
       transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 999;
+      z-index: 2000;
       pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .toast-bubble.show {
@@ -816,6 +1384,12 @@
       <button onclick="goToHome()" class="home-btn" title="返回遊戲大廳主頁">
         <i class="fa-solid fa-house"></i>
         <span>返回主頁</span>
+      </button>
+
+      <!-- 家長 API Key 設定鍵 -->
+      <button onclick="openSettingsModal()" class="settings-btn" title="設定 Gemini API Key">
+        <i class="fa-solid fa-gear"></i>
+        <span>AI 設定</span>
       </button>
 
       <div class="logo-badge">
@@ -839,6 +1413,7 @@
     <section id="story-section" class="section-view active">
       <div class="story-container">
         
+        <!-- 季節切換按鈕列 -->
         <div class="season-selector-bar">
           <button class="season-card-btn spring active" onclick="loadStory('spring')">
             <span class="emoji-icon">🌸</span>
@@ -858,11 +1433,15 @@
           </button>
         </div>
 
+        <!-- 故事展示卡片 -->
         <div class="story-display-card">
           <div class="story-illustration" id="story-art"></div>
           
           <div class="story-info">
-            <div class="story-header-tag" id="story-tag">🌸 春天來了・大地甦醒</div>
+            <div class="story-tag-row">
+              <div class="story-header-tag" id="story-tag">🌸 春天來了・大地甦醒</div>
+              <div class="ai-badge" id="story-ai-badge">📖 現有預設故事</div>
+            </div>
             <h2 id="story-title" style="color: #2E7D32;">小種子的春日派對</h2>
             <p class="story-text-p" id="story-desc">
               春天到了，溫暖的微風吹過大地，小草從泥土裡探出頭來。五顏六色的花朵慢慢盛開，粉紅色的櫻花隨風跳舞。小蜜蜂和蝴蝶忙著採花蜜，小鳥在枝頭唱著快樂的歌。
@@ -877,32 +1456,335 @@
               <button class="audio-play-btn" onclick="readStoryVoice()">
                 🔊 語音朗讀故事
               </button>
-              <button class="action-icon-btn primary" style="font-size:1.05rem; padding:10px 20px; border-radius:50px;" onclick="goToGameWithSeason()">
+              <button class="ai-magic-story-btn" id="btn-ai-story-gen" onclick="generateSeasonStoryWithAI()">
+                <span>🪄</span>
+                <span id="btn-ai-story-text">AI 隨機生成新故事</span>
+              </button>
+              <button class="action-icon-btn primary" style="font-size:1rem; padding:10px 18px; border-radius:50px;" onclick="goToGameWithSeason()">
                 🎨 前往佈置這個季節
               </button>
             </div>
           </div>
         </div>
 
-        <div style="background: white; border-radius: 20px; padding: 16px 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-          <div>
-            <h3 style="color: #37474F; margin-bottom: 4px;">🌍 四季輪轉的小秘密 (The Four Seasons)</h3>
-            <p style="color: #607D8B; font-size: 0.95rem;">地球繞著太陽公轉，因為地軸傾斜，我們才能體驗到春夏秋冬四個美麗的季節！</p>
+        <!-- 擴充：四季輪轉的小秘密 (地理教學互動探索館・動畫 + 文字小故事) -->
+        <div class="secrets-section-card" id="seasons-secrets-card">
+          <div class="secrets-card-header">
+            <div class="secrets-header-titles">
+              <h3>
+                <span>🌍</span>
+                <span>四季輪轉的小秘密 (The Secrets of Four Seasons)</span>
+              </h3>
+              <p>以地理科學角度，揭開地球公轉 🔄 與地軸傾斜 23.5° 📐 如何形成春夏秋冬！</p>
+            </div>
+            <div class="secrets-header-actions">
+              <button class="action-icon-btn" onclick="showAllSeasonsOverview()">
+                ✨ 四季交響曲
+              </button>
+              <button class="action-icon-btn primary" onclick="openSecretsModal()">
+                🚀 開啟沉浸式天文探索館
+              </button>
+            </div>
           </div>
-          <button class="action-icon-btn" onclick="showAllSeasonsOverview()">
-            ✨ 查看四季大自然交響曲
-          </button>
+
+          <!-- 地理教學主網格：左側軌道動畫 + 右側圖文解說 -->
+          <div class="secrets-main-grid">
+            
+            <!-- 左側：動態公轉軌道模擬與控制 -->
+            <div class="orbit-sim-box">
+              <div class="orbit-live-status-bar">
+                <div>
+                  <span>☀️ 太陽直射點：</span>
+                  <span id="orbit-status-direct" class="status-highlight-sun">赤道 (0°)</span>
+                </div>
+                <div>
+                  <span>📍 當前位置：</span>
+                  <span id="orbit-status-station" class="status-highlight-earth">🌸 春分點 (3月)</span>
+                </div>
+              </div>
+
+              <!-- 動態 SVG 軌道視圖 -->
+              <div class="orbit-svg-wrapper">
+                <svg id="secret-orbit-svg" viewBox="0 0 540 310" xmlns="http://www.w3.org/2000/svg">
+                  <!-- 宇宙星空與光暈背景 -->
+                  <defs>
+                    <radialGradient id="sun-glow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#FFF9C4" stop-opacity="1" />
+                      <stop offset="35%" stop-color="#FFD54F" stop-opacity="0.9" />
+                      <stop offset="70%" stop-color="#FF9800" stop-opacity="0.4" />
+                      <stop offset="100%" stop-color="#FF5722" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="earth-grad" cx="40%" cy="40%" r="60%">
+                      <stop offset="0%" stop-color="#80D8FF" />
+                      <stop offset="50%" stop-color="#0288D1" />
+                      <stop offset="100%" stop-color="#01579B" />
+                    </radialGradient>
+                    <filter id="glow-filter" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="4" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                  </defs>
+
+                  <!-- 點點繁星 -->
+                  <g opacity="0.6">
+                    <circle cx="40" cy="30" r="1.5" fill="#ffffff" />
+                    <circle cx="120" cy="50" r="1" fill="#ffffff" />
+                    <circle cx="480" cy="40" r="1.5" fill="#ffffff" />
+                    <circle cx="510" cy="180" r="1" fill="#ffffff" />
+                    <circle cx="50" cy="270" r="1.5" fill="#ffffff" />
+                    <circle cx="200" cy="290" r="1" fill="#ffffff" />
+                    <circle cx="380" cy="285" r="1.5" fill="#ffffff" />
+                  </g>
+
+                  <!-- 地球公轉橢圓軌道 (Elliptical Orbit) -->
+                  <ellipse cx="270" cy="155" rx="210" ry="105" fill="none" stroke="#4FC3F7" stroke-width="2" stroke-dasharray="6,6" opacity="0.55" />
+
+                  <!-- 軌道公轉方向箭頭 (逆時針) -->
+                  <path d="M 270 50 L 260 45 L 260 55 Z" fill="#81D4FA" opacity="0.8" />
+                  <path d="M 60 155 L 65 145 L 55 145 Z" fill="#81D4FA" opacity="0.8" />
+                  <path d="M 270 260 L 280 255 L 280 265 Z" fill="#81D4FA" opacity="0.8" />
+                  <path d="M 480 155 L 475 165 L 485 165 Z" fill="#81D4FA" opacity="0.8" />
+
+                  <!-- 四大節氣站點標記 (可點擊) -->
+                  <!-- 1. 春分 (上方 cx:270, cy:50) -->
+                  <g class="orbit-node-btn" onclick="jumpToSecretStation('spring_eq')" style="cursor:pointer;">
+                    <circle cx="270" cy="50" r="12" fill="#E8F5E9" stroke="#66BB6A" stroke-width="2" />
+                    <text x="270" y="55" font-size="12" text-anchor="middle">🌸</text>
+                    <text x="270" y="30" font-size="11" fill="#C8E6C9" font-weight="bold" text-anchor="middle">春分 (3月)</text>
+                  </g>
+
+                  <!-- 2. 夏至 (左側 cx:60, cy:155) -->
+                  <g class="orbit-node-btn" onclick="jumpToSecretStation('summer_sol')" style="cursor:pointer;">
+                    <circle cx="60" cy="155" r="12" fill="#FFF3E0" stroke="#FFA726" stroke-width="2" />
+                    <text x="60" y="160" font-size="12" text-anchor="middle">☀️</text>
+                    <text x="60" y="185" font-size="11" fill="#FFE082" font-weight="bold" text-anchor="middle">夏至 (6月)</text>
+                  </g>
+
+                  <!-- 3. 秋分 (下方 cx:270, cy:260) -->
+                  <g class="orbit-node-btn" onclick="jumpToSecretStation('autumn_eq')" style="cursor:pointer;">
+                    <circle cx="270" cy="260" r="12" fill="#FBE9E7" stroke="#FF7043" stroke-width="2" />
+                    <text x="270" y="265" font-size="12" text-anchor="middle">🍁</text>
+                    <text x="270" y="288" font-size="11" fill="#FFCCBC" font-weight="bold" text-anchor="middle">秋分 (9月)</text>
+                  </g>
+
+                  <!-- 4. 冬至 (右側 cx:480, cy:155) -->
+                  <g class="orbit-node-btn" onclick="jumpToSecretStation('winter_sol')" style="cursor:pointer;">
+                    <circle cx="480" cy="155" r="12" fill="#E3F2FD" stroke="#42A5F5" stroke-width="2" />
+                    <text x="480" y="160" font-size="12" text-anchor="middle">❄️</text>
+                    <text x="480" y="185" font-size="11" fill="#BBDEFB" font-weight="bold" text-anchor="middle">冬至 (12月)</text>
+                  </g>
+
+                  <!-- 太陽光束連線 (動態繪製) -->
+                  <line id="svg-sun-ray-line" x1="270" y1="155" x2="270" y2="50" stroke="#FFE082" stroke-width="2.5" stroke-dasharray="4,4" opacity="0.85" />
+
+                  <!-- 中心太陽 (Sun) -->
+                  <g transform="translate(270, 155)">
+                    <!-- 光暈 -->
+                    <circle cx="0" cy="0" r="46" fill="url(#sun-glow)" filter="url(#glow-filter)" />
+                    <circle cx="0" cy="0" r="26" fill="#FFB300" />
+                    <circle cx="0" cy="0" r="22" fill="#FFC107" />
+                    <!-- 太陽笑臉 -->
+                    <circle cx="-7" cy="-4" r="2.5" fill="#E65100" />
+                    <circle cx="7" cy="-4" r="2.5" fill="#E65100" />
+                    <path d="M -8 5 Q 0 13 8 5" stroke="#E65100" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                    <text x="0" y="38" font-size="10" fill="#FFE082" font-weight="bold" text-anchor="middle">太陽公公</text>
+                  </g>
+
+                  <!-- 動態公轉地球 (Earth - 動態變更 transform) -->
+                  <g id="svg-dynamic-earth" transform="translate(270, 50)" style="cursor:grab;">
+                    <!-- 傾斜地軸 (23.5° Fixed Tilt) -->
+                    <!-- 旋轉 -23.5 度之自轉軸 -->
+                    <g transform="rotate(-23.5)">
+                      <line x1="0" y1="-32" x2="0" y2="32" stroke="#FF5252" stroke-width="2.5" stroke-linecap="round" />
+                      <!-- 北極與南極標籤 -->
+                      <text x="0" y="-35" font-size="9" fill="#FF8A80" font-weight="bold" text-anchor="middle">北極 (N)</text>
+                      <text x="0" y="44" font-size="9" fill="#FF8A80" font-weight="bold" text-anchor="middle">南極 (S)</text>
+
+                      <!-- 地球球體 (半徑 18) -->
+                      <circle cx="0" cy="0" r="18" fill="url(#earth-grad)" />
+
+                      <!-- 赤道線 (Equator) -->
+                      <line x1="-18" y1="0" x2="18" y2="0" stroke="#FFD54F" stroke-width="1.5" stroke-dasharray="2,2" />
+                      
+                      <!-- 北回歸線 (Tropic of Cancer) -->
+                      <line x1="-15" y1="-7" x2="15" y2="-7" stroke="#81C784" stroke-width="1" stroke-dasharray="2,2" opacity="0.8" />
+                      
+                      <!-- 南回歸線 (Tropic of Capricorn) -->
+                      <line x1="-15" y1="7" x2="15" y2="7" stroke="#81C784" stroke-width="1" stroke-dasharray="2,2" opacity="0.8" />
+
+                      <!-- 大陸塊意象小圖形 -->
+                      <path d="M -8 -8 Q -4 -12 2 -8 Q 6 -4 0 0 Q -8 2 -8 -8 Z" fill="#66BB6A" opacity="0.85" />
+                      <path d="M 2 4 Q 8 2 10 8 Q 6 14 0 10 Z" fill="#66BB6A" opacity="0.85" />
+
+                      <!-- 晝夜陰影遮罩 (隨位置動態透明) -->
+                      <path id="svg-earth-shadow" d="M 0 -18 A 18 18 0 0 1 0 18 A 18 18 0 0 0 0 -18 Z" fill="#000000" opacity="0.4" />
+                    </g>
+
+                    <!-- 地球外圈指示光環 -->
+                    <circle cx="0" cy="0" r="22" fill="none" stroke="#80D8FF" stroke-width="1.5" opacity="0.6" stroke-dasharray="3,3" />
+                  </g>
+                </svg>
+              </div>
+
+              <!-- 動畫控制與快切選單 -->
+              <div class="orbit-controls-bar">
+              <!-- 軌道進度滑桿 (適合平板拖曳) -->
+              <div style="display:flex; align-items:center; gap:8px; width:100%; margin-top:4px; padding:0 4px;">
+                <span style="font-size:0.8rem; color:#B0BEC5; white-space:nowrap;"><i class="fa-solid fa-arrows-rotate"></i> 季節滑桿：</span>
+                <input type="range" min="0" max="359" id="orbit-deg-slider" value="270" oninput="onOrbitSliderChange(this.value)" style="flex:1; accent-color:#FFD54F; cursor:pointer;" title="用手指拖動地球看四季變化" />
+              </div>
+
+                <div class="station-btn-group">
+                  <button class="station-quick-btn active" id="sbtn-spring_eq" onclick="jumpToSecretStation('spring_eq')">🌸 春分</button>
+                  <button class="station-quick-btn" id="sbtn-summer_sol" onclick="jumpToSecretStation('summer_sol')">☀️ 夏至</button>
+                  <button class="station-quick-btn" id="sbtn-autumn_eq" onclick="jumpToSecretStation('autumn_eq')">🍁 秋分</button>
+                  <button class="station-quick-btn" id="sbtn-winter_sol" onclick="jumpToSecretStation('winter_sol')">❄️ 冬至</button>
+                </div>
+                
+                <div class="orbit-anim-btns">
+                  <button class="orbit-anim-play-btn" id="btn-orbit-toggle-play" onclick="toggleOrbitAnimation()">
+                    <i class="fa-solid fa-pause"></i>
+                    <span>暫停公轉</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 右側：地理教學小故事卡片 -->
+            <div class="secrets-story-panel">
+              <div>
+                <div class="secret-story-header">
+                  <span class="secret-badge" id="secret-station-badge">🌸 春回大地・晝夜平分</span>
+                  <span style="font-size:0.85rem; color:#689F38; font-weight:bold;" id="secret-station-date">約 3月21日</span>
+                </div>
+                
+                <h4 class="secret-story-title" id="secret-station-title" style="margin-top:6px;">
+                  【春分】太陽直射赤道・小草小花醒來囉！
+                </h4>
+              </div>
+
+              <!-- 地理重點指標 -->
+              <div class="secret-facts-grid">
+                <div class="secret-fact-card">
+                  <strong>📍 太陽直射點</strong>
+                  <span id="fact-sun-direct">赤道 (0°)</span>
+                </div>
+                <div class="secret-fact-card">
+                  <strong>⚖️ 晝夜長短</strong>
+                  <span id="fact-day-night">全球晝夜平分 (各12小時)</span>
+                </div>
+                <div class="secret-fact-card">
+                  <strong>🌸 北半球狀況</strong>
+                  <span id="fact-north-status">春天來臨 (氣溫回升)</span>
+                </div>
+                <div class="secret-fact-card">
+                  <strong>🍁 南半球狀況</strong>
+                  <span id="fact-south-status">秋天來臨 (氣溫轉涼)</span>
+                </div>
+              </div>
+
+              <!-- 地理故事內容 -->
+              <p class="secret-story-narrative" id="secret-story-desc">
+                當地球公轉到春分位置時，太陽公公正正照在地球正中央的「赤道」上！這一天，全世界不管是北半球還是南半球，白天和夜晚一樣長（都是 12 小時）。北半球開始吸收更多陽光，冰雪融化、小草發芽、櫻花盛開，溫暖的春天正式開始囉！
+              </p>
+
+              <!-- 手電筒直射 vs 斜射實驗對比 -->
+              <div class="flashlight-exp-box">
+                <div class="flashlight-exp-icon">🔦</div>
+                <div class="flashlight-exp-text" id="secret-flashlight-text">
+                  <strong>地理小實驗：</strong>當手電筒<strong>垂直直射</strong>地面時，光斑集中且最亮最熱；當手電筒<strong>傾斜照射</strong>時，光斑散開溫度較低！這就是春夏秋冬冷熱不同的真正秘密！
+                </div>
+              </div>
+
+              <!-- 問答揭曉與語音 -->
+              <div class="quiz-reveal-box" id="secret-quiz-box">
+                <div style="font-weight:bold; color:#E65100; margin-bottom:3px;" id="secret-quiz-q">
+                  ❓ 你知道為什麼春分這一天叫「晝夜平分」嗎？
+                </div>
+                <div style="font-size:0.85rem; color:#37474F;" id="secret-quiz-a">
+                  💡 因為太陽直射赤道，地球兩邊被照亮的時間剛好一樣長，白天 12 小時、夜晚也是 12 小時喔！
+                </div>
+              </div>
+
+              <!-- 互動操作按鈕列 -->
+              <div class="secrets-interactive-actions">
+                <button class="audio-play-btn" onclick="readSecretStoryVoice()">
+                  🔊 朗讀地理小故事
+                </button>
+                <button class="action-icon-btn" onclick="toggleSecretQuiz()">
+                  💡 探索小提問
+                </button>
+              </div>
+            </div>
+
+          </div>
         </div>
 
       </div>
     </section>
 
-    <!-- 2. 創作小遊戲區 -->
+    <!-- 2. 創作小遊戲區 (優化：百寶箱置左、Category在頂部、可縮排) -->
     <section id="game-section" class="section-view">
       <div class="game-workspace">
         
-        <div class="canvas-container">
-          <div class="canvas-header-bar">
+        <!-- 左側：四季百寶箱 (可縮排 / 展開，分類在頂部) -->
+        <div class="stickers-panel" id="stickers-panel">
+          
+          <!-- 縮排時顯示之緊湊標籤 (點擊可展開) -->
+          <div class="collapsed-indicator" onclick="toggleStickersPanel()" title="點擊展開四季百寶箱">
+            <i class="fa-solid fa-box-open" style="font-size:1.3rem;"></i>
+            <span>展開百寶箱</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+
+          <!-- 百寶箱頂部標題與縮排收合按鈕 -->
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="panel-title-text">🎒 四季百寶箱</span>
+              <span class="panel-subtitle">點擊或拖入畫布</span>
+            </div>
+
+            <button class="panel-toggle-btn" id="btn-toggle-stickers" onclick="toggleStickersPanel()" title="縮排/收起百寶箱以增大畫布">
+              <i class="fa-solid fa-chevron-left" id="toggle-icon"></i>
+              <span id="toggle-text">收起</span>
+            </button>
+          </div>
+
+          <!-- 百寶箱頂部分類欄 (Category on TOP) -->
+          <div class="category-top-bar" id="category-top-bar">
+            <button class="category-btn active" onclick="filterStickers('all')">🌟 全部</button>
+            <button class="category-btn" onclick="filterStickers('spring')">🌸 春天</button>
+            <button class="category-btn" onclick="filterStickers('summer')">☀️ 夏天</button>
+            <button class="category-btn" onclick="filterStickers('autumn')">🍁 秋天</button>
+            <button class="category-btn" onclick="filterStickers('winter')">❄️ 冬天</button>
+            <button class="category-btn" onclick="filterStickers('people')">🧑 人物</button>
+            <button class="category-btn" onclick="filterStickers('animal')">🐾 動物</button>
+            <button class="category-btn" onclick="filterStickers('fun')">🚀 奇幻</button>
+          </div>
+
+          <!-- 貼紙網格內容區 -->
+          <div class="stickers-content-wrap">
+            <div class="stickers-grid" id="stickers-grid"></div>
+          </div>
+        </div>
+
+        <!-- 右側：主畫布容器 -->
+        <div class="canvas-container" id="canvas-container">
+          <!-- 主畫布 -->
+          <div class="art-board-wrapper bg-spring" id="art-board">
+            <svg class="bg-scenery-overlay" id="bg-scenery" viewBox="0 0 800 500" preserveAspectRatio="none"></svg>
+
+            <!-- 貼紙操作列 -->
+            <div class="sticker-toolbar" id="sticker-toolbar">
+              <button class="tool-btn" onclick="scaleSelectedSticker(1.2)" title="放大">➕</button>
+              <button class="tool-btn" onclick="scaleSelectedSticker(0.8)" title="縮小">➖</button>
+              <button class="tool-btn" onclick="rotateSelectedSticker(15)" title="旋轉">🔄</button>
+              <button class="tool-btn delete" onclick="deleteSelectedSticker()" title="刪除">🗑️</button>
+            </div>
+          </div>
+
+          <!-- 下移後的工具列：春夏秋冬切換 + 魔法點綴/清空/保存 -->
+          <div class="canvas-toolbar-bar">
             <div class="canvas-season-tabs">
               <button class="canvas-tab-btn active" onclick="setCanvasBg('spring')">🌸 春天</button>
               <button class="canvas-tab-btn" onclick="setCanvasBg('summer')">☀️ 夏天</button>
@@ -923,47 +1805,13 @@
             </div>
           </div>
 
-          <!-- 主畫布 -->
-          <div class="art-board-wrapper bg-spring" id="art-board">
-            <svg class="bg-scenery-overlay" id="bg-scenery" viewBox="0 0 800 500" preserveAspectRatio="none"></svg>
-
-            <!-- 貼紙操作列 -->
-            <div class="sticker-toolbar" id="sticker-toolbar">
-              <button class="tool-btn" onclick="scaleSelectedSticker(1.2)" title="放大">➕</button>
-              <button class="tool-btn" onclick="scaleSelectedSticker(0.8)" title="縮小">➖</button>
-              <button class="tool-btn" onclick="rotateSelectedSticker(15)" title="旋轉">🔄</button>
-              <button class="tool-btn delete" onclick="deleteSelectedSticker()" title="刪除">🗑️</button>
-            </div>
-          </div>
-
           <!-- 畫布底部 AI 說故事專用按鈕 -->
           <div class="canvas-bottom-bar">
-            <button class="ai-story-launch-btn" onclick="generateAndShowAIStory()">
-              <span>🪄 AI 說故事 (繪本模式)</span>
-              <span style="font-size:0.9rem; font-weight:normal; opacity:0.95;">(結合你的圖畫創作小故事)</span>
+            <button class="ai-story-launch-btn" id="btn-artwork-ai-story" onclick="generateAndShowArtworkAIStory()">
+              <span>🪄 <span id="btn-artwork-ai-text">AI 說故事 (繪本模式)</span></span>
+              <span class="ai-btn-subtext">(結合你的圖畫創作小故事)</span>
             </button>
           </div>
-        </div>
-
-        <!-- 側邊四季百寶箱 -->
-        <div class="stickers-panel">
-          <div class="panel-title">
-            <span>🎒 四季百寶箱</span>
-            <span style="font-size:0.82rem; font-weight:normal; color:#7CB342;">點擊加入畫布</span>
-          </div>
-
-          <div class="category-scroll-bar">
-            <button class="category-btn active" onclick="filterStickers('all')">🌟 全部</button>
-            <button class="category-btn" onclick="filterStickers('spring')">🌸 春天</button>
-            <button class="category-btn" onclick="filterStickers('summer')">☀️ 夏天</button>
-            <button class="category-btn" onclick="filterStickers('autumn')">🍁 秋天</button>
-            <button class="category-btn" onclick="filterStickers('winter')">❄️ 冬天</button>
-            <button class="category-btn" onclick="filterStickers('people')">🧑 人物</button>
-            <button class="category-btn" onclick="filterStickers('animal')">🐾 動物</button>
-            <button class="category-btn" onclick="filterStickers('fun')">🚀 奇幻趣味</button>
-          </div>
-
-          <div class="stickers-grid" id="stickers-grid"></div>
         </div>
 
       </div>
@@ -981,7 +1829,15 @@
         <button class="modal-close-btn" onclick="closeStoryModal()">✕</button>
       </div>
 
-      <div class="storybook-layout-grid">
+      <!-- Loading 狀態 -->
+      <div class="modal-loading-box" id="modal-loading-view">
+        <div class="spinner-magic">🪄✨</div>
+        <h3 style="color:#E65100;">AI 正在根據你的畫作構思專屬童話...</h3>
+        <p style="color:#78909C; font-size:0.95rem;">請稍候，小精靈馬上把故事編寫完成！</p>
+      </div>
+
+      <!-- 內容展示 -->
+      <div class="storybook-layout-grid" id="modal-content-view">
         <div class="storybook-art-column">
           <div class="art-badge-tag">🎨 小小畫家的四季插圖</div>
           <div class="storybook-art-frame">
@@ -998,11 +1854,83 @@
             <button class="audio-play-btn" onclick="readAIStoryVoice()">
               🔊 語音朗讀故事
             </button>
-            <button class="action-icon-btn" onclick="regenerateAIStory()">
-              ✨ 換一個情節
+            <button class="ai-magic-story-btn" id="btn-modal-ai-regen" onclick="regenerateArtworkAIStory()">
+              <span>✨</span>
+              <span id="btn-modal-regen-text">再寫一個新故事</span>
             </button>
             <button class="action-icon-btn primary" onclick="closeStoryModal()">
               👍 回去繼續畫
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 家長 API Key 設定彈窗 -->
+  <div class="story-modal-overlay" id="settings-modal">
+    <div class="settings-modal-card">
+      <div class="story-modal-header">
+        <h3 style="color:#2E7D32; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-gear"></i> 家長專區：AI 設定
+        </h3>
+        <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
+      </div>
+      <p style="color:#546E7A; font-size:0.95rem; line-height:1.6;">
+        本遊戲預設已啟用免設定雲端 AI 引擎。若您擁有自己的 <strong>Google Gemini API Key</strong>，可在此填入以享有更快速、穩定的故事生成體驗！
+      </p>
+      <div>
+        <label style="display:block; font-weight:bold; color:#37474F; margin-bottom:6px;">Google Gemini API Key</label>
+        <input type="password" class="settings-input" id="settings-api-key" placeholder="貼上您的 Gemini API Key (AIzaSy...)" />
+        <span style="font-size:0.8rem; color:#90A4AE; margin-top:4px; display:block;">可至 Google AI Studio (aistudio.google.com) 免費取得</span>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+        <button class="action-icon-btn" onclick="closeSettingsModal()">取消</button>
+        <button class="action-icon-btn primary" onclick="saveSettings()">儲存設定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 沉浸式地理天文館探索彈窗 (Fullscreen/Widescreen Secrets Modal) -->
+  <div class="story-modal-overlay" id="secrets-modal">
+    <div class="planetarium-modal-card">
+      <div class="story-modal-header" style="border-color: rgba(255,255,255,0.15);">
+        <div class="story-modal-title" style="color:#80D8FF;">
+          <span>🪐</span>
+          <span>四季天文地理探索劇場：地球公轉與地軸傾斜</span>
+        </div>
+        <button class="modal-close-btn" style="background:#1C2541; color:#fff;" onclick="closeSecretsModal()">✕</button>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:18px; align-items:center;">
+        <div style="background:#0D1B2A; border-radius:18px; padding:14px; border:1px solid #1C2541;">
+          <h4 style="color:#FFE082; margin-bottom:8px; font-size:1.05rem;">
+            🌌 太陽與地球的宇宙芭蕾舞 (公轉軌道)
+          </h4>
+          <p style="color:#B0BEC5; font-size:0.9rem; line-height:1.6;">
+            1. <strong>公轉 1 圈 = 1 年 (365天)</strong>：地球圍繞太陽轉。<br>
+            2. <strong>地軸傾斜 23.5°</strong>：地球斜著身體轉，永遠朝向北極星方向。<br>
+            3. <strong>直射與斜射</strong>：造成太陽光熱量在地球各地的分佈不同！
+          </p>
+          <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="station-quick-btn" onclick="jumpToSecretStation('spring_eq')">🌸 3月春分</button>
+            <button class="station-quick-btn" onclick="jumpToSecretStation('summer_sol')">☀️ 6月夏至</button>
+            <button class="station-quick-btn" onclick="jumpToSecretStation('autumn_eq')">🍁 9月秋分</button>
+            <button class="station-quick-btn" onclick="jumpToSecretStation('winter_sol')">❄️ 12月冬至</button>
+          </div>
+        </div>
+
+        <div style="background:#0D1B2A; border-radius:18px; padding:14px; border:1px solid #1C2541;">
+          <h4 style="color:#69F0AE; margin-bottom:8px; font-size:1.05rem;">
+            🌏 南北半球相反的魔法
+          </h4>
+          <p style="color:#ECEFF1; font-size:0.9rem; line-height:1.6;">
+            當北半球（例如香港、北京、東京）夏天好熱時，南半球（例如澳洲悉尼、南極洲）正是寒冷的冬天！<br>
+            當北半球過聖誕節下雪時，澳洲的小朋友卻在海灘過著炎熱的聖誕節呢！
+          </p>
+          <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+            <button class="action-icon-btn primary" onclick="closeSecretsModal()">
+              ✨ 明白了，回去探索
             </button>
           </div>
         </div>
@@ -1019,11 +1947,11 @@
       window.location.href = 'index.html';
     }
 
-    // --- 四季故事與向量介紹圖 ---
+    // --- 四季故事與向量介紹圖 (現有預設故事庫) ---
     const SEASONS_DATA = {
       spring: {
         name: "春天",
-        tag: "🌸 春天來了・萬物復甦",
+        tag: "🌸 春天來了・大地甦醒",
         title: "小種子的春日甦醒派對",
         color: "#2E7D32",
         bgGradient: "linear-gradient(135deg, #a8e063 0%, #56ab2f 100%)",
@@ -1138,6 +2066,102 @@
       }
     };
 
+    // --- 備援四季故事庫 (當 AI 無法生成/失敗/超時時從現有預設故事庫隨機切換) ---
+    const FALLBACK_SEASON_STORIES = {
+      spring: [
+        { title: "小種子的春日甦醒派對", desc: "春天到了，溫暖的微風吹過大地，小草從泥土裡探出頭來。五顏六色的花朵慢慢盛開，粉紅色的櫻花隨風跳舞。小蜜蜂和蝴蝶忙著採花蜜，小鳥在枝頭唱著快樂的歌。", features: ["🌱 嫩綠幼芽", "🌸 櫻花盛放", "🦋 蝴蝶翩翩", "🌦️ 潤物春雨"] },
+        { title: "小蜜蜂的花園交響樂", desc: "春天來臨，溫暖的陽光照耀著大地。小蜜蜂提著小竹籃在花叢中飛舞，邀請粉紅蝴蝶和小金龜子一起在櫻花樹下舉辦了一場熱鬧的花園音樂會！", features: ["🐝 勤勞蜜蜂", "🌸 櫻花音樂會", "🌱 綠意盎然", "☀️ 溫暖陽光"] },
+        { title: "小綠芽的彩虹願望", desc: "細細的春雨輕輕落下，滋潤了整個大地。泥土裡的小綠芽勇敢地伸了個大懶腰，驚喜地看到天空中出現了一道美麗的七色彩虹，快樂地跳起舞來！", features: ["🌱 勇敢綠芽", "🌈 美麗彩虹", "🌧️ 溫柔春雨", "🌷 鬱金香花"] }
+      ],
+      summer: [
+        { title: "金色沙灘與蔚藍海浪派對", desc: "夏天是個充滿活力的季節！金黃色的太陽高高掛在藍天，小蟬在樹上高聲歌唱。我們可以在金色沙灘上堆城堡、聽海浪唱歌，吃一口冰涼甜甜的西瓜與雪糕，真是太消暑了！", features: ["☀️ 熱情陽光", "🏖️ 金色沙灘", "🌊 蔚藍海浪", "🍉 冰涼西瓜"] },
+        { title: "海豚與小螃蟹的沙堡大賽", desc: "炎炎夏日，陽光灑在閃閃發亮的大海上。聰明的小海豚在浪花中翻跟斗，岸上的小螃蟹揮動著小鉗子，在沙灘上堆起了一座高大的夢幻貝殼城堡！", features: ["🐬 活潑海豚", "🦀 勤勞螃蟹", "🏖️ 貝殼城堡", "🌊 奔騰浪花"] },
+        { title: "向日葵的冰淇淋派對", desc: "夏天的太陽暖洋洋地微笑著，向日葵大口大口地喝著陽光養分。小朋友們戴上酷炫的太陽眼鏡，一邊吹著涼爽的海風，一邊分享著美味的西瓜冰棒！", features: ["🌻 陽光向日葵", "🍦 甜蜜雪糕", "🕶️ 太陽眼鏡", "🍉 消暑西瓜"] }
+      ],
+      autumn: [
+        { title: "楓葉舞動的大豐收", desc: "秋天到了，天氣變得涼爽舒服。樹葉變成了紅色、橙色和黃色，像一片金色的地毯。果園裡結滿了紅通通的蘋果與大南瓜，松鼠忙著把松果藏起來，準備迎接冬天囉！", features: ["🍁 繽紛楓葉", "🍎 香甜果實", "🎃 大大南瓜", "🐿️ 勤勞小松鼠"] },
+        { title: "小松鼠的森林果實寶庫", desc: "涼爽的秋風輕輕吹過，樹上的葉子像金色的蝴蝶翩翩起舞。可愛的小松鼠背著小布袋，忙著在落葉堆裡收集香甜的栗子與大南瓜，準備熱鬧的豐收大餐！", features: ["🐿️ 可愛松鼠", "🌰 香甜栗子", "🍁 金黃落葉", "🎃 豐收南瓜"] },
+        { title: "果園裡的秋日派對", desc: "秋天的果園散發著甜甜的果香，紅蘋果與紫葡萄掛滿了枝頭。小刺蝟和小浣熊開心地在草地上翻跟斗，大家一起享用熱呼呼又香脆的蘋果派！", features: ["🍎 香甜紅蘋果", "🍇 多汁葡萄", "🦔 可愛小刺蝟", "🥧 美味蘋果派"] }
+      ],
+      winter: [
+        { title: "雪花飄飄的雪人狂歡", desc: "冬天到了，天空飄下潔白晶瑩的雪花，為大地蓋上一層厚厚的白棉被。我們戴上暖暖的毛帽與手套，一起在雪地上堆出可愛的雪人，喝一杯暖呼呼的熱可可，好幸福呢！", features: ["❄️ 晶瑩雪花", "⛄ 可愛雪人", "🧤 保暖手套", "🎄 閃亮松樹"] },
+        { title: "雪人小弟的暖暖圍巾", desc: "窗外飄著潔白的雪花，整個世界變成了一座銀白色童話樂園。小朋友們在雪地裡滾出兩個大雪球，給小雪人繫上紅色的溫暖圍巾，一起圍著聖誕樹歡樂唱歌！", features: ["⛄ 微笑小雪人", "🧣 溫暖紅圍巾", "❄️ 飛舞雪花", "🎄 璀璨聖誕樹"] },
+        { title: "小企鵝與北極熊的滑雪派對", desc: "在美麗的冬日冰雪王國裡，小企鵝穿上了溜冰鞋在冰面上優雅旋轉，北極熊拉著紅色雪橇載著禮物奔馳。大家最後聚在壁爐旁，喝著棉花糖熱可可！", features: ["🐧 溜冰小企鵝", "🐻‍❄️ 歡樂北極熊", "🎿 飛速滑雪板", "☕ 棉花糖熱可可"] }
+      ]
+    };
+
+    // --- 四季輪轉的小秘密 (地理教學天文科普資料庫) ---
+    const SEASONS_SECRET_DATA = {
+      spring_eq: {
+        id: 'spring_eq',
+        name: '春分 (Spring Equinox)',
+        date: '約 3月21日',
+        seasonKey: 'spring',
+        orbitAngle: 270, // Angle in degrees on ellipse: (cx:270, cy:50) corresponds to 270 deg / Top
+        sunDirect: '赤道 (Equator 0°)',
+        dayNight: '全球晝夜平分 (各 12 小時)',
+        northStatus: '🌸 北半球：春天來臨 (天氣漸暖、百花萌芽)',
+        southStatus: '🍁 南半球：秋天來臨 (天氣轉涼、樹葉轉黃)',
+        badge: '🌸 春回大地・晝夜平分',
+        title: '【春分】太陽直射赤道・小草小花醒來囉！',
+        story: '當地球公轉到春分位置時，太陽公公正正照在地球正中央的「赤道」上！這一天，全世界不管是北半球還是南半球，白天和夜晚一樣長（都是 12 小時）。北半球開始吸收更多陽光，冰雪融化、小草發芽、櫻花盛開，溫暖的春天正式開始囉！',
+        flashlightText: '<strong>地理手電筒實驗：</strong>太陽光直直照在赤道上，南北兩半球受光均勻，氣候溫和舒適，不冷也不熱！',
+        quizQ: '❓ 你知道為什麼春分這一天叫「晝夜平分」嗎？',
+        quizA: '💡 因為太陽直射赤道，地球兩邊被照亮的時間剛好一樣長，白天 12 小時、夜晚也是 12 小時喔！'
+      },
+      summer_sol: {
+        id: 'summer_sol',
+        name: '夏至 (Summer Solstice)',
+        date: '約 6月21日',
+        seasonKey: 'summer',
+        orbitAngle: 180, // Left: (cx:60, cy:155)
+        sunDirect: '北回歸線 (23.5°N)',
+        dayNight: '北半球白天最長、夜晚最短',
+        northStatus: '☀️ 北半球：盛夏來臨 (陽光直射、天氣炎熱)',
+        southStatus: '❄️ 南半球：嚴寒冬日 (陽光斜射、寒冷飄雪)',
+        badge: '☀️ 烈日當空・晝長夜短',
+        title: '【夏至】太陽直射北回歸線・陽光最熱情的一天！',
+        story: '地球歪著頭（傾斜 23.5°）繞太陽轉，到了夏至這一天，北半球正正朝向太陽！太陽公公直射「北回歸線」，陽光像手電筒直直照在地面，熱量超集中！北半球的白天是一年中時間最長、夜晚最短的一天。樹木茂盛、蟬鳴陣陣，大家開心地去沙灘游泳、吃甜甜的冰西瓜！',
+        flashlightText: '<strong>地理手電筒實驗：</strong>☀️ 陽光<strong>垂直直射</strong>北半球，光斑小而集中，地面吸熱超多，所以夏天熱辣辣！',
+        quizQ: '❓ 當我們在香港過熱呼呼的夏天時，南極的企鵝和澳洲的小朋友在過什麼季節？',
+        quizA: '💡 是冬天喔！因為此時南半球背對太陽，陽光斜斜照過去，所以南半球很冷在過冬天！'
+      },
+      autumn_eq: {
+        id: 'autumn_eq',
+        name: '秋分 (Autumn Equinox)',
+        date: '約 9月23日',
+        seasonKey: 'autumn',
+        orbitAngle: 90, // Bottom: (cx:270, cy:260)
+        sunDirect: '赤道 (Equator 0°)',
+        dayNight: '全球再度晝夜平分 (各 12 小時)',
+        northStatus: '🍁 北半球：金秋豐收 (涼爽舒服、果實成熟)',
+        southStatus: '🌸 南半球：春回大地 (百花盛開、綠草如茵)',
+        badge: '🍁 金風送爽・五穀豐登',
+        title: '【秋分】太陽重回赤道・大自然換上金黃衣裳！',
+        story: '地球繼續在太空中漫步，轉到了秋分位置，太陽公公再次直射「赤道」！全球白天和夜晚又一樣長了。北半球接收的陽光漸漸變少、角度變斜，氣溫變得涼爽宜人。森林裡的樹葉漸漸染成金黃與火紅色，蘋果、南瓜和栗子都成熟了，小動物們忙著儲存冬糧準備過冬囉！',
+        flashlightText: '<strong>地理手電筒實驗：</strong>太陽直射點回到赤道，北半球陽光角度漸漸變斜，氣溫逐漸下降，秋風吹拂好涼爽！',
+        quizQ: '❓ 為什麼秋天的樹葉會從綠色變成黃色和紅色呢？',
+        quizA: '💡 因為秋天天氣變涼、日照變短，樹木裡的葉綠素漸漸休息分解，美麗的花青素與胡蘿蔔素就顯現出來囉！'
+      },
+      winter_sol: {
+        id: 'winter_sol',
+        name: '冬至 (Winter Solstice)',
+        date: '約 12月22日',
+        seasonKey: 'winter',
+        orbitAngle: 0, // Right: (cx:480, cy:155)
+        sunDirect: '南回歸線 (23.5°S)',
+        dayNight: '北半球白天最短、夜晚最長',
+        northStatus: '❄️ 北半球：寒冷嚴冬 (陽光斜射、白雪皚皚)',
+        southStatus: '☀️ 南半球：熱情盛夏 (陽光直射、海灘狂歡)',
+        badge: '❄️ 銀白世界・晝短夜長',
+        title: '【冬至】太陽直射南回歸線・北半球白天最短最冷！',
+        story: '到了冬至這一天，北半球背對著太陽公公，太陽只能斜斜地照在北半球，光線散開、熱量最少！太陽直射南半球的「南回歸線」。北半球白天是一年中最短、夜晚最長的一天。天氣好冷好冷，許多地方下起了美麗的白雪。大家穿上保暖的羽絨服與手套，吃著熱騰騰的湯圓，好溫馨！',
+        flashlightText: '<strong>地理手電筒實驗：</strong>❄️ 陽光<strong>傾斜照射</strong>北半球，光斑大而分散，地面吸熱最少，所以冬天最寒冷！',
+        quizQ: '❓ 冬至這一天是一年中夜晚最長的一天，你知道這天有什麼傳統美食嗎？',
+        quizA: '💡 在香港和許多華人地區，冬至有「冬至大如年」的說法，大家會一家人團聚吃甜甜暖暖的湯圓和豐盛的冬至飯喔！'
+      }
+    };
+
     // --- 四季百寶箱素材庫 ---
     const STICKER_LIBRARY = [
       { id: 'sp1', emoji: '🌸', name: '粉紅櫻花', category: 'spring' },
@@ -1186,59 +2210,52 @@
       { id: 'au12', emoji: '🦔', name: '小刺蝟', category: 'autumn' },
       { id: 'au13', emoji: '🦝', name: '小浣熊', category: 'autumn' },
       { id: 'au14', emoji: '🪵', name: '露營木柴', category: 'autumn' },
-      { id: 'au15', emoji: '🍵', name: '暖暖熱茶', category: 'autumn' },
+      { id: 'au15', emoji: '⛺', name: '秋日帳篷', category: 'autumn' },
 
-      { id: 'wi1', emoji: '⛄', name: '微笑雪人', category: 'winter' },
-      { id: 'wi2', emoji: '❄️', name: '晶瑩雪花', category: 'winter' },
-      { id: 'wi3', emoji: '🧣', name: '溫暖圍巾', category: 'winter' },
-      { id: 'wi4', emoji: '🧤', name: '毛線手套', category: 'winter' },
+      { id: 'wi1', emoji: '❄️', name: '潔白雪花', category: 'winter' },
+      { id: 'wi2', emoji: '⛄', name: '微笑雪人', category: 'winter' },
+      { id: 'wi3', emoji: '🧤', name: '保暖手套', category: 'winter' },
+      { id: 'wi4', emoji: '🧣', name: '溫暖圍巾', category: 'winter' },
       { id: 'wi5', emoji: '🎄', name: '聖誕樹', category: 'winter' },
-      { id: 'wi6', emoji: '☕', name: '棉花糖熱可可', category: 'winter' },
+      { id: 'wi6', emoji: '☕', name: '熱可可', category: 'winter' },
       { id: 'wi7', emoji: '🎿', name: '滑雪板', category: 'winter' },
-      { id: 'wi8', emoji: '🐧', name: '小企鵝', category: 'winter' },
-      { id: 'wi9', emoji: '🐻‍❄️', name: '北極熊', category: 'winter' },
-      { id: 'wi10', emoji: '⛸️', name: '溜冰鞋', category: 'winter' },
-      { id: 'wi11', emoji: '🛷', name: '紅色雪橇', category: 'winter' },
-      { id: 'wi12', emoji: '🔔', name: '叮噹鈴鐺', category: 'winter' },
-      { id: 'wi13', emoji: '🪵', name: '壁爐木炭', category: 'winter' },
-      { id: 'wi14', emoji: '🍲', name: '暖暖火鍋湯', category: 'winter' },
-      { id: 'wi15', emoji: '🧦', name: '聖誕襪子', category: 'winter' },
+      { id: 'wi8', emoji: '🛷', name: '紅色雪橇', category: 'winter' },
+      { id: 'wi9', emoji: '🐧', name: '小企鵝', category: 'winter' },
+      { id: 'wi10', emoji: '🐻‍❄️', name: '北極熊', category: 'winter' },
+      { id: 'wi11', emoji: '🔔', name: '聖誕鈴鐺', category: 'winter' },
+      { id: 'wi12', emoji: '🧦', name: '聖誕襪', category: 'winter' },
+      { id: 'wi13', emoji: '🔥', name: '暖暖壁爐', category: 'winter' },
+      { id: 'wi14', emoji: '⛸️', name: '溜冰鞋', category: 'winter' },
+      { id: 'wi15', emoji: '🍲', name: '熱騰騰火鍋', category: 'winter' },
 
-      { id: 'pe1', emoji: '👦', name: '活潑小男孩', category: 'people' },
-      { id: 'pe2', emoji: '👧', name: '可愛小女孩', category: 'people' },
-      { id: 'pe3', emoji: '👶', name: '開朗小寶寶', category: 'people' },
-      { id: 'pe4', emoji: '🧑', name: '大自然探險家', category: 'people' },
-      { id: 'pe5', emoji: '🏃', name: '奔跑小朋友', category: 'people' },
-      { id: 'pe6', emoji: '🏊', name: '游泳小健將', category: 'people' },
-      { id: 'pe7', emoji: '🚶', name: '散步漫遊者', category: 'people' },
-      { id: 'pe8', emoji: '🤸', name: '翻跟斗高手', category: 'people' },
-      { id: 'pe9', emoji: '👩‍🍳', name: '小小廚師', category: 'people' },
-      { id: 'pe10', emoji: '🧚', name: '大自然花仙子', category: 'people' },
-      { id: 'pe11', emoji: '🧙‍♂️', name: '森林魔法精靈', category: 'people' },
-      { id: 'pe12', emoji: '🦸', name: '正義小超人', category: 'people' },
-      { id: 'pe13', emoji: '👑', name: '優雅小公主', category: 'people' },
-      { id: 'pe14', emoji: '👨‍👩‍👧', name: '幸福一家人', category: 'people' },
+      { id: 'pe1', emoji: '👧', name: '快樂女孩', category: 'people' },
+      { id: 'pe2', emoji: '👦', name: '活力男孩', category: 'people' },
+      { id: 'pe3', emoji: '👶', name: '可愛寶寶', category: 'people' },
+      { id: 'pe4', emoji: '👵', name: '親切奶奶', category: 'people' },
+      { id: 'pe5', emoji: '👴', name: '慈祥爺爺', category: 'people' },
+      { id: 'pe6', emoji: '🧚‍♀️', name: '花仙子', category: 'people' },
+      { id: 'pe7', emoji: '🧜‍♀️', name: '美人魚', category: 'people' },
+      { id: 'pe8', emoji: '🧙‍♂️', name: '四季魔法師', category: 'people' },
 
-      { id: 'an1', emoji: '🐰', name: '小白兔', category: 'animal' },
-      { id: 'an2', emoji: '🐻', name: '棕熊', category: 'animal' },
-      { id: 'an3', emoji: '🐶', name: '淘氣小狗', category: 'animal' },
-      { id: 'an4', emoji: '🐱', name: '撒嬌小貓', category: 'animal' },
+      { id: 'an1', emoji: '🐱', name: '小貓咪', category: 'animal' },
+      { id: 'an2', emoji: '🐶', name: '小狗狗', category: 'animal' },
+      { id: 'an3', emoji: '🐰', name: '小白兔', category: 'animal' },
+      { id: 'an4', emoji: '🐼', name: '大熊貓', category: 'animal' },
       { id: 'an5', emoji: '🦊', name: '小狐狸', category: 'animal' },
-      { id: 'an6', emoji: '🦆', name: '小黃鴨', category: 'animal' },
-      { id: 'an7', emoji: '🐬', name: '海豚', category: 'animal' },
-      { id: 'an8', emoji: '🦭', name: '小海豹', category: 'animal' },
-      { id: 'an9', emoji: '🐼', name: '大熊貓', category: 'animal' },
-      { id: 'an10', emoji: '🦁', name: '小獅子', category: 'animal' },
+      { id: 'an6', emoji: '🐻', name: '棕熊', category: 'animal' },
+      { id: 'an7', emoji: '🐸', name: '小青蛙', category: 'animal' },
+      { id: 'an8', emoji: '🦆', name: '小鴨子', category: 'animal' },
+      { id: 'an9', emoji: '🦌', name: '小鹿', category: 'animal' },
 
-      { id: 'fn1', emoji: '🚀', name: '太空火箭', category: 'fun' },
-      { id: 'fn2', emoji: '🛸', name: '外星飛碟', category: 'fun' },
-      { id: 'fn3', emoji: '🦄', name: '夢幻獨角獸', category: 'fun' },
-      { id: 'fn4', emoji: '🦖', name: '綠色小恐龍', category: 'fun' },
-      { id: 'fn5', emoji: '🚗', name: '玩具小車', category: 'fun' },
-      { id: 'fn6', emoji: '🎈', name: '彩色氣球', category: 'fun' },
-      { id: 'fn7', emoji: '🎸', name: '音樂吉他', category: 'fun' },
-      { id: 'fn8', emoji: '🍕', name: '香脆披薩', category: 'fun' },
-      { id: 'fn9', emoji: '🍔', name: '美味漢堡', category: 'fun' },
+      { id: 'fn1', emoji: '🎈', name: '彩色氣球', category: 'fun' },
+      { id: 'fn2', emoji: '⭐', name: '閃亮星星', category: 'fun' },
+      { id: 'fn3', emoji: '💖', name: '愛心', category: 'fun' },
+      { id: 'fn4', emoji: '🦄', name: '夢幻獨角獸', category: 'fun' },
+      { id: 'fn5', emoji: '🛸', name: '外星飛碟', category: 'fun' },
+      { id: 'fn6', emoji: '🍭', name: '波板糖', category: 'fun' },
+      { id: 'fn7', emoji: '🧁', name: '杯子蛋糕', category: 'fun' },
+      { id: 'fn8', emoji: '🎸', name: '小吉他', category: 'fun' },
+      { id: 'fn9', emoji: '👑', name: '閃耀皇冠', category: 'fun' },
       { id: 'fn10', emoji: '🎁', name: '驚喜禮盒', category: 'fun' },
       { id: 'fn11', emoji: '🤖', name: '友善機器人', category: 'fun' },
       { id: 'fn12', emoji: '⚽', name: '足球', category: 'fun' },
@@ -1248,10 +2265,26 @@
 
     let currentStorySeason = 'spring';
     let currentCanvasSeason = 'spring';
+    let currentSecretStation = 'spring_eq';
+    let isStickersPanelCollapsed = false;
+
     let placedStickers = [];
     let selectedStickerElement = null;
     let audioCtx = null;
-    let lastGeneratedStory = "";
+    let lastGeneratedArtworkStory = "";
+
+    // 軌道動畫變數
+    let orbitAnimActive = true;
+    let currentOrbitDegree = 270; // 預設春分點
+    let orbitReqId = null;
+
+    // --- 嚴格 10 秒 AI 間隔控制 (Rate Limit & 10s Cooldown Manager) ---
+    const AI_COOLDOWN_SECONDS = 10;
+    let storyCooldownTimer = null;
+    let storyCooldownRemaining = 0;
+
+    let artworkCooldownTimer = null;
+    let artworkCooldownRemaining = 0;
 
     function initAudio() {
       if (!audioCtx) {
@@ -1312,17 +2345,20 @@
       }
     }
 
+    // --- 故事區模式載入 (載入現有預設故事) ---
     function loadStory(seasonKey) {
       currentStorySeason = seasonKey;
       const data = SEASONS_DATA[seasonKey];
       
       document.querySelectorAll('.season-card-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`.season-card-btn.${seasonKey}`).classList.add('active');
+      const activeBtn = document.querySelector(`.season-card-btn.${seasonKey}`);
+      if (activeBtn) activeBtn.classList.add('active');
 
       document.getElementById('story-tag').textContent = data.tag;
       document.getElementById('story-tag').style.background = data.bgGradient;
       document.getElementById('story-tag').style.color = '#ffffff';
       
+      document.getElementById('story-ai-badge').textContent = '📖 現有預設故事';
       document.getElementById('story-title').textContent = data.title;
       document.getElementById('story-title').style.color = data.color;
       
@@ -1334,17 +2370,343 @@
       playSound('pop');
     }
 
+    // --- 1. 四季故事：AI 隨機生成春夏秋冬故事 (含10秒間隔控制與預設降級) ---
+    async function generateSeasonStoryWithAI() {
+      if (storyCooldownRemaining > 0) {
+        showToast(`⏳ AI 休息中，請等待 ${storyCooldownRemaining} 秒後再試～`);
+        return;
+      }
+
+      const seasonKey = currentStorySeason;
+      const seasonName = SEASONS_DATA[seasonKey].name;
+      
+      const descEl = document.getElementById('story-desc');
+      const titleEl = document.getElementById('story-title');
+      const badgeEl = document.getElementById('story-ai-badge');
+      
+      badgeEl.textContent = '🪄 AI 正在構思中...';
+      descEl.textContent = `✨ AI 正在為你創作一個全新的【${seasonName}】奇妙故事，請稍候...`;
+      playSound('magic');
+
+      startStoryCooldown();
+
+      const systemPrompt = `你是一位專為幼兒創作童話故事的專家。請以繁體中文為3-7歲幼兒創作一段全新、生動、溫暖且充滿大自然知識的短篇四季故事。必須輸出嚴格的純JSON格式（不含markdown標記），包含：{"title":"故事標題","desc":"故事內容（約100字，字句溫馨）","features":["特色標籤1","特色標籤2","特色標籤3","特色標籤4"]}`;
+      const userPrompt = `請為【${seasonName}】隨機創作一個全新的幼兒童話故事。`;
+
+      try {
+        const result = await callGeminiLLM(systemPrompt, userPrompt);
+        titleEl.textContent = result.title || `${seasonName}的奇妙冒險`;
+        descEl.textContent = result.desc || result.content || result.story;
+        badgeEl.textContent = '✨ AI 專屬創作';
+
+        if (result.features && Array.isArray(result.features)) {
+          const tagsContainer = document.getElementById('story-tags');
+          tagsContainer.innerHTML = result.features.map(f => `<span class="feature-chip">${f}</span>`).join('');
+        }
+        playSound('magic');
+        showToast(`🎉 AI 已為你生成全新的${seasonName}故事！`);
+      } catch (e) {
+        console.warn('AI 生成異常或無法生成，顯示現有預設故事:', e);
+        const fallback = getFallbackSeasonStory(seasonKey);
+        titleEl.textContent = fallback.title;
+        descEl.textContent = fallback.desc;
+        badgeEl.textContent = '📖 現有預設故事';
+        if (fallback.features) {
+          document.getElementById('story-tags').innerHTML = fallback.features.map(f => `<span class="feature-chip">${f}</span>`).join('');
+        }
+        showToast(`✨ 已為你呈現現有預設${seasonName}故事！`);
+      }
+    }
+
+    function startStoryCooldown() {
+      storyCooldownRemaining = AI_COOLDOWN_SECONDS;
+      const btn = document.getElementById('btn-ai-story-gen');
+      const textSpan = document.getElementById('btn-ai-story-text');
+      
+      btn.disabled = true;
+      textSpan.textContent = `請稍候 (${storyCooldownRemaining}s)`;
+
+      if (storyCooldownTimer) clearInterval(storyCooldownTimer);
+      storyCooldownTimer = setInterval(() => {
+        storyCooldownRemaining--;
+        if (storyCooldownRemaining <= 0) {
+          clearInterval(storyCooldownTimer);
+          storyCooldownRemaining = 0;
+          btn.disabled = false;
+          textSpan.textContent = 'AI 隨機生成新故事';
+        } else {
+          textSpan.textContent = `請稍候 (${storyCooldownRemaining}s)`;
+        }
+      }, 1000);
+    }
+
+    // --- 2. 創作小遊戲：AI 說故事按鍵後透過 AI 生成故事 (含10秒間隔控制與預設降級) ---
+    async function generateAndShowArtworkAIStory() {
+      if (artworkCooldownRemaining > 0) {
+        showToast(`⏳ AI 休息中，請等待 ${artworkCooldownRemaining} 秒後再試～`);
+        return;
+      }
+
+      if (placedStickers.length === 0) {
+        playSound('pop');
+        showToast('💡 畫布上還沒有貼紙喔！先放幾個角色與物品吧～');
+        return;
+      }
+
+      deselectSticker();
+      playSound('magic');
+
+      const seasonName = SEASONS_DATA[currentCanvasSeason].name;
+      const elementsOnBoard = placedStickers.map(s => ({
+        emoji: s.emoji,
+        name: s.name || getStickerName(s.emoji)
+      }));
+
+      const artworkDataUrl = renderCanvasSnapshotDataURL();
+      document.getElementById('modal-artwork-img').src = artworkDataUrl;
+
+      document.getElementById('story-modal').classList.add('show');
+      document.getElementById('modal-loading-view').classList.add('show');
+      document.getElementById('modal-content-view').style.display = 'none';
+
+      document.getElementById('modal-elements-list').innerHTML = `
+        <span style="font-weight:bold;">🎨 登場元素：</span>
+        ${elementsOnBoard.map(e => `<span class="element-badge">${e.emoji} ${e.name}</span>`).join('')}
+      `;
+
+      startArtworkCooldown();
+
+      const elementsText = elementsOnBoard.map(e => `${e.emoji}${e.name}`).join('、');
+      const systemPrompt = `你是一位頂尖的兒童繪本作家。小朋友在畫布上創作了一幅四季圖畫。請根據小朋友選擇的季節以及畫作上的所有元素，為小朋友創作一段溫暖動人、情節連貫的繪本故事。請輸出純JSON格式（不含markdown）：{"title":"繪本故事標題","story":"繪本故事內容（約150字，生動呈現主角與物品互動，充滿童趣）"}`;
+      const userPrompt = `【季節】：${seasonName}\n【畫面上的角色與物品】：${elementsText}\n請為這幅畫作創作專屬故事。`;
+
+      try {
+        const result = await callGeminiLLM(systemPrompt, userPrompt);
+        document.getElementById('modal-story-heading').textContent = `✨ ${result.title || `${seasonName}繪本奇遇記`}`;
+        document.getElementById('modal-story-text').textContent = result.story || result.desc || result.content;
+        lastGeneratedArtworkStory = `${result.title || '四季繪本小故事'}。
+
+${result.story || result.desc || result.content}`;
+      } catch (err) {
+        console.warn('AI 畫作故事生成異常或無法生成，顯示現有預設故事:', err);
+        const fallback = composeChildStoryFallback(seasonName, elementsOnBoard);
+        document.getElementById('modal-story-heading').textContent = `✨ 我的${seasonName}繪本冒險`;
+        document.getElementById('modal-story-text').textContent = fallback.fullText;
+        lastGeneratedArtworkStory = fallback.fullText;
+        showToast('✨ 已為你呈現現有預設故事！');
+      }
+
+      document.getElementById('modal-loading-view').classList.remove('show');
+      document.getElementById('modal-content-view').style.display = 'grid';
+      playSound('magic');
+    }
+
+    function startArtworkCooldown() {
+      artworkCooldownRemaining = AI_COOLDOWN_SECONDS;
+      const btn1 = document.getElementById('btn-artwork-ai-story');
+      const text1 = document.getElementById('btn-artwork-ai-text');
+      const btn2 = document.getElementById('btn-modal-ai-regen');
+      const text2 = document.getElementById('btn-modal-regen-text');
+
+      if (btn1) btn1.disabled = true;
+      if (text1) text1.textContent = `AI 休息中 (${artworkCooldownRemaining}s)`;
+      if (btn2) btn2.disabled = true;
+      if (text2) text2.textContent = `請稍候 (${artworkCooldownRemaining}s)`;
+
+      if (artworkCooldownTimer) clearInterval(artworkCooldownTimer);
+      artworkCooldownTimer = setInterval(() => {
+        artworkCooldownRemaining--;
+        if (artworkCooldownRemaining <= 0) {
+          clearInterval(artworkCooldownTimer);
+          artworkCooldownRemaining = 0;
+          if (btn1) btn1.disabled = false;
+          if (text1) text1.textContent = 'AI 說故事 (繪本模式)';
+          if (btn2) btn2.disabled = false;
+          if (text2) text2.textContent = '再寫一個新故事';
+        } else {
+          if (text1) text1.textContent = `AI 休息中 (${artworkCooldownRemaining}s)`;
+          if (text2) text2.textContent = `請稍候 (${artworkCooldownRemaining}s)`;
+        }
+      }, 1000);
+    }
+
+    function regenerateArtworkAIStory() {
+      if (artworkCooldownRemaining > 0) {
+        showToast(`⏳ AI 休息中，請等待 ${artworkCooldownRemaining} 秒後再試～`);
+        return;
+      }
+      generateAndShowArtworkAIStory();
+    }
+
+    // --- 通用 AI API 呼叫核心 (支援自訂 Gemini API Key 與免 Key 雲端雙軌) ---
+    async function callGeminiLLM(systemPrompt, userPrompt) {
+      const customKey = localStorage.getItem('gemini_api_key') || '';
+
+      if (customKey) {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${customKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `${systemPrompt}
+
+${userPrompt}` }] }],
+            generationConfig: { responseMimeType: "application/json" }
+          })
+        });
+        if (!response.ok) throw new Error(`Gemini API 狀態碼: ${response.status}`);
+        const data = await response.json();
+        const rawText = data.candidates[0].content.parts[0].text;
+        return parseJSONResponse(rawText);
+      }
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6500);
+
+      const response = await fetch('https://text.pollinations.ai/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          model: 'openai',
+          jsonMode: true
+        })
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) throw new Error(`雲端引擎狀態碼: ${response.status}`);
+      const rawText = await response.text();
+      return parseJSONResponse(rawText);
+    }
+
+    function parseJSONResponse(text) {
+      let cleaned = text.trim();
+      if (cleaned.includes('```')) {
+        cleaned = cleaned.replace(/```json/gi, '').replace(/```/g, '').trim();
+      }
+      try {
+        const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          return JSON.parse(jsonMatch[0]);
+        }
+      } catch (e) {}
+
+      return {
+        title: "四季奇妙冒險",
+        story: cleaned,
+        desc: cleaned,
+        features: ["🌟 創意無限", "🍀 大自然之美", "🎉 快樂成長", "📖 趣味故事"]
+      };
+    }
+
+    function getFallbackSeasonStory(seasonKey) {
+      const list = FALLBACK_SEASON_STORIES[seasonKey] || FALLBACK_SEASON_STORIES.spring;
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function composeChildStoryFallback(season, elements) {
+      const people = elements.filter(e => {
+        const found = STICKER_LIBRARY.find(s => s.emoji === e.emoji);
+        return found && found.category === 'people';
+      });
+      const animals = elements.filter(e => {
+        const found = STICKER_LIBRARY.find(s => s.emoji === e.emoji);
+        return found && found.category === 'animal';
+      });
+      const funItems = elements.filter(e => {
+        const found = STICKER_LIBRARY.find(s => s.emoji === e.emoji);
+        return found && found.category === 'fun';
+      });
+
+      let protagonist = "勇敢的小探險家";
+      if (people.length > 0) protagonist = people[0].name;
+      else if (animals.length > 0) protagonist = `可愛的${animals[0].name}`;
+
+      let sceneSetting = "";
+      if (season === "春天") sceneSetting = "這是一個微風徐徐、萬物復甦的春天。大地開滿了嫩綠的小草與美麗的花朵。";
+      else if (season === "夏天") sceneSetting = "這是一個陽光燦爛、海風輕拂的夏天。蔚藍的大海泛著白色的浪花，金色沙灘上充滿了歡笑聲。";
+      else if (season === "秋天") sceneSetting = "這是一個涼爽愜意、落葉繽紛的秋天。紅紅的楓樹與金黃的果園散發著甜甜的香氣。";
+      else if (season === "冬天") sceneSetting = "這是一個白雪飄飄、溫馨寧靜的冬天。晶瑩的雪花像白棉被一樣輕輕覆蓋在大地上。";
+
+      let itemSentences = "";
+      const displayItems = elements.slice(0, 5).map(e => `${e.name}${e.emoji}`);
+      if (displayItems.length === 1) {
+        itemSentences = `在這片美麗的景色中，${protagonist}驚喜地發現了神奇的【${displayItems[0]}】，開心地與它一同玩耍！`;
+      } else if (displayItems.length <= 3) {
+        itemSentences = `在冒險的旅途中，${protagonist}身旁伴隨著【${displayItems.join('】和【')}】，大家一起享受著這個美好的季節！`;
+      } else {
+        itemSentences = `在這片精彩的場景裡，${protagonist}帶領著【${displayItems.slice(0, 3).join('】、【')}】以及【${displayItems.slice(3).join('】與【')}】，展開了一場令人難忘的夢幻探索！`;
+      }
+
+      let funTwist = "";
+      if (funItems.length > 0) {
+        funTwist = `更神奇的是，突然出現了閃閃發光的【${funItems[0].name}${funItems[0].emoji}】，為這趟旅程增添了無限的魔法與想像！`;
+      }
+
+      const closings = [
+        "夕陽西下，大家帶著滿滿的歡笑與回憶，相約下一個季節還要一起快樂玩耍！",
+        "大自然的美麗與大家的笑容交織成最溫暖的畫面，這真是一段最棒的四季奇遇！",
+        "看著這幅美麗的圖畫，小精靈也忍不住拍手稱讚：『這真是太有創意、太精彩的故事了！』"
+      ];
+      const selectedClosing = closings[Math.floor(Math.random() * closings.length)];
+
+      const fullText = `【${season}的小冒險】
+
+${sceneSetting}
+
+有一天，${protagonist}來到這片美麗的風景裡。
+${itemSentences}
+${funTwist}
+${selectedClosing}`;
+      return { fullText };
+    }
+
     function readStoryVoice() {
-      const data = SEASONS_DATA[currentStorySeason];
+      const title = document.getElementById('story-title').textContent;
+      const desc = document.getElementById('story-desc').textContent;
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const text = `${data.name}。${data.title}。${data.desc}`;
+        const text = `${title}。${desc}`;
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'zh-HK';
         utterance.rate = 0.9;
         utterance.pitch = 1.1;
         window.speechSynthesis.speak(utterance);
         showToast('📢 正在為你朗讀故事...');
+      } else {
+        showToast('💡 瀏覽器暫不支援自動語音播放');
+      }
+    }
+
+    function readAIStoryVoice() {
+      const text = lastGeneratedArtworkStory || document.getElementById('modal-story-text').textContent;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-HK';
+        utterance.rate = 0.92;
+        utterance.pitch = 1.08;
+        window.speechSynthesis.speak(utterance);
+        showToast('📢 正在為你朗讀 AI 繪本故事...');
+      } else {
+        showToast('💡 瀏覽器暫不支援自動語音播放');
+      }
+    }
+
+    function readSecretStoryVoice() {
+      const data = SEASONS_SECRET_DATA[currentSecretStation];
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const text = `${data.title}。${data.story}`;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-HK';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.05;
+        window.speechSynthesis.speak(utterance);
+        showToast('📢 正在為你朗讀地理小秘密故事...');
       } else {
         showToast('💡 瀏覽器暫不支援自動語音播放');
       }
@@ -1359,6 +2721,168 @@
       showToast('🌟 四季交替：春暖 ➡️ 夏熱 ➡️ 秋涼 ➡️ 冬冷');
     }
 
+    function openSecretsModal() {
+      document.getElementById('secrets-modal').classList.add('show');
+    }
+
+    function closeSecretsModal() {
+      document.getElementById('secrets-modal').classList.remove('show');
+    }
+
+    function toggleSecretQuiz() {
+      const quizBox = document.getElementById('secret-quiz-box');
+      quizBox.classList.toggle('show');
+      playSound('pop');
+    }
+
+    // --- 擴充：四季輪轉的小秘密・動態軌道與站點控制 ---
+    function jumpToSecretStation(stationId) {
+      currentSecretStation = stationId;
+      const data = SEASONS_SECRET_DATA[stationId];
+      if (!data) return;
+
+      // 暫停自動公轉以便孩子細細觀察該站點
+      orbitAnimActive = false;
+      updateOrbitPlayBtnState();
+
+      // 更新選中按鈕狀態
+      document.querySelectorAll('.station-quick-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`sbtn-${stationId}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // 更新文字面板
+      document.getElementById('secret-station-badge').textContent = data.badge;
+      document.getElementById('secret-station-date').textContent = data.date;
+      document.getElementById('secret-station-title').textContent = data.title;
+      document.getElementById('fact-sun-direct').textContent = data.sunDirect;
+      document.getElementById('fact-day-night').textContent = data.dayNight;
+      document.getElementById('fact-north-status').textContent = data.northStatus;
+      document.getElementById('fact-south-status').textContent = data.southStatus;
+      document.getElementById('secret-story-desc').textContent = data.story;
+      document.getElementById('secret-flashlight-text').innerHTML = data.flashlightText;
+      document.getElementById('secret-quiz-q').textContent = data.quizQ;
+      document.getElementById('secret-quiz-a').textContent = data.quizA;
+
+      // 更新軌道狀態條
+      document.getElementById('orbit-status-direct').textContent = data.sunDirect;
+      document.getElementById('orbit-status-station').textContent = `${data.name} (${data.date})`;
+
+      // 將地球平滑移動至該節氣位置
+      currentOrbitDegree = data.orbitAngle;
+      renderOrbitVisual(currentOrbitDegree);
+      const slider = document.getElementById("orbit-deg-slider");
+      if (slider && document.activeElement !== slider) slider.value = Math.round(currentOrbitDegree);
+
+      playSound('magic');
+    }
+
+    function toggleOrbitAnimation() {
+      orbitAnimActive = !orbitAnimActive;
+      updateOrbitPlayBtnState();
+      if (orbitAnimActive) {
+        runOrbitLoop();
+        showToast('▶️ 公轉動畫播放中');
+      } else {
+        showToast('⏸️ 公轉動畫已暫停');
+      }
+      playSound('pop');
+    }
+
+    function updateOrbitPlayBtnState() {
+      const btn = document.getElementById('btn-orbit-toggle-play');
+      if (!btn) return;
+      if (orbitAnimActive) {
+        btn.classList.remove('paused');
+        btn.innerHTML = '<i class="fa-solid fa-pause"></i><span>暫停公轉</span>';
+      } else {
+        btn.classList.add('paused');
+        btn.innerHTML = '<i class="fa-solid fa-play"></i><span>播放公轉</span>';
+      }
+    }
+
+    
+    function onOrbitSliderChange(val) {
+      orbitAnimActive = false;
+      updateOrbitPlayBtnState();
+      currentOrbitDegree = parseFloat(val);
+      renderOrbitVisual(currentOrbitDegree);
+      const slider = document.getElementById("orbit-deg-slider");
+      if (slider && document.activeElement !== slider) slider.value = Math.round(currentOrbitDegree);
+      updateLiveOrbitState(currentOrbitDegree);
+
+      // 檢查是否接近四大站點，自動同步選中狀態
+      if (Math.abs(currentOrbitDegree - 270) <= 20) {
+        highlightSecretStationButton('spring_eq');
+      } else if (Math.abs(currentOrbitDegree - 180) <= 20) {
+        highlightSecretStationButton('summer_sol');
+      } else if (Math.abs(currentOrbitDegree - 90) <= 20) {
+        highlightSecretStationButton('autumn_eq');
+      } else if (currentOrbitDegree <= 20 || currentOrbitDegree >= 340) {
+        highlightSecretStationButton('winter_sol');
+      }
+    }
+
+    function highlightSecretStationButton(stationId) {
+      document.querySelectorAll('.station-quick-btn').forEach(btn => btn.classList.remove('active'));
+      const btn = document.getElementById(`sbtn-${stationId}`);
+      if (btn) btn.classList.add('active');
+    }
+
+    function renderOrbitVisual(deg) {
+      const rad = (deg * Math.PI) / 180;
+      const centerX = 270;
+      const centerY = 155;
+      const rx = 210;
+      const ry = 105;
+
+      const earthX = centerX + rx * Math.cos(rad);
+      const earthY = centerY + ry * Math.sin(rad);
+
+      const earthEl = document.getElementById('svg-dynamic-earth');
+      if (earthEl) {
+        earthEl.setAttribute('transform', `translate(${earthX}, ${earthY})`);
+      }
+
+      const sunRay = document.getElementById('svg-sun-ray-line');
+      if (sunRay) {
+        sunRay.setAttribute('x1', centerX);
+        sunRay.setAttribute('y1', centerY);
+        sunRay.setAttribute('x2', earthX);
+        sunRay.setAttribute('y2', earthY);
+      }
+    }
+
+    function runOrbitLoop() {
+      if (!orbitAnimActive) return;
+      currentOrbitDegree = (currentOrbitDegree - 0.4 + 360) % 360; // 逆時針公轉
+      renderOrbitVisual(currentOrbitDegree);
+      const slider = document.getElementById("orbit-deg-slider");
+      if (slider && document.activeElement !== slider) slider.value = Math.round(currentOrbitDegree);
+
+      // 動態更新直射緯度與對應站點提示
+      updateLiveOrbitState(currentOrbitDegree);
+
+      orbitReqId = requestAnimationFrame(runOrbitLoop);
+    }
+
+    function updateLiveOrbitState(deg) {
+      // 0: 冬至(南回歸線), 90: 秋分(赤道), 180: 夏至(北回歸線), 270: 春分(赤道)
+      if (deg >= 240 && deg <= 300) {
+        document.getElementById('orbit-status-station').textContent = '🌸 春分前後 (3-4月)';
+        document.getElementById('orbit-status-direct').textContent = '赤道附近 (0°)';
+      } else if (deg >= 150 && deg < 240) {
+        document.getElementById('orbit-status-station').textContent = '☀️ 夏至前後 (6-7月)';
+        document.getElementById('orbit-status-direct').textContent = '北回歸線 (23.5°N)';
+      } else if (deg >= 60 && deg < 150) {
+        document.getElementById('orbit-status-station').textContent = '🍁 秋分前後 (9-10月)';
+        document.getElementById('orbit-status-direct').textContent = '赤道附近 (0°)';
+      } else {
+        document.getElementById('orbit-status-station').textContent = '❄️ 冬至前後 (12-1月)';
+        document.getElementById('orbit-status-direct').textContent = '南回歸線 (23.5°S)';
+      }
+    }
+
+    // --- 創作小遊戲：四季背景切換 ---
     function setCanvasBg(seasonKey) {
       currentCanvasSeason = seasonKey;
       const artBoard = document.getElementById('art-board');
@@ -1411,6 +2935,29 @@
       svgOverlay.innerHTML = content;
     }
 
+    // --- 四季百寶箱：縮排 / 展開功能 ---
+    function toggleStickersPanel() {
+      const panel = document.getElementById('stickers-panel');
+      isStickersPanelCollapsed = !isStickersPanelCollapsed;
+
+      const toggleIcon = document.getElementById('toggle-icon');
+      const toggleText = document.getElementById('toggle-text');
+
+      if (isStickersPanelCollapsed) {
+        panel.classList.add('collapsed');
+        if (toggleIcon) toggleIcon.className = 'fa-solid fa-chevron-right';
+        if (toggleText) toggleText.textContent = '展開';
+        showToast('◀ 四季百寶箱已縮排，畫布空間更大囉！');
+      } else {
+        panel.classList.remove('collapsed');
+        if (toggleIcon) toggleIcon.className = 'fa-solid fa-chevron-left';
+        if (toggleText) toggleText.textContent = '收起';
+        showToast('▶ 四季百寶箱已展開！');
+      }
+      playSound('pop');
+    }
+
+    // --- 貼紙篩選與網格渲染 (分類在頂部) ---
     function renderStickersGrid(filterCategory = 'all') {
       const grid = document.getElementById('stickers-grid');
       const filtered = filterCategory === 'all' 
@@ -1418,7 +2965,7 @@
         : STICKER_LIBRARY.filter(s => s.category === filterCategory);
 
       grid.innerHTML = filtered.map(item => `
-        <div class="sticker-tray-item" onclick="createStickerOnCanvas('${item.emoji}', null, null, '${item.name}')">
+        <div class="sticker-tray-item" onclick="createStickerOnCanvas('${item.emoji}', null, null, '${item.name}')" title="點擊加入 ${item.name}">
           <span class="emoji">${item.emoji}</span>
           <span class="name">${item.name}</span>
         </div>
@@ -1688,123 +3235,27 @@
       return canvas.toDataURL('image/png');
     }
 
-    function generateAndShowAIStory() {
-      if (placedStickers.length === 0) {
-        playSound('pop');
-        showToast('💡 畫布上還沒有貼紙喔！先放幾個角色與物品吧～');
-        return;
-      }
-
-      deselectSticker();
-      playSound('magic');
-
-      const seasonName = SEASONS_DATA[currentCanvasSeason].name;
-      const elementsOnBoard = placedStickers.map(s => ({
-        emoji: s.emoji,
-        name: s.name || getStickerName(s.emoji)
-      }));
-
-      const artworkDataUrl = renderCanvasSnapshotDataURL();
-      document.getElementById('modal-artwork-img').src = artworkDataUrl;
-
-      const storyObj = composeChildStory(seasonName, elementsOnBoard);
-      lastGeneratedStory = storyObj.fullText;
-
-      document.getElementById('modal-story-heading').textContent = `✨ 我的${seasonName}繪本奇遇記`;
-      document.getElementById('modal-elements-list').innerHTML = `
-        <span style="font-weight:bold;">🎨 登場元素：</span>
-        ${elementsOnBoard.map(e => `<span class="element-badge">${e.emoji} ${e.name}</span>`).join('')}
-      `;
-      document.getElementById('modal-story-text').textContent = storyObj.fullText;
-
-      document.getElementById('story-modal').classList.add('show');
-    }
-
-    function composeChildStory(season, elements) {
-      const people = elements.filter(e => {
-        const found = STICKER_LIBRARY.find(s => s.emoji === e.emoji);
-        return found && found.category === 'people';
-      });
-      const animals = elements.filter(e => {
-        const found = STICKER_LIBRARY.find(s => s.emoji === e.emoji);
-        return found && found.category === 'animal';
-      });
-      const funItems = elements.filter(e => {
-        const found = STICKER_LIBRARY.find(s => s.emoji === e.emoji);
-        return found && found.category === 'fun';
-      });
-
-      let protagonist = "勇敢的小探險家";
-      if (people.length > 0) {
-        protagonist = people[0].name;
-      } else if (animals.length > 0) {
-        protagonist = `可愛的${animals[0].name}`;
-      }
-
-      let sceneSetting = "";
-      if (season === "春天") {
-        sceneSetting = "這是一個微風徐徐、萬物復甦的春天。大地開滿了嫩綠的小草與美麗的花朵。";
-      } else if (season === "夏天") {
-        sceneSetting = "這是一個陽光燦爛、海風輕拂的夏天。蔚藍的大海泛著白色的浪花，金色沙灘上充滿了歡笑聲。";
-      } else if (season === "秋天") {
-        sceneSetting = "這是一個涼爽愜意、落葉繽紛的秋天。紅紅的楓樹與金黃的果園散發著甜甜的香氣。";
-      } else if (season === "冬天") {
-        sceneSetting = "這是一個白雪飄飄、溫馨寧靜的冬天。晶瑩的雪花像白棉被一樣輕輕覆蓋在大地上。";
-      }
-
-      let itemSentences = "";
-      const displayItems = elements.slice(0, 5).map(e => `${e.name}${e.emoji}`);
-      
-      if (displayItems.length === 1) {
-        itemSentences = `在這片美麗的景色中，${protagonist}驚喜地發現了神奇的【${displayItems[0]}】，開心地與它一同玩耍！`;
-      } else if (displayItems.length <= 3) {
-        itemSentences = `在冒險的旅途中，${protagonist}身旁伴隨著【${displayItems.join('】和【')}】，大家一起享受著這個美好的季節！`;
-      } else {
-        itemSentences = `在這片精彩的場景裡，${protagonist}帶領著【${displayItems.slice(0, 3).join('】、【')}】以及【${displayItems.slice(3).join('】與【')}】，展開了一場令人難忘的夢幻探索！`;
-      }
-
-      let funTwist = "";
-      if (funItems.length > 0) {
-        funTwist = `更神奇的是，突然出現了閃閃發光的【${funItems[0].name}${funItems[0].emoji}】，為這趟旅程增添了無限的魔法與想像！`;
-      }
-
-      const closings = [
-        `夕陽西下，大家帶著滿滿的歡笑與回憶，相約下一個季節還要一起快樂玩耍！`,
-        `大自然的美麗與大家的笑容交織成最溫暖的畫面，這真是一段最棒的四季奇遇！`,
-        `看著這幅美麗的圖畫，小精靈也忍不住拍手稱讚：『這真是太有創意、太精彩的故事了！』`
-      ];
-      const selectedClosing = closings[Math.floor(Math.random() * closings.length)];
-
-      const fullText = `【${season}的小冒險】\n\n${sceneSetting}\n\n有一天，${protagonist}來到這片美麗的風景裡。\n${itemSentences}\n${funTwist}\n${selectedClosing}`;
-      return { fullText };
-    }
-
-    function readAIStoryVoice() {
-      if (!lastGeneratedStory) return;
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(lastGeneratedStory);
-        utterance.lang = 'zh-HK';
-        utterance.rate = 0.92;
-        utterance.pitch = 1.08;
-        window.speechSynthesis.speak(utterance);
-        showToast('📢 正在為你朗讀 AI 繪本故事...');
-      } else {
-        showToast('💡 瀏覽器暫不支援自動語音播放');
-      }
-    }
-
-    function regenerateAIStory() {
-      generateAndShowAIStory();
-      playSound('magic');
-      showToast('✨ 為你重新編織了一個新故事！');
-    }
-
     function closeStoryModal() {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
       document.getElementById('story-modal').classList.remove('show');
+    }
+
+    function openSettingsModal() {
+      document.getElementById('settings-api-key').value = localStorage.getItem('gemini_api_key') || '';
+      document.getElementById('settings-modal').classList.add('show');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').classList.remove('show');
+    }
+
+    function saveSettings() {
+      const key = document.getElementById('settings-api-key').value.trim();
+      localStorage.setItem('gemini_api_key', key);
+      closeSettingsModal();
+      showToast('💾 AI 設定已儲存！');
     }
 
     function exportArtwork() {
@@ -1835,6 +3286,8 @@
       loadStory('spring');
       setCanvasBg('spring');
       renderStickersGrid('all');
+      jumpToSecretStation('spring_eq');
+      runOrbitLoop();
     });
   </script>
 </body>
