@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>數感大冒險 - 數字組合與拆解（難度 2）</title>
+  <!-- FontAwesome for home icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #ff7043;
+      --primary-hover: #f4511e;
+      --secondary-color: #42a5f5;
+      --accent-green: #4caf50;
+      --accent-green-hover: #388e3c;
+      --bg-cream: #fff9e6;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --text-dark: #2c3e50;
+      --text-muted: #607d8b;
+      --shadow-sm: 0 4px 10px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
+      --shadow-lg: 0 12px 36px rgba(0,0,0,0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang HK", "Microsoft JhengHei", sans-serif;
+      background: var(--bg-cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    /* 頂部導航與進度列 (完全比照 math_game_add.html) */
+    header {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+      z-index: 30;
+      position: relative;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* 立體 HOME 鍵樣式 */
+    .home-btn {
+      background: #ffffff;
+      color: #2E7D32;
+      border: 2px solid #C8E6C9;
+      font-size: 0.95rem;
+      font-weight: bold;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      box-shadow: 0 3px 0 rgba(46, 125, 50, 0.2);
+    }
+
+    .home-btn:hover {
+      background: #E8F5E9;
+    }
+
+    .home-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 rgba(46, 125, 50, 0.2);
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ff6f00;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .level-badge {
+      background: #fff3e0;
+      color: #e65100;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 2px solid #ffe082;
+    }
+
+    .status-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .progress-track {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .star-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: #757575;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .star-dot.completed {
+      background: #ffb300;
+      color: #ffffff;
+      transform: scale(1.15);
+    }
+
+    .star-dot.current {
+      background: #ff7043;
+      color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(255, 112, 67, 0.3);
+      animation: pulse 1.5s infinite;
+    }
+
+    .star-dot.special-q4 {
+      border: 2px solid #ffb300;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .sound-btn {
+      background: #f0f4f8;
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s;
+    }
+
+    .sound-btn:active {
+      transform: scale(0.9);
+    }
+
+    /* 遊戲主容器 */
+    main {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 動態主題背景 SVG 容器 */
+    .bg-scenery-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+      transition: opacity 0.5s ease;
+    }
+
+    .bg-scenery-container svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* 遊戲前景操作層 */
+    .game-content-layer {
+      flex: 1;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    /* 題目引導語音氣泡 */
+    .prompt-banner {
+      margin: 8px auto 4px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      padding: 8px 24px;
+      border-radius: 999px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #2c3e50;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 3px solid #ffb74d;
+      max-width: 90%;
+    }
+
+    .prompt-speaker {
+      cursor: pointer;
+      font-size: 1.4rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-6px); }
+      60% { transform: translateY(-3px); }
+    }
+
+    /* =======================================================
+       雙欄自適應主操作區 (完全比照 math_game_add.html)
+       ======================================================= */
+    .concrete-container {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 1fr auto;
+      gap: 16px;
+      padding: 8px 24px 16px;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* 左側主遊戲區（算式組合放置板） */
+    .drop-play-area {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      border: 4px solid #ffa726;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: var(--shadow-md);
+      transition: all 0.2s ease;
+      overflow: hidden;
+    }
+
+    /* 頂部看板 */
+    .concrete-left-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 6px;
+      border-bottom: 2px dashed rgba(255, 152, 0, 0.4);
+      margin-bottom: 8px;
+      z-index: 5;
+    }
+
+    .formula-badge-left {
+      background: #fff3e0;
+      color: #e65100;
+      font-size: 1.45rem;
+      font-weight: 900;
+      padding: 6px 20px;
+      border-radius: 999px;
+      border: 3px solid #ffb74d;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      letter-spacing: 1px;
+    }
+
+    /* 需找出 X 組進度標籤 */
+    .live-counter-badge {
+      background: #4caf50;
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    /* 算式列表主容器 (支援滾動以容納 5 組) */
+    .slots-scroll-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      overflow-y: auto;
+      padding: 4px 6px;
+    }
+
+    /* 單一行算式組合槽位 */
+    .formula-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 3px solid #ffe082;
+      border-radius: 20px;
+      padding: 6px 14px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+      transition: all 0.2s ease;
+    }
+
+    .formula-row.row-success {
+      border-color: #4caf50 !important;
+      background: #e8f5e9 !important;
+    }
+
+    .formula-row.row-error {
+      border-color: #f44336 !important;
+      background: #ffebee !important;
+    }
+
+    .formula-row.shake-error {
+      animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-3px, 0, 0); }
+      20%, 80% { transform: translate3d(5px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+      40%, 60% { transform: translate3d(6px, 0, 0); }
+    }
+
+    .row-index-tag {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #ffa000;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* 填空格槽位 */
+    .slot-box {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      border: 3px dashed #b0bec5;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #1a237e;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .slot-box.filled {
+      border: 3px solid #42a5f5;
+      background: #e3f2fd;
+      color: #0d47a1;
+      box-shadow: 0 4px 10px rgba(66, 165, 245, 0.3);
+      transform: scale(1.02);
+    }
+
+    .slot-box:hover {
+      border-color: #ff9800;
+      background: #fff8e1;
+    }
+
+    .slot-box.drag-over {
+      border-color: #4caf50 !important;
+      background: #c8e6c9 !important;
+      transform: scale(1.08);
+    }
+
+    .slot-box .slot-emoji {
+      position: absolute;
+      bottom: 2px;
+      right: 4px;
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+
+    .slot-op-plus {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #ff9800;
+      line-height: 1;
+    }
+
+    .slot-op-equal {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #78909c;
+      line-height: 1;
+    }
+
+    .slot-target-badge {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: #fff3e0;
+      border: 3px solid #ffb74d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #e65100;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    /* 右側：目標指示與「回答」按鈕區 */
+    .target-action-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      border: 4px solid #81c784;
+      text-align: center;
+    }
+
+    .target-header-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #2e7d32;
+    }
+
+    .target-huge-number {
+      font-size: 6.2rem;
+      font-weight: 900;
+      color: #1b5e20;
+      line-height: 1;
+      margin: 6px 0;
+      text-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+    }
+
+    .target-theme-label {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #558b2f;
+      margin-bottom: 10px;
+    }
+
+    /* 「回答」按鈕樣式 (綠色大按鈕) */
+    .btn-submit-answer {
+      background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+      color: #ffffff;
+      border: none;
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 24px;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-submit-answer:hover:not(:disabled) {
+      background: linear-gradient(135deg, #66bb6a 0%, #388e3c 100%);
+      transform: translateY(-2px);
+    }
+
+    .btn-submit-answer:active:not(:disabled) {
+      transform: scale(0.96);
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-submit-answer:disabled {
+      background: #cfd8dc;
+      color: #90a4ae;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-reset-light {
+      background: #fbe9e7;
+      color: #d84315;
+      border: 2px solid #ffccbc;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-reset-light:hover {
+      background: #ffccbc;
+    }
+
+    .btn-reset-light:active {
+      transform: scale(0.95);
+    }
+
+    /* 底端籌碼庫 (Reservoir Shelf) */
+    .reservoir-shelf {
+      grid-column: 1 / -1;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 10px 20px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border: 3px solid #ffd54f;
+    }
+
+    .reservoir-hint {
+      display: flex;
+      flex-direction: column;
+      min-width: 140px;
+    }
+
+    .reservoir-hint-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #f57f17;
+    }
+
+    .reservoir-hint-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .reservoir-items-row {
+      flex: 1;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      overflow-x: auto;
+      padding: 4px;
+    }
+
+    .reservoir-chip {
+      width: 66px;
+      height: 66px;
+      min-width: 66px;
+      border-radius: 18px;
+      background: #fff8e1;
+      border: 3px solid #ffb300;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.15s ease, border-color 0.2s ease;
+    }
+
+    .reservoir-chip:hover {
+      transform: translateY(-3px);
+      border-color: #ff6f00;
+      background: #ffffff;
+    }
+
+    .reservoir-chip:active {
+      transform: scale(0.92);
+    }
+
+    .chip-number {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #2c3e50;
+      line-height: 1;
+    }
+
+    .chip-emoji {
+      font-size: 0.95rem;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    /* 懸浮飛行鬼影 (用於手勢拖曳) */
+    .drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      width: 66px;
+      height: 66px;
+      border-radius: 18px;
+      background: #fff8e1;
+      border: 3px solid #ff9800;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%) scale(1.15);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.3);
+    }
+
+    /* 全螢幕彩帶動畫 Canvas */
+    #celebration-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* 彈跳視窗通用 Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* =======================================================
+       正確答對後的「重溫加數組合」彈出視窗
+       ======================================================= */
+    .review-card {
+      background: #ffffff;
+      border-radius: 36px;
+      padding: 30px 40px;
+      max-width: 560px;
+      width: 92%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.85);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 6px solid #4caf50;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-overlay.show .review-card {
+      transform: scale(1);
+    }
+
+    .review-trophy {
+      font-size: 3.8rem;
+      line-height: 1;
+      margin-bottom: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .review-title {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #2e7d32;
+      margin-bottom: 4px;
+    }
+
+    .review-subtitle {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #558b2f;
+      margin-bottom: 12px;
+    }
+
+    /* 組合重溫列表容器 */
+    .review-pairs-box {
+      background: #f1f8e9;
+      border: 2px dashed #a5d6a7;
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 38vh;
+      overflow-y: auto;
+    }
+
+    .review-pair-pill {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
+
+    .pill-num {
+      color: #1b5e20;
+    }
+
+    .pill-op {
+      color: #ff9800;
+    }
+
+    .pill-equal {
+      color: #78909c;
+    }
+
+    .pill-target {
+      color: #e65100;
+      background: #fff3e0;
+      padding: 2px 10px;
+      border-radius: 10px;
+      border: 1px solid #ffe082;
+    }
+
+    .modal-btn-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-primary-btn {
+      background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+      color: #ffffff;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 999px;
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(76, 175, 80, 0.4);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-primary-btn:hover {
+      background: linear-gradient(135deg, #66bb6a 0%, #388e3c 100%);
+      transform: translateY(-2px);
+    }
+
+    .modal-primary-btn:active {
+      transform: scale(0.96);
+    }
+
+    .modal-replay-btn {
+      background: #fff3e0;
+      color: #e65100;
+      border: 2px solid #ffb74d;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-replay-btn:hover {
+      background: #ffe0b2;
+    }
+
+    /* 4題結束總結彈跳視窗 */
+    .summary-card {
+      background: #ffffff;
+      border-radius: 36px;
+      padding: 36px 48px;
+      max-width: 520px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.8);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 6px solid #ffd54f;
+    }
+
+    .modal-overlay.show .summary-card {
+      transform: scale(1);
+    }
+
+    .summary-trophy {
+      font-size: 5rem;
+      margin-bottom: 8px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    .summary-title {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ff6f00;
+      margin-bottom: 6px;
+    }
+
+    .summary-stars-row {
+      font-size: 3rem;
+      color: #ffb300;
+      margin: 10px 0 16px;
+    }
+
+    .summary-stats {
+      background: #fff8e1;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 24px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #5d4037;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部資訊與控制欄 (依要求取消中英語言選單，保留純廣東話/繁體中文) -->
+  <header>
+    <div class="header-left">
+      <!-- 返回主頁 HOME 鍵 (依 math_game_add.html 規格) -->
+      <button onclick="goToHome()" class="home-btn" title="返回遊戲大廳主頁">
+        <i class="fa-solid fa-house"></i>
+        <span>返回主頁</span>
+      </button>
+
+      <div class="brand-title">
+        <span>🧩</span>
+        <span>數感大冒險（數字拆解）</span>
+        <span class="level-badge">難度 2</span>
+      </div>
+    </div>
+
+    <!-- 當前題數進度與語音按鈕 -->
+    <div class="status-group">
+      <div class="progress-track" id="progress-track" title="當前進度">
+        <!-- 4 題進度點由 JS 動態生成 -->
+      </div>
+      <button class="sound-btn" id="btn-voice-toggle" onclick="toggleVoice()" title="切換語音/重播引導">🔊</button>
+    </div>
+  </header>
+
+  <!-- 遊戲視窗主體 -->
+  <main>
+    <!-- 動態主題背景 SVG 呈現層 -->
+    <div class="bg-scenery-container" id="bg-scenery-container"></div>
+
+    <!-- 遊戲前景操作層 -->
+    <div class="game-content-layer">
+      <!-- 頂部提示引導語音氣泡 -->
+      <div class="prompt-banner" id="prompt-banner">
+        <span class="prompt-speaker" onclick="speakCurrentPrompt()">📢</span>
+        <span id="prompt-text">載入題目中...</span>
+      </div>
+
+      <!-- 主遊戲雙欄操作區 (完全比照 math_game_add.html concrete-container) -->
+      <div class="concrete-container" id="concrete-container">
+        <!-- 左側主遊戲區（算式組合放置板） -->
+        <div class="drop-play-area" id="concrete-drop-area">
+          <div class="concrete-left-topbar">
+            <div class="formula-badge-left" id="slots-main-title">找出所有的加法組合</div>
+            <div class="live-counter-badge" id="slots-live-counter">需找出 2 組</div>
+          </div>
+
+          <!-- 動態生成的組合算式列表 (保證每次題目出現時為全空初始化) -->
+          <div class="slots-scroll-wrapper" id="slots-scroll-wrapper">
+            <!-- 由 JS 依目標 N 動態生成 [N/2] 組空白算式槽 -->
+          </div>
+        </div>
+
+        <!-- 右側：目標指示區 + 回答按鈕 -->
+        <div class="target-action-card">
+          <div class="target-header-title" id="target-header-title">🎯 目標數字</div>
+          <div class="target-huge-number" id="target-huge-number">5</div>
+          <div class="target-theme-label" id="target-theme-label">湊出這個數！</div>
+
+          <div style="width: 100%;">
+            <!-- 綠色確認回答按鈕 (填滿前 Disable，填滿後解鎖) -->
+            <button class="btn-submit-answer" id="btn-submit-answer" onclick="submitAnswers()" disabled>
+              <span>✨</span>
+              <span id="btn-submit-text">回答</span>
+              <span>✨</span>
+            </button>
+            <div style="text-align: center;">
+              <button class="btn-reset-light" onclick="resetCurrentQuestion()">清空所有空格 ↺</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底端籌碼庫 (數字卡片庫：提供 1 至 10 卡片) -->
+        <div class="reservoir-shelf">
+          <div class="reservoir-hint">
+            <span class="reservoir-hint-title" id="dock-title">數字卡片庫</span>
+            <span class="reservoir-hint-sub" id="dock-sub">點擊放入空格，或拖曳放入</span>
+          </div>
+
+          <div class="reservoir-items-row" id="reservoir-items-row">
+            <!-- 1 到 10 的數字卡片 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 懸浮飛行鬼影 (用於手勢拖曳) -->
+  <div class="drag-ghost" id="drag-ghost">
+    <span class="chip-number" id="ghost-num">1</span>
+    <span class="chip-emoji" id="ghost-emoji">🍎</span>
+  </div>
+
+  <!-- 全螢幕彩帶動畫 Canvas -->
+  <canvas id="celebration-canvas"></canvas>
+
+  <!-- =======================================================
+       正確答對後的彈出視窗：列出所有加數組合給小孩重溫 + 下一題按鈕
+       ======================================================= -->
+  <div class="modal-overlay" id="review-modal">
+    <div class="review-card">
+      <div class="review-trophy">🎉</div>
+      <div class="review-title" id="review-modal-title">太棒了！答對了！</div>
+      <div class="review-subtitle" id="review-modal-subtitle">一起來重溫這幾個加數組合：</div>
+
+      <!-- 加數組合清單展示區 -->
+      <div class="review-pairs-box" id="review-pairs-container">
+        <!-- JS 動態插入組合卡片 -->
+      </div>
+
+      <!-- 操作按鈕：再聽一次語音 + 下一題按鈕 -->
+      <div class="modal-btn-row">
+        <button class="modal-replay-btn" onclick="replaySuccessSpeech()">
+          <span>🔊</span>
+          <span>再聽一次</span>
+        </button>
+        <button class="modal-primary-btn" id="btn-modal-next" onclick="goToNextQuestion()">
+          <span>下一題 🚀</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 題完成結算彈跳視窗 -->
+  <div class="modal-overlay" id="summary-modal">
+    <div class="summary-card">
+      <div class="summary-trophy">🏆</div>
+      <div class="summary-title" id="modal-summary-title">數感小天才！大獲全勝！</div>
+      <div class="summary-stars-row">⭐⭐⭐⭐</div>
+      <div class="summary-stats" id="summary-stats-content">
+        成功挑戰 4 題數字拆解！<br>
+        掌握了所有加法互補組合與關鍵湊十法！
+      </div>
+      <div class="modal-btn-row">
+        <button class="modal-primary-btn" onclick="restartRound()">再玩一輪 🌟</button>
+        <button class="modal-secondary-btn" onclick="goToHome()">返回主頁 🏠</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- 返回主頁大廳 (index.html) ---
+    function goToHome() {
+      window.location.href = 'index.html';
+    }
+
+    /* ==========================================================
+       1. 音效合成引擎 (Web Audio API - 零外部檔案依賴)
+       ========================================================== */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playPop() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const now = this.ctx.currentTime;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(500, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.08);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      }
+
+      playSuccessFanfare() {
+        if (this.muted) return;
+        this.init();
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          const now = this.ctx.currentTime + idx * 0.09;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.28, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.28);
+        });
+      }
+
+      playBoing() {
+        if (this.muted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(280, now);
+        osc.frequency.linearRampToValueAtTime(130, now + 0.22);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    /* ==========================================================
+       2. 語音播報系統 (Web Speech API - 防 GC 中斷與廣東話女性親切發音)
+       ========================================================== */
+    class SpeechSystem {
+      constructor() {
+        this.synth = window.speechSynthesis || null;
+        this.enabled = true;
+        this.voice = null;
+        this.activeUtterance = null; // 防 GC 垃圾回收中斷播音
+        this.lastSpokenText = '';
+        this.initVoices();
+      }
+
+      initVoices() {
+        if (!this.synth) return;
+        const load = () => {
+          const voices = this.synth.getVoices();
+          if (!voices || voices.length === 0) return;
+
+          const isFemale = (name) => {
+            const lower = name.toLowerCase();
+            const femaleKw = ['female', 'woman', 'girl', 'sin-ji', 'sinji', 'hiu', 'ting', 'mei', 'xiao', 'yating', 'hanhan', 'chen', 'yu', 'tracy', '粵語', 'siri'];
+            const maleKw = ['male', 'man', 'boy', 'danny', 'kang', 'yunxi', 'yunjian', 'zhiwei'];
+            if (maleKw.some(k => lower.includes(k))) return false;
+            return femaleKw.some(k => lower.includes(k));
+          };
+
+          // 優先選取廣東話 (zh-HK / yue) 女性語音，次選繁中 (zh-TW)，再選普通話
+          let selected = voices.find(v => (v.lang.includes('zh-HK') || v.lang.includes('yue')) && isFemale(v.name))
+            || voices.find(v => v.lang.includes('zh-HK') || v.lang.includes('yue'))
+            || voices.find(v => v.lang.includes('zh-TW') && isFemale(v.name))
+            || voices.find(v => v.lang.includes('zh-TW'))
+            || voices.find(v => v.lang.includes('zh'));
+
+          this.voice = selected || null;
+        };
+
+        load();
+        if (this.synth.onvoiceschanged !== undefined) {
+          this.synth.onvoiceschanged = load;
+        }
+      }
+
+      speak(text, onEndCallback = null) {
+        if (!this.enabled || !this.synth) {
+          if (onEndCallback) onEndCallback();
+          return;
+        }
+        this.synth.cancel();
+        this.lastSpokenText = text;
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        this.activeUtterance = utterance; // 掛載在物件避免被瀏覽器 GC 回收
+
+        if (this.voice) {
+          utterance.voice = this.voice;
+          utterance.lang = this.voice.lang;
+        } else {
+          utterance.lang = 'zh-HK';
+        }
+
+        utterance.rate = 0.90; // 適中親切語速
+        utterance.pitch = 1.30; // 親切甜美幼師音調
+
+        let callbackTriggered = false;
+        const triggerCallback = () => {
+          if (!callbackTriggered) {
+            callbackTriggered = true;
+            if (onEndCallback) onEndCallback();
+          }
+        };
+
+        utterance.onend = triggerCallback;
+        utterance.onerror = triggerCallback;
+
+        this.synth.speak(utterance);
+      }
+
+      replayLast() {
+        if (this.lastSpokenText) {
+          this.speak(this.lastSpokenText);
+        }
+      }
+
+      stop() {
+        if (this.synth) this.synth.cancel();
+      }
+    }
+
+    const speech = new SpeechSystem();
+
+    /* ==========================================================
+       3. 繁體中文（廣東話）規範文案
+       ========================================================== */
+    const TEXTS = {
+      guide: (n) => `請找出 ${n} 的所有加數組合！`,
+      duplicate: '這組已經有了，試試其他組合吧！',
+      sumError: '有些相加不等於目標數字喔，再算算看！',
+      summary: (n, pairs) => {
+        const str = pairs.map(p => `${p[0]} 加 ${p[1]}`).join('，也可以是 ');
+        return `太棒了！${n} 可以是 ${str}。`;
+      },
+      q4Summary: '太厲害了！你完成了最重要的湊十法！',
+      slotsMainTitle: '找出所有的加法組合',
+      needPairs: (need, filled) => `需找出 ${need} 組（已填 ${filled}/${need}）`,
+      targetHeader: '🎯 目標數字',
+      targetLabelDefault: '湊出這個數！',
+      targetLabelQ4: '🌟 關鍵挑戰：湊十法！',
+      btnSubmit: '回答'
+    };
+
+    /* ==========================================================
+       4. 主題向量背景 SVG (水果農莊)
+       ========================================================== */
+    const THEMES = [
+      {
+        id: 'fruit',
+        name: '水果農莊',
+        emojis: ['🍎', '🍊', '🍓', '🍇', '🍉', '🍌', '🍒', '🍍', '🍑', '🍐'],
+        renderBackground: () => `
+          <svg viewBox="0 0 1200 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="sky-fruit" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#b3e5fc"/>
+                <stop offset="60%" stop-color="#e1f5fe"/>
+                <stop offset="100%" stop-color="#f1f8e9"/>
+              </linearGradient>
+              <linearGradient id="hill-far" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#aed581"/>
+                <stop offset="100%" stop-color="#81c784"/>
+              </linearGradient>
+              <linearGradient id="hill-near" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#81c784"/>
+                <stop offset="100%" stop-color="#4caf50"/>
+              </linearGradient>
+            </defs>
+            <rect width="1200" height="800" fill="url(#sky-fruit)"/>
+            <circle cx="1020" cy="120" r="60" fill="#fff59d" opacity="0.85"/>
+            <circle cx="1020" cy="120" r="45" fill="#fbc02d"/>
+            <path d="M180,100 Q200,70 230,85 Q260,65 290,85 Q320,80 330,105 Q300,125 180,110 Z" fill="#ffffff" opacity="0.85"/>
+            <path d="M720,130 Q740,105 770,115 Q800,95 830,118 Q860,115 870,135 Q840,155 720,140 Z" fill="#ffffff" opacity="0.8"/>
+            <path d="M0,520 Q300,380 650,480 T1200,430 L1200,800 L0,800 Z" fill="url(#hill-far)"/>
+            <g transform="translate(60, 360)">
+              <rect x="35" y="80" width="20" height="100" fill="#795548" rx="6"/>
+              <circle cx="45" cy="80" r="55" fill="#43a047"/>
+              <circle cx="20" cy="65" r="35" fill="#66bb6a"/>
+              <circle cx="70" cy="70" r="35" fill="#2e7d32"/>
+            </g>
+            <path d="M0,580 Q350,500 750,570 T1200,540 L1200,800 L0,800 Z" fill="url(#hill-near)"/>
+          </svg>
+        `
+      }
+    ];
+
+    /* ==========================================================
+       5. 題庫生成器 (固定4題：Q1~Q3 隨機不重複 [2,9]，Q4 固定為 10)
+       ========================================================== */
+    class QuestionGenerator {
+      static generateRound() {
+        const pool = [2, 3, 4, 5, 6, 7, 8, 9];
+        // Fisher-Yates 洗牌
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+        const targets = [pool[0], pool[1], pool[2], 10];
+        return targets.map((N, idx) => ({
+          id: idx + 1,
+          targetNumber: N,
+          expectedPairsCount: Math.floor(N / 2),
+          isQ4: (idx === 3 && N === 10)
+        }));
+      }
+    }
+
+    /* ==========================================================
+       6. 全域遊戲狀態與初始化
+       ========================================================== */
+    let questions = [];
+    let currentQuestionIndex = 0;
+    let isTransitioning = false;
+
+    // 核心數據：slotsData 陣列儲存當前題目每一組槽位的值
+    let slotsData = [];
+
+    // 彩帶 Canvas
+    const canvas = document.getElementById('celebration-canvas');
+    const ctx = canvas.getContext('2d');
+    let confettiParticles = [];
+    let confettiAnimationId = null;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function triggerConfetti() {
+      confettiParticles = [];
+      const colors = ['#ff5722', '#ffeb3b', '#4caf50', '#00bcd4', '#e91e63', '#9c27b0'];
+      for (let i = 0; i < 90; i++) {
+        confettiParticles.push({
+          x: canvas.width / 2 + (Math.random() - 0.5) * 260,
+          y: canvas.height / 2 + (Math.random() - 0.5) * 120,
+          vx: (Math.random() - 0.5) * 18,
+          vy: (Math.random() - 0.7) * 20,
+          size: Math.random() * 12 + 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 12,
+          opacity: 1
+        });
+      }
+
+      if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+      renderConfetti();
+    }
+
+    function renderConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let alive = false;
+      confettiParticles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.45;
+        p.rotation += p.vRot;
+        p.opacity -= 0.012;
+
+        if (p.opacity > 0) {
+          alive = true;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = Math.max(0, p.opacity);
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.restore();
+        }
+      });
+
+      if (alive) {
+        confettiAnimationId = requestAnimationFrame(renderConfetti);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    /* ==========================================================
+       7. 題目載入與「加數組合框乾淨初始化」
+       ========================================================== */
+    function loadQuestion(index) {
+      if (index >= questions.length) {
+        showFinalSummary();
+        return;
+      }
+
+      currentQuestionIndex = index;
+      isTransitioning = false;
+      renderProgressBar();
+
+      const q = questions[currentQuestionIndex];
+      const N = q.targetNumber;
+      const expectedCount = q.expectedPairsCount;
+
+      // --- 【重點】每次題目載入時，無條件生成全空槽位，徹底初始化 ---
+      slotsData = [];
+      for (let i = 0; i < expectedCount; i++) {
+        slotsData.push({
+          a: null,
+          b: null
+        });
+      }
+
+      // 切換背景 SVG
+      document.getElementById('bg-scenery-container').innerHTML = THEMES[0].renderBackground();
+
+      // 更新右側目標看板
+      document.getElementById('target-huge-number').textContent = N;
+      document.getElementById('target-header-title').textContent = TEXTS.targetHeader;
+      document.getElementById('target-theme-label').textContent = q.isQ4 ? TEXTS.targetLabelQ4 : TEXTS.targetLabelDefault;
+
+      // 更新引導語音氣泡文字並播放語音
+      const promptStr = TEXTS.guide(N);
+      document.getElementById('prompt-text').textContent = promptStr;
+      speech.speak(promptStr);
+
+      // 渲染空白算式槽
+      renderFormulaSlots();
+
+      // 渲染底部卡片托盤
+      renderReservoirShelf();
+
+      // 更新按鈕與計數標籤
+      updateLiveCounterAndSubmitButton();
+    }
+
+    // 渲染加數組合算式列 (保證完全清空舊 DOM)
+    function renderFormulaSlots() {
+      const wrapper = document.getElementById('slots-scroll-wrapper');
+      wrapper.innerHTML = '';
+
+      const q = questions[currentQuestionIndex];
+      const N = q.targetNumber;
+
+      slotsData.forEach((slot, rowIdx) => {
+        const row = document.createElement('div');
+        row.className = 'formula-row';
+        row.id = `formula-row-${rowIdx}`;
+
+        // 序號 (1., 2. ...)
+        const indexTag = document.createElement('div');
+        indexTag.className = 'row-index-tag';
+        indexTag.textContent = `${rowIdx + 1}.`;
+
+        // 槽位 A
+        const slotA = createSlotElement(rowIdx, 'a', slot.a);
+
+        // 加號 (+)
+        const plus = document.createElement('div');
+        plus.className = 'slot-op-plus';
+        plus.textContent = '+';
+
+        // 槽位 B
+        const slotB = createSlotElement(rowIdx, 'b', slot.b);
+
+        // 等號 (=)
+        const equal = document.createElement('div');
+        equal.className = 'slot-op-equal';
+        equal.textContent = '=';
+
+        // 目標數字 (N)
+        const targetBadge = document.createElement('div');
+        targetBadge.className = 'slot-target-badge';
+        targetBadge.textContent = N;
+
+        row.appendChild(indexTag);
+        row.appendChild(slotA);
+        row.appendChild(plus);
+        row.appendChild(slotB);
+        row.appendChild(equal);
+        row.appendChild(targetBadge);
+
+        wrapper.appendChild(row);
+      });
+    }
+
+    // 生成單一可點擊與拖放的槽位
+    function createSlotElement(rowIdx, pos, value) {
+      const slotEl = document.createElement('div');
+      slotEl.className = 'slot-box';
+      slotEl.dataset.row = rowIdx;
+      slotEl.dataset.pos = pos;
+
+      if (value !== null) {
+        slotEl.classList.add('filled');
+        slotEl.textContent = value;
+
+        // 附帶主題水果 emoji
+        const emoji = THEMES[0].emojis[(value - 1) % THEMES[0].emojis.length];
+        const sub = document.createElement('span');
+        sub.className = 'slot-emoji';
+        sub.textContent = emoji;
+        slotEl.appendChild(sub);
+      } else {
+        slotEl.innerHTML = '<span style="color:#cfd8dc; font-size:1.4rem;">?</span>';
+      }
+
+      // 點擊槽位：若已有數字則收回/移除
+      slotEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isTransitioning) return;
+        if (slotsData[rowIdx][pos] !== null) {
+          slotsData[rowIdx][pos] = null;
+          sound.playPop();
+          renderFormulaSlots();
+          updateLiveCounterAndSubmitButton();
+        }
+      });
+
+      // 拖曳放置目標
+      slotEl.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        slotEl.classList.add('drag-over');
+      });
+      slotEl.addEventListener('dragleave', () => {
+        slotEl.classList.remove('drag-over');
+      });
+      slotEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        slotEl.classList.remove('drag-over');
+        if (isTransitioning) return;
+        const valStr = e.dataTransfer.getData('text/plain');
+        if (valStr) {
+          const val = parseInt(valStr, 10);
+          setSlotValue(rowIdx, pos, val);
+        }
+      });
+
+      return slotEl;
+    }
+
+    // 填入數值到指定槽位
+    function setSlotValue(rowIdx, pos, val) {
+      slotsData[rowIdx][pos] = val;
+      sound.playPop();
+      renderFormulaSlots();
+      updateLiveCounterAndSubmitButton();
+    }
+
+    // 尋找第一個空位填入 (點擊卡片時自動流暢入槽)
+    function autoFillFirstEmptySlot(val) {
+      if (isTransitioning) return false;
+      for (let r = 0; r < slotsData.length; r++) {
+        if (slotsData[r].a === null) {
+          setSlotValue(r, 'a', val);
+          return true;
+        }
+        if (slotsData[r].b === null) {
+          setSlotValue(r, 'b', val);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // 檢查已填組數與解鎖提交按鈕
+    function updateLiveCounterAndSubmitButton() {
+      const q = questions[currentQuestionIndex];
+      const need = q.expectedPairsCount;
+      let filledRows = 0;
+      let allFilled = true;
+
+      slotsData.forEach(slot => {
+        if (slot.a !== null && slot.b !== null) {
+          filledRows++;
+        }
+        if (slot.a === null || slot.b === null) {
+          allFilled = false;
+        }
+      });
+
+      document.getElementById('slots-main-title').textContent = TEXTS.slotsMainTitle;
+      document.getElementById('slots-live-counter').textContent = TEXTS.needPairs(need, filledRows);
+
+      const submitBtn = document.getElementById('btn-submit-answer');
+      submitBtn.disabled = !allFilled;
+    }
+
+    // 清空當前題目的所有空格
+    function resetCurrentQuestion() {
+      if (isTransitioning) return;
+      sound.playBoing();
+      slotsData.forEach(slot => {
+        slot.a = null;
+        slot.b = null;
+      });
+      renderFormulaSlots();
+      updateLiveCounterAndSubmitButton();
+    }
+
+    // 渲染底端數字卡片庫 (1 到 10)
+    function renderReservoirShelf() {
+      const shelfRow = document.getElementById('reservoir-items-row');
+      shelfRow.innerHTML = '';
+
+      for (let num = 1; num <= 10; num++) {
+        const chip = document.createElement('div');
+        chip.className = 'reservoir-chip';
+        chip.draggable = true;
+
+        const emoji = THEMES[0].emojis[(num - 1) % THEMES[0].emojis.length];
+        chip.innerHTML = `
+          <span class="chip-number">${num}</span>
+          <span class="chip-emoji">${emoji}</span>
+        `;
+
+        chip.addEventListener('click', () => {
+          autoFillFirstEmptySlot(num);
+        });
+
+        chip.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', num.toString());
+          sound.init();
+        });
+
+        setupPointerDrag(chip, num, emoji);
+
+        shelfRow.appendChild(chip);
+      }
+    }
+
+    // 手勢觸控拖放處理
+    const dragGhost = document.getElementById('drag-ghost');
+    let activePointerId = null;
+
+    function setupPointerDrag(chip, num, emoji) {
+      let isDragging = false;
+      let startX = 0, startY = 0;
+
+      chip.addEventListener('pointerdown', (e) => {
+        if (isTransitioning) return;
+        sound.init();
+        activePointerId = e.pointerId;
+        chip.setPointerCapture(e.pointerId);
+        isDragging = false;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        document.getElementById('ghost-num').textContent = num;
+        document.getElementById('ghost-emoji').textContent = emoji;
+        dragGhost.style.left = `${e.clientX}px`;
+        dragGhost.style.top = `${e.clientY}px`;
+      });
+
+      chip.addEventListener('pointermove', (e) => {
+        if (activePointerId !== e.pointerId) return;
+        if (!isDragging && (Math.hypot(e.clientX - startX, e.clientY - startY) > 8)) {
+          isDragging = true;
+          dragGhost.style.display = 'flex';
+        }
+
+        if (isDragging) {
+          dragGhost.style.left = `${e.clientX}px`;
+          dragGhost.style.top = `${e.clientY}px`;
+
+          const targetSlot = getSlotUnderPointer(e.clientX, e.clientY);
+          document.querySelectorAll('.slot-box').forEach(s => s.classList.remove('drag-over'));
+          if (targetSlot) {
+            targetSlot.classList.add('drag-over');
+          }
+        }
+      });
+
+      const handlePointerEnd = (e) => {
+        if (activePointerId !== e.pointerId) return;
+        activePointerId = null;
+        dragGhost.style.display = 'none';
+        document.querySelectorAll('.slot-box').forEach(s => s.classList.remove('drag-over'));
+
+        if (isDragging) {
+          const targetSlot = getSlotUnderPointer(e.clientX, e.clientY);
+          if (targetSlot) {
+            const r = parseInt(targetSlot.dataset.row, 10);
+            const p = targetSlot.dataset.pos;
+            setSlotValue(r, p, num);
+          }
+        }
+      };
+
+      chip.addEventListener('pointerup', handlePointerEnd);
+      chip.addEventListener('pointercancel', handlePointerEnd);
+    }
+
+    function getSlotUnderPointer(x, y) {
+      const slots = document.querySelectorAll('.slot-box');
+      for (const slot of slots) {
+        const rect = slot.getBoundingClientRect();
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+          return slot;
+        }
+      }
+      return null;
+    }
+
+    /* ==========================================================
+       8. 檢查作答與「正確後彈出重溫組合視窗」
+       ========================================================== */
+    function submitAnswers() {
+      if (isTransitioning) return;
+      const q = questions[currentQuestionIndex];
+      const N = q.targetNumber;
+
+      let hasError = false;
+      let hasDuplicate = false;
+      const seenPairs = new Map();
+
+      // 1. 檢查每組總和
+      slotsData.forEach((slot, rowIdx) => {
+        const rowEl = document.getElementById(`formula-row-${rowIdx}`);
+        const a = slot.a;
+        const b = slot.b;
+        const isSumCorrect = (a > 0 && b > 0 && (a + b === N));
+
+        if (!isSumCorrect) {
+          hasError = true;
+          rowEl.classList.add('shake-error', 'row-error');
+          setTimeout(() => rowEl.classList.remove('shake-error'), 450);
+        } else {
+          rowEl.classList.remove('row-error');
+          const pairKey = `${Math.min(a, b)}-${Math.max(a, b)}`;
+          if (!seenPairs.has(pairKey)) {
+            seenPairs.set(pairKey, []);
+          }
+          seenPairs.get(pairKey).push(rowIdx);
+        }
+      });
+
+      // 2. 檢查重複組合
+      seenPairs.forEach((rowIndices, pairKey) => {
+        if (rowIndices.length > 1) {
+          hasDuplicate = true;
+          hasError = true;
+          rowIndices.forEach(idx => {
+            const rowEl = document.getElementById(`formula-row-${idx}`);
+            rowEl.classList.add('shake-error', 'row-error');
+            setTimeout(() => rowEl.classList.remove('shake-error'), 450);
+          });
+        }
+      });
+
+      // 3. 回饋與處理
+      if (hasError) {
+        sound.playBoing();
+        if (hasDuplicate) {
+          speech.speak(TEXTS.duplicate);
+          document.getElementById('prompt-text').textContent = `💡 ${TEXTS.duplicate}`;
+        } else {
+          speech.speak(TEXTS.sumError);
+          document.getElementById('prompt-text').textContent = `⚠️ ${TEXTS.sumError}`;
+        }
+      } else {
+        // --- 【重點修正】答案正確：不自動搶跳下一題，彈出視窗讓小孩重溫並手動按下一題 ---
+        isTransitioning = true;
+        sound.playSuccessFanfare();
+        triggerConfetti();
+
+        // 標記全部組合為綠色成功
+        document.querySelectorAll('.formula-row').forEach(row => row.classList.add('row-success'));
+
+        const pairs = slotsData.map(s => [s.a, s.b]);
+        const successSpeech = q.isQ4 ? TEXTS.q4Summary : TEXTS.summary(N, pairs);
+        document.getElementById('prompt-text').textContent = `🎉 ${successSpeech}`;
+
+        // 播報完整語音 (語音播放的同時彈出重溫視窗，小孩可以從容聽完)
+        speech.speak(successSpeech);
+
+        // 彈出重溫視窗
+        showReviewModal(N, pairs, q.isQ4);
+      }
+    }
+
+    // 彈出重溫加數組合視窗
+    function showReviewModal(N, pairs, isQ4) {
+      const modal = document.getElementById('review-modal');
+      const title = document.getElementById('review-modal-title');
+      const subtitle = document.getElementById('review-modal-subtitle');
+      const container = document.getElementById('review-pairs-container');
+      const nextBtn = document.getElementById('btn-modal-next');
+
+      if (isQ4) {
+        title.textContent = '🌟 太厲害了！達成湊十法！';
+        subtitle.textContent = '一起重溫 10 的所有互補組合：';
+      } else {
+        title.textContent = '🎉 太棒了！全部答對了！';
+        subtitle.textContent = `一起來重溫 ${N} 的所有加數組合：`;
+      }
+
+      // 生成所有加數組合的漂亮清單
+      container.innerHTML = '';
+      pairs.forEach(([a, b]) => {
+        const pill = document.createElement('div');
+        pill.className = 'review-pair-pill';
+        pill.innerHTML = `
+          <span class="pill-num">${a}</span>
+          <span class="pill-op">+</span>
+          <span class="pill-num">${b}</span>
+          <span class="pill-equal">=</span>
+          <span class="pill-target">${N}</span>
+        `;
+        container.appendChild(pill);
+      });
+
+      // 設定按鈕文字 (如果是第 4 題，則顯示「查看總結 🏆」)
+      if (currentQuestionIndex >= questions.length - 1) {
+        nextBtn.innerHTML = `<span>查看總結 🏆</span>`;
+      } else {
+        nextBtn.innerHTML = `<span>下一題 🚀</span>`;
+      }
+
+      // 顯示彈窗
+      modal.classList.add('show');
+    }
+
+    // 重聽當前成功組合語音
+    function replaySuccessSpeech() {
+      speech.replayLast();
+    }
+
+    // 點擊彈窗中的「下一題」按鈕
+    function goToNextQuestion() {
+      // 關閉彈窗
+      document.getElementById('review-modal').classList.remove('show');
+      
+      // 進入下一題 (或顯示總結)
+      if (currentQuestionIndex < questions.length - 1) {
+        loadQuestion(currentQuestionIndex + 1);
+      } else {
+        showFinalSummary();
+      }
+    }
+
+    /* ==========================================================
+       9. 進度條與全域控制
+       ========================================================== */
+    function renderProgressBar() {
+      const track = document.getElementById('progress-track');
+      track.innerHTML = '';
+      for (let i = 0; i < questions.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'star-dot';
+        if (i === 3) dot.classList.add('special-q4');
+
+        if (i < currentQuestionIndex) {
+          dot.classList.add('completed');
+          dot.textContent = '★';
+        } else if (i === currentQuestionIndex) {
+          dot.classList.add('current');
+          dot.textContent = (i === 3 ? '★' : i + 1);
+        } else {
+          dot.textContent = (i === 3 ? '★' : i + 1);
+        }
+        track.appendChild(dot);
+      }
+    }
+
+    function toggleVoice() {
+      speech.enabled = !speech.enabled;
+      sound.muted = !speech.enabled;
+      const btn = document.getElementById('btn-voice-toggle');
+      btn.textContent = speech.enabled ? '🔊' : '🔇';
+      if (speech.enabled) {
+        speakCurrentPrompt();
+      } else {
+        speech.stop();
+      }
+    }
+
+    function speakCurrentPrompt() {
+      const text = document.getElementById('prompt-text').textContent;
+      speech.speak(text);
+    }
+
+    function showFinalSummary() {
+      isTransitioning = true;
+      sound.playSuccessFanfare();
+      triggerConfetti();
+
+      const modal = document.getElementById('summary-modal');
+      modal.classList.add('show');
+      speech.speak('太厲害了！你成功掌握了所有數字拆解與湊十法，是個超級數感小天才！');
+    }
+
+    function restartRound() {
+      document.getElementById('summary-modal').classList.remove('show');
+      document.getElementById('review-modal').classList.remove('show');
+      questions = QuestionGenerator.generateRound();
+      loadQuestion(0);
+    }
+
+    // 啟動初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      questions = QuestionGenerator.generateRound();
+      loadQuestion(0);
+    });
+  </script>
+</body>
+</html>
