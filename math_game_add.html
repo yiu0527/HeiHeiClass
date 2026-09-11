@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>數感大冒險 - 10以內湊數與加法</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary-color: #ff7043;
@@ -36,9 +37,10 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
-    /* 頂部導航與進度列 */
+    /* 頂部導航與進度列（浮在最頂，參考 seasons.html） */
     header {
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(8px);
@@ -47,8 +49,11 @@
       align-items: center;
       justify-content: space-between;
       box-shadow: var(--shadow-sm);
-      z-index: 30;
-      position: relative;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .brand-title {
