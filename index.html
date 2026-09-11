@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>禧禧小遊戲樂園 🎈 | Kids Mini Game Hub</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- PapaParse 輕量級純文字 CSV 解析器 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <!-- Canvas Confetti 慶祝特效 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'hub-blue': '#3B82F6',
+                        'hub-sky': '#0EA5E9',
+                        'hub-pink': '#EC4899',
+                        'hub-yellow': '#F59E0B',
+                        'hub-amber': '#FCD34D',
+                        'hub-green': '#10B981',
+                        'hub-purple': '#8B5CF6',
+                        'hub-orange': '#F97316'
+                    },
+                    boxShadow: {
+                        'card-pop': '0 12px 28px -5px rgba(0,0,0,0.12), 0 8px 10px -6px rgba(0,0,0,0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Fredoka', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef3c7 100%);
+            min-height: 100vh;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .btn-3d {
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.16);
+        }
+
+        .btn-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.16);
+        }
+
+        .btn-3d:active {
+            transform: translateY(4px) !important;
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.16) !important;
+        }
+
+        .tab-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .tab-btn:active {
+            transform: scale(0.96);
+        }
+
+        .tab-btn.is-active {
+            background: linear-gradient(135deg, #2563EB 0%, #4F46E5 100%) !important;
+            color: #FFFFFF !important;
+            border-color: #1D4ED8 !important;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35) !important;
+            transform: scale(1.04);
+        }
+
+        .game-card {
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .animate-float {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        .animate-pop-in {
+            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-gray-800 antialiased selection:bg-hub-yellow selection:text-white">
+
+    <!-- 頂部導航列 Header -->
+    <header class="w-full bg-white/85 backdrop-blur-md sticky top-0 z-40 border-b-4 border-amber-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-tr from-hub-yellow to-hub-pink rounded-2xl flex items-center justify-center text-2xl shadow-md animate-float">
+                    🎮
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 bg-clip-text text-transparent tracking-tight">
+                        禧禧小遊戲樂園
+                    </h1>
+                    <p class="text-xs sm:text-sm font-bold text-gray-500 flex items-center gap-1.5">
+                        <span>✨ 小朋友專屬趣味學習天地</span>
+                        <span id="sheetConnectionBadge" class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                            試算表已連線
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="manualRefresh()" title="從試算表即時重新整理" class="btn-3d bg-white text-hub-sky hover:bg-sky-50 font-bold px-3.5 py-2 rounded-2xl border-2 border-sky-200 flex items-center gap-2 text-sm sm:text-base">
+                    <i id="refreshIcon" class="fa-solid fa-rotate text-lg"></i>
+                    <span class="hidden md:inline">即時更新</span>
+                </button>
+
+                <button onclick="openConfigModal()" title="設定 Google 試算表連結" class="btn-3d bg-white text-hub-purple hover:bg-purple-50 font-bold px-3.5 py-2 rounded-2xl border-2 border-purple-200 flex items-center gap-2 text-sm sm:text-base">
+                    <i class="fa-solid fa-table text-lg"></i>
+                    <span class="hidden md:inline">試算表設定</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 分類過濾與搜尋條 -->
+    <div class="max-w-6xl mx-auto px-4 py-4 w-full flex flex-col sm:flex-row justify-between items-center gap-4">
+        <!-- 分類標籤按鈕區 -->
+        <div id="categoryTabs" class="flex flex-wrap items-center gap-2.5"></div>
+
+        <!-- 搜尋欄 -->
+        <div class="relative w-full sm:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="text" id="searchInput" oninput="handleSearch()" placeholder="搜尋遊戲名稱或主題..." 
+                   class="w-full pl-10 pr-4 py-2 rounded-2xl border-2 border-gray-200 focus:border-hub-blue focus:outline-none bg-white font-medium text-sm transition-colors shadow-inner">
+        </div>
+    </div>
+
+    <!-- 目前篩選提示條 -->
+    <div id="filterStatusContainer" class="max-w-6xl mx-auto px-4 pb-2 w-full hidden">
+        <div class="flex items-center justify-between bg-blue-50/80 border border-blue-200 rounded-2xl px-4 py-2 text-xs sm:text-sm text-blue-900">
+            <div class="flex items-center gap-2">
+                <span class="font-bold">🎯 目前顯示：</span>
+                <span id="activeFilterText" class="font-black text-blue-700">全部遊戲</span>
+            </div>
+            <button onclick="selectCategory('ALL')" class="font-bold text-blue-600 hover:text-blue-800 underline flex items-center gap-1">
+                <i class="fa-solid fa-xmark"></i> 顯示全部
+            </button>
+        </div>
+    </div>
+
+    <!-- 主要遊戲列表 Container -->
+    <main class="max-w-6xl mx-auto px-4 py-2 flex-grow w-full">
+        <div id="loadingState" class="flex flex-col items-center justify-center py-16 hidden">
+            <div class="animate-spin text-5xl text-hub-blue mb-4">
+                <i class="fa-solid fa-circle-notch"></i>
+            </div>
+            <p class="text-xl font-bold text-gray-600">正在同步 Google 試算表...</p>
+        </div>
+
+        <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+        <div id="emptyState" class="hidden text-center py-16 bg-white/60 rounded-3xl border-2 border-dashed border-gray-300">
+            <div class="text-6xl mb-4">🔍</div>
+            <h3 class="text-2xl font-bold text-gray-700 mb-2">找不到符合的遊戲</h3>
+            <p class="text-gray-500 font-medium mb-4">請嘗試更換分類或點擊「顯示全部遊戲」</p>
+            <button onclick="selectCategory('ALL')" class="btn-3d bg-hub-blue text-white font-bold px-6 py-2 rounded-full">
+                顯示全部遊戲
+            </button>
+        </div>
+    </main>
+
+    <!-- 頁腳 Footer -->
+    <footer class="w-full bg-white/60 backdrop-blur-sm border-t border-gray-200 py-6 mt-10">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+            <div class="text-sm font-bold text-gray-500">
+                🎈 禧禧小遊戲樂園 • 開心玩，快樂學
+            </div>
+        </div>
+    </footer>
+
+    <!-- Google 試算表設定 Modal 彈窗 -->
+    <div id="configModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 sm:p-8 animate-pop-in border-4 border-amber-300">
+            <div class="flex justify-between items-center mb-5 border-b pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="text-3xl">⚙️</span>
+                    <h3 class="text-xl sm:text-2xl font-black text-gray-800">Google 試算表設定</h3>
+                </div>
+                <button onclick="closeConfigModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold p-1">
+                    ✕
+                </button>
+            </div>
+
+            <div class="space-y-4 text-sm text-gray-600">
+                <p class="leading-relaxed">
+                    本主頁已連接您的 Google 試算表發布連結：
+                </p>
+
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1.5">試算表發布網址 (CSV / XLSX)：</label>
+                    <input type="text" id="sheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv"
+                           class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-300 focus:border-blue-500 focus:outline-none font-mono text-xs text-gray-800 bg-gray-50">
+                </div>
+
+                <div class="bg-green-50 p-3.5 rounded-2xl border border-green-200 text-xs text-green-900 space-y-1">
+                    <div class="font-bold flex items-center gap-1.5 text-green-800">
+                        <i class="fa-solid fa-lightbulb"></i> 說明：
+                    </div>
+                    <ul class="list-disc list-inside space-y-1 text-green-900/90 pl-1">
+                        <li>在 Google 試算表新增遊戲後，發布網址約 1–2 分鐘內自動同步。</li>
+                        <li>點擊「即時更新」按鈕可手動強制刷新最新資料。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-3">
+                <button onclick="resetToDefaultSheet()" class="px-4 py-2 rounded-xl text-gray-500 hover:bg-gray-100 font-bold">
+                    恢復預設
+                </button>
+                <button onclick="saveSheetConfig()" class="btn-3d bg-hub-green text-white px-6 py-2.5 rounded-xl font-bold border-b-4 border-green-700 hover:bg-green-500">
+                    儲存並更新 💾
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 核心腳本 -->
+    <script>
+        const DEFAULT_PUBLISHED_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTZQ1EdB9OIXebPkjQbWRDA0gTZiyM_smuyuSfGLR20CziLnQN7v6yiJeN4yy_ZzrXX3PcAKOeRRyh6/pub?output=csv";
+        const CONFIG_KEY = "KIDS_GAME_HUB_SHEET_URL_V6";
+        const CACHE_KEY = "KIDS_GAME_HUB_DATA_CACHE_V6";
+
+        const DEFAULT_FALLBACK_GAMES = [
+            {
+                name: "Emoji 英文拼字遊戲",
+                file: "spelling_game.html",
+                emoji: "🔤",
+                category: "英文學習",
+                desc: "點擊可愛 Emoji 字母拼出單字，支援美式發音、音效與過關歡呼！",
+                status: "啟用"
+            },
+            {
+                name: "四季奇遇記：春夏秋冬",
+                file: "seasons.html",
+                emoji: "🌸",
+                category: "自然常識",
+                desc: "探索春夏秋冬四季故事、趣味貼紙畫布創作與 AI 說故事繪本！",
+                status: "啟用"
+            }
+        ];
+
+        let allGames = [];
+        let currentCategory = 'ALL';
+        let searchQuery = '';
+        let audioCtx = null;
+
+        function playChime(freq = 587.33, freqEnd = 880, duration = 0.2) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                const now = audioCtx.currentTime;
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+                osc.frequency.exponentialRampToValueAtTime(freqEnd, now + duration);
+
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + duration);
+            } catch (e) {}
+        }
+
+        function cleanStr(val, fallback = '') {
+            if (val === undefined || val === null) return fallback;
+            const s = String(val).replace(/[\r\n\t]/g, '').trim();
+            return s !== '' ? s : fallback;
+        }
+
+        // 智慧分類推斷
+        function smartInferCategoryAndEmoji(name, file, rawCategory, rawEmoji) {
+            let cat = cleanStr(rawCategory);
+            let emoji = cleanStr(rawEmoji);
+            const combinedText = (name + ' ' + file + ' ' + cat).toLowerCase();
+
+            if (!cat || cat === '學習遊戲' || cat === '通用小遊戲' || cat === '小遊戲') {
+                if (combinedText.includes('spelling') || combinedText.includes('emoji') || combinedText.includes('英文') || combinedText.includes('english') || combinedText.includes('單字') || combinedText.includes('abc') || combinedText.includes('word') || combinedText.includes('拼字')) {
+                    cat = '英文學習';
+                    if (!emoji || emoji === '🎮') emoji = '🔤';
+                } else if (combinedText.includes('season') || combinedText.includes('四季') || combinedText.includes('春夏秋冬') || combinedText.includes('常識') || combinedText.includes('自然') || combinedText.includes('科學') || combinedText.includes('nature') || combinedText.includes('science')) {
+                    cat = '自然常識';
+                    if (!emoji || emoji === '🎮') emoji = '🌸';
+                } else if (combinedText.includes('math') || combinedText.includes('數') || combinedText.includes('加減') || combinedText.includes('計數') || combinedText.includes('算術') || combinedText.includes('數字')) {
+                    cat = '趣味數學';
+                    if (!emoji || emoji === '🎮') emoji = '🔢';
+                } else if (combinedText.includes('sentence') || combinedText.includes('車') || combinedText.includes('重組') || combinedText.includes('語文') || combinedText.includes('中文') || combinedText.includes('句子') || combinedText.includes('garage')) {
+                    cat = '語文學習';
+                    if (!emoji || emoji === '🎮') emoji = '🚗';
+                } else {
+                    cat = '綜合學習';
+                    if (!emoji || emoji === '🎮') emoji = '🎯';
+                }
+            }
+
+            if (!emoji || emoji === '🎮') {
+                if (cat.includes('英文') || cat.toLowerCase().includes('english')) emoji = '🔤';
+                else if (cat.includes('自然') || cat.includes('常識') || cat.includes('科學')) emoji = '🌸';
+                else if (cat.includes('數')) emoji = '🔢';
+                else if (cat.includes('語文') || cat.includes('中文')) emoji = '🚗';
+                else emoji = '🎮';
+            }
+
+            return { category: cat, emoji: emoji };
+        }
+
+        function getActiveSheetUrl() {
+            let url = localStorage.getItem(CONFIG_KEY) || DEFAULT_PUBLISHED_URL;
+            if (url.includes('output=xlsx')) {
+                url = url.replace('output=xlsx', 'output=csv');
+            }
+            return url;
+        }
+
+        async function fetchCsvDirectOrProxy(url) {
+            try {
+                const res = await fetch(url);
+                if (res.ok) {
+                    const text = await res.text();
+                    if (text && text.trim().length > 0 && !text.includes('<!DOCTYPE html>')) {
+                        return text;
+                    }
+                }
+            } catch (e) {
+                console.warn("直連讀取 CSV 失敗，嘗試代理:", e);
+            }
+
+            try {
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                const resProxy = await fetch(proxyUrl);
+                if (resProxy.ok) {
+                    const text = await resProxy.text();
+                    if (text && text.trim().length > 0 && !text.includes('<!DOCTYPE html>')) {
+                        return text;
+                    }
+                }
+            } catch (proxyErr) {
+                console.warn("代理讀取 CSV 失敗:", proxyErr);
+            }
+
+            throw new Error("無法取得試算表內容");
+        }
+
+        function parseGamesFromCsvRows(rows) {
+            if (!rows || rows.length === 0) return [];
+
+            let headerRowIndex = -1;
+            for (let i = 0; i < rows.length; i++) {
+                const r = rows[i];
+                if (!Array.isArray(r)) continue;
+                for (let j = 0; j < r.length; j++) {
+                    const cell = cleanStr(r[j]).toLowerCase();
+                    if (cell.includes('名稱') || cell.includes('name') || cell.includes('title') || cell === '遊戲' || cell === '小遊戲') {
+                        headerRowIndex = i;
+                        break;
+                    }
+                }
+                if (headerRowIndex !== -1) break;
+            }
+
+            if (headerRowIndex === -1) headerRowIndex = 0;
+
+            const header = rows[headerRowIndex];
+            const colMap = {};
+
+            for (let j = 0; j < header.length; j++) {
+                const c = cleanStr(header[j]).toLowerCase();
+                if (c.includes('簡介') || c.includes('說明') || c.includes('description') || c.includes('desc') || c.includes('介紹')) {
+                    colMap['desc'] = j;
+                } else if (c.includes('html') || c.includes('檔案') || c.includes('file') || c.includes('link') || c.includes('path') || c.includes('url')) {
+                    colMap['file'] = j;
+                } else if (c.includes('圖示') || c.includes('emoji') || c.includes('icon') || c.includes('圖標')) {
+                    colMap['emoji'] = j;
+                } else if (c.includes('分類') || c.includes('category') || c.includes('類別') || c.includes('tag') || c.includes('類型')) {
+                    colMap['category'] = j;
+                } else if (c.includes('狀態') || c.includes('status') || c.includes('啟用') || c.includes('enable')) {
+                    colMap['status'] = j;
+                } else if (c.includes('名稱') || c.includes('name') || c.includes('title') || c === '遊戲' || c === '小遊戲') {
+                    colMap['name'] = j;
+                }
+            }
+
+            if (colMap['name'] === undefined && header.length > 0) colMap['name'] = 0;
+            if (colMap['file'] === undefined && header.length > 1) colMap['file'] = 1;
+
+            const games = [];
+            for (let i = headerRowIndex + 1; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.length === 0) continue;
+
+                const getCell = (key, fallback = '') => {
+                    const idx = colMap[key];
+                    if (idx !== undefined && idx < row.length) {
+                        return cleanStr(row[idx], fallback);
+                    }
+                    return fallback;
+                };
+
+                const rawName = getCell('name');
+                const rawFile = getCell('file');
+                const rawEmoji = getCell('emoji');
+                const rawCategory = getCell('category');
+                const desc = getCell('desc', '點擊開啟並開始暢玩遊戲！');
+                const status = getCell('status', '啟用');
+
+                if (rawName && rawFile && !status.includes('停用') && !status.includes('關閉') && !status.includes('false')) {
+                    const inferred = smartInferCategoryAndEmoji(rawName, rawFile, rawCategory, rawEmoji);
+                    games.push({
+                        name: rawName,
+                        file: rawFile,
+                        emoji: inferred.emoji,
+                        category: inferred.category,
+                        desc: desc,
+                        status: status
+                    });
+                }
+            }
+
+            return games;
+        }
+
+        // 分類點擊核心 (全域暴露)
+        window.selectCategory = function(targetCategory) {
+            playChime(659.25, 880, 0.15);
+            currentCategory = cleanStr(targetCategory, 'ALL');
+            
+            const statusContainer = document.getElementById('filterStatusContainer');
+            const activeFilterText = document.getElementById('activeFilterText');
+            if (statusContainer && activeFilterText) {
+                if (currentCategory === 'ALL' && !searchQuery) {
+                    statusContainer.classList.add('hidden');
+                } else {
+                    statusContainer.classList.remove('hidden');
+                    activeFilterText.innerText = currentCategory === 'ALL' ? `全部 (${searchQuery})` : currentCategory;
+                }
+            }
+
+            renderCategoryTabs();
+            renderGamesList();
+        };
+
+        function renderCategoryTabs() {
+            const tabsContainer = document.getElementById('categoryTabs');
+            if (!tabsContainer) return;
+
+            const categorySet = new Set();
+            allGames.forEach(g => {
+                const c = cleanStr(g.category);
+                if (c && c !== 'ALL') categorySet.add(c);
+            });
+            const categoryList = Array.from(categorySet);
+
+            const totalCount = allGames.length;
+            const isAllActive = currentCategory.toUpperCase() === 'ALL';
+
+            tabsContainer.innerHTML = '';
+
+            // 1. 全部遊戲按鈕
+            const allBtn = document.createElement('button');
+            allBtn.type = 'button';
+            allBtn.className = `tab-btn px-4 py-2 rounded-2xl font-black text-sm border ${
+                isAllActive 
+                    ? 'is-active' 
+                    : 'bg-white text-gray-700 hover:bg-blue-50 border-gray-200'
+            }`;
+            allBtn.innerHTML = `🌟 全部遊戲 (${totalCount})`;
+            allBtn.onclick = () => window.selectCategory('ALL');
+            tabsContainer.appendChild(allBtn);
+
+            // 2. 各獨立分類按鈕
+            categoryList.forEach(catName => {
+                const count = allGames.filter(g => cleanStr(g.category).toLowerCase() === catName.toLowerCase()).length;
+                const isActive = currentCategory.toLowerCase() === catName.toLowerCase();
+
+                const catBtn = document.createElement('button');
+                catBtn.type = 'button';
+                catBtn.className = `tab-btn px-4 py-2 rounded-2xl font-black text-sm border ${
+                    isActive 
+                        ? 'is-active' 
+                        : 'bg-white text-gray-700 hover:bg-blue-50 border-gray-200'
+                }`;
+                catBtn.innerHTML = `🏷️ ${catName} (${count})`;
+                catBtn.onclick = () => window.selectCategory(catName);
+                tabsContainer.appendChild(catBtn);
+            });
+        }
+
+        function renderGamesList() {
+            const grid = document.getElementById('gamesGrid');
+            const empty = document.getElementById('emptyState');
+            if (!grid) return;
+
+            const filtered = allGames.filter(game => {
+                const gameCat = cleanStr(game.category).toLowerCase();
+                const curCat = cleanStr(currentCategory).toLowerCase();
+
+                const matchCat = (curCat === 'all') || (gameCat === curCat);
+
+                const query = searchQuery.toLowerCase();
+                const matchSearch = !query || 
+                    game.name.toLowerCase().includes(query) || 
+                    game.desc.toLowerCase().includes(query) ||
+                    gameCat.includes(query);
+
+                return matchCat && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                if (empty) empty.classList.remove('hidden');
+                return;
+            }
+
+            if (empty) empty.classList.add('hidden');
+            grid.classList.remove('hidden');
+
+            const cardColors = [
+                { bg: 'from-amber-400 to-orange-500', btn: 'bg-amber-500 hover:bg-amber-400 border-amber-700', badge: 'bg-amber-100 text-amber-800' },
+                { bg: 'from-sky-400 to-blue-600', btn: 'bg-blue-500 hover:bg-blue-400 border-blue-700', badge: 'bg-blue-100 text-blue-800' },
+                { bg: 'from-emerald-400 to-teal-600', btn: 'bg-emerald-500 hover:bg-emerald-400 border-emerald-700', badge: 'bg-emerald-100 text-emerald-800' },
+                { bg: 'from-pink-400 to-rose-600', btn: 'bg-pink-500 hover:bg-pink-400 border-pink-700', badge: 'bg-pink-100 text-pink-800' },
+                { bg: 'from-purple-400 to-indigo-600', btn: 'bg-purple-500 hover:bg-purple-400 border-purple-700', badge: 'bg-purple-100 text-purple-800' }
+            ];
+
+            let html = '';
+            filtered.forEach((game, index) => {
+                const colorTheme = cardColors[index % cardColors.length];
+
+                html += `
+                    <div class="game-card bg-white rounded-3xl p-6 shadow-card-pop border-4 border-white flex flex-col justify-between relative overflow-hidden animate-pop-in" style="animation-delay: ${index * 0.04}s">
+                        
+                        <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r ${colorTheme.bg}"></div>
+
+                        <div>
+                            <div class="flex justify-between items-start mb-4 mt-2">
+                                <div class="w-16 h-16 rounded-2xl bg-gray-50 border-2 border-gray-100 flex items-center justify-center text-4xl shadow-inner">
+                                    ${game.emoji}
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-black ${colorTheme.badge}">
+                                    ${game.category}
+                                </span>
+                            </div>
+
+                            <h3 class="text-xl sm:text-2xl font-black text-gray-800 mb-2 leading-snug">
+                                ${game.name}
+                            </h3>
+
+                            <p class="text-sm font-medium text-gray-500 line-clamp-2 mb-6">
+                                ${game.desc}
+                            </p>
+                        </div>
+
+                        <a href="${game.file}" onclick="handleGameLaunch(event, '${game.file}')" 
+                           class="btn-3d w-full ${colorTheme.btn} text-white font-black py-3.5 px-6 rounded-2xl text-center flex items-center justify-center gap-2 border-b-4 shadow-lg text-lg tracking-wider">
+                            <span>開始遊玩</span>
+                            <i class="fa-solid fa-circle-play text-xl"></i>
+                        </a>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        function handleSearch() {
+            const input = document.getElementById('searchInput');
+            searchQuery = cleanStr(input ? input.value : '');
+            renderGamesList();
+        }
+
+        function handleGameLaunch(e, file) {
+            playChime(523.25, 1046.50, 0.3);
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 40,
+                    spread: 60,
+                    origin: { y: 0.8 }
+                });
+            }
+            e.preventDefault();
+            setTimeout(() => {
+                window.location.href = file;
+            }, 200);
+        }
+
+        // 背景同步與初始化 (SWR 瞬時渲染架構)
+        async function syncGamesData() {
+            const badge = document.getElementById('sheetConnectionBadge');
+            const targetUrl = getActiveSheetUrl();
+
+            try {
+                const csvText = await fetchCsvDirectOrProxy(targetUrl);
+                
+                Papa.parse(csvText, {
+                    header: false,
+                    skipEmptyLines: 'greedy',
+                    complete: function(results) {
+                        const parsed = parseGamesFromCsvRows(results.data);
+                        if (parsed && parsed.length > 0) {
+                            allGames = parsed;
+                            localStorage.setItem(CACHE_KEY, JSON.stringify(allGames));
+                            
+                            if (badge) {
+                                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> 試算表已連線 (${allGames.length} 款遊戲)`;
+                                badge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700';
+                            }
+                            renderApp();
+                        }
+                    }
+                });
+            } catch (err) {
+                console.warn("背景同步失敗，保持現有快取:", err);
+                if (badge && allGames.length > 0) {
+                    badge.innerHTML = `🟢 快取模式 (${allGames.length} 款遊戲)`;
+                }
+            }
+        }
+
+        function manualRefresh() {
+            const icon = document.getElementById('refreshIcon');
+            if (icon) icon.classList.add('animate-spin');
+            playChime(784, 1046, 0.2);
+            syncGamesData().then(() => {
+                setTimeout(() => {
+                    if (icon) icon.classList.remove('animate-spin');
+                }, 400);
+            });
+        }
+
+        function renderApp() {
+            renderCategoryTabs();
+            renderGamesList();
+        }
+
+        function initApp() {
+            const cached = localStorage.getItem(CACHE_KEY);
+            if (cached) {
+                try {
+                    allGames = JSON.parse(cached);
+                } catch (e) {
+                    allGames = DEFAULT_FALLBACK_GAMES;
+                }
+            } else {
+                allGames = DEFAULT_FALLBACK_GAMES;
+            }
+
+            renderApp();
+            syncGamesData();
+        }
+
+        function openConfigModal() {
+            playChime();
+            const input = document.getElementById('sheetUrlInput');
+            if (input) input.value = getActiveSheetUrl();
+            const modal = document.getElementById('configModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeConfigModal() {
+            const modal = document.getElementById('configModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function saveSheetConfig() {
+            const input = document.getElementById('sheetUrlInput');
+            const val = cleanStr(input ? input.value : '');
+            if (val) {
+                localStorage.setItem(CONFIG_KEY, val);
+            } else {
+                localStorage.removeItem(CONFIG_KEY);
+            }
+            playChime(523.25, 1046.5, 0.3);
+            closeConfigModal();
+            syncGamesData();
+        }
+
+        function resetToDefaultSheet() {
+            const input = document.getElementById('sheetUrlInput');
+            if (input) input.value = DEFAULT_PUBLISHED_URL;
+        }
+
+        document.getElementById('configModal').addEventListener('click', (e) => {
+            if (e.target.id === 'configModal') closeConfigModal();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initApp();
+        });
+    </script>
+</body>
+</html>
